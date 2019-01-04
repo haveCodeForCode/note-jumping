@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.root.cognition.system.dao.user.UserDao">
+
+    <sql id="userColumns">
+      a.id      AS "id",
+      a.user_id AS "userId",
+      a.user_name AS "userName";
+      a.user_password AS "userPassword";
+      a.user_email AS "userEmail";
+      a.user_mobile AS "userMobile";
+    </sql>
+
+    <!--<sql id="userinfoJoins">-->
+    <!--LEFT JOIN sys_userinfo uif ON a.id = uif.user_id-->
+    <!--LEFT JOIN user_purse upur ON a.id = upur.USER_ID-->
+    <!--LEFT JOIN sys_trade_rule r ON a.rule_type = r.id-->
+    <!--</sql>-->
+
+    <select id="loginway" resultType="com.root.cognition.system.entity.user.User">
+        SELECT
+        <include refid="userColumns"/>
+        FROM sys_user a
+        WHERE (a.user_name = #{userName} OR a.user_email = #{userEmail} OR a.user_mobile = #{userMobile})
+    </select>
+
+
+    <!-- 根据id获得用户 -->
+    <select id="get" parameterType="string" resultType="com.root.cognition.system.dao.user.UserDao">
+        SELECT
+        <include refid="userColumns"/>
+        FROM sys_user a
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="getByEntity" parameterType="com.root.cognition.system.dao.user.UserDao"
+            resultType="com.root.cognition.system.dao.user.UserDao">
+        SELECT
+        <include refid="userColumns"/>
+        FROM sys_user a
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            <if test="id !=null and id !=''">
+                AND a.id = #{id}
+            </if>
+            <if test="userName !=null and userName !=''">
+                AND a.user_name = #{userName}
+            </if>
+            <if test="userEmail !=null and userEmail!=''">
+                AND a.user_email = #{userEmail}
+            </if>
+            <if test="userMobile !=null and userMobile!=''">
+                AND a.user_mobile = #{userMobile}
+            </if>
+        </where>
+    </select>
+
+    <!--多条查询用户信息 -->
+    <select id="findList" resultType="com.root.cognition.system.dao.user.UserDao">
+        SELECT
+        <include refid="userColumns"/>
+        FROM sys_user a
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            <if test="id !=null and id !=''">
+                AND a.id = #{id}
+            </if>
+            <if test="userId !=null and userId !=''">
+                AND a.user_id = #{userId}
+            </if>
+        </where>
+    </select>
+
+    <!-- 查询全部用户 -->
+    <!--<select id="findAllList" resultType="User">-->
+    <!--SELECT-->
+    <!--<include refid="userColumns"/>-->
+    <!--FROM sys_user a-->
+    <!--<include refid="userJoins"/>-->
+    <!--WHERE a.del_flag = #{DEL_FLAG_NORMAL}-->
+    <!--ORDER BY c.code, o.code, a.name-->
+    <!--</select>-->
+
+    <!-- 查询全部用户数目 -->
+    <!--<select id="findAllCount" resultType="long">-->
+    <!--SELECT-->
+    <!--COUNT(1)-->
+    <!--FROM sys_user a-->
+    <!--WHERE a.del_flag = #{DEL_FLAG_NORMAL}-->
+    <!--</select>-->
+
+    <!-- 插入用户 -->
+    <insert id="insert">
+        INSERT INTO sys_user(
+        <if test="userNumber !=null and userNumber !''">
+            user_number,
+        </if>
+        <if test="userName !=null and userName !=''">
+            user_name,
+        </if>
+        <if test="userPassword !=null and userPassword !=''">
+            user_password,
+        </if>
+        <if test="userEmail !=null and userEmail !=''">
+            user_email,
+        </if>
+        <if test="userMobile !=null and userMobile !=''">
+            user_mobile,
+        </if>
+        <if test="creator !=null and creator !=''">
+            creator,
+        </if>
+        <if test="gmtCreate !=null and gmtCreate !=''">
+            gmt_create,
+        </if>
+        <if test="updater !=null and updater !=''">
+            updater,
+        </if>
+        <if test="gmtModified !=null and gmtModified !=''">
+            gmt_modified,
+        </if>
+        <if test="delFlage !=null and delFlage !=''">
+            del_flage,
+        </if>
+        id
+        ) VALUES (
+        <if test="userId !=null and userId !=''">
+            #{userId},
+        </if>
+        <if test="userNumber !=null and userNumber !''">
+            #{userNumber}
+        </if>
+        <if test="userName !=null and userName !=''">
+            #{userName},
+        </if>
+        <if test="userPassword !=null and userPassword !=''">
+            #{userPassword},
+        </if>
+        <if test="userEmail !=null and userEmail !=''">
+            #{userEmail},
+        </if>
+        <if test="userMobile !=null and userMobile !=''">
+            #{userMobile},
+        </if>
+        <if test="creator !=null and creator !=''">
+            #{creator},
+        </if>
+        <if test="gmtCreate !=null and gmtCreate !=''">
+            #{gmtCreate},
+        </if>
+        <if test="updater !=null and updater !=''">
+            #{updater},
+        </if>
+        <if test="gmtModified !=null and gmtModified !=''">
+            #{gmtModified},
+        </if>
+        <if test="delFlage !=null and delFlage !=''">
+            #{delFlage}
+        </if>
+        #{id}
+        )
+    </insert>
+
+    <!-- 更新用户 -->
+    <update id="update">
+        UPDATE sys_user SET
+        <if test="userId !=null and userId !=''">
+            user_number = #{userId},
+        </if>
+        <if test="userName !=null and userName !=''">
+            user_name = #{userName},
+        </if>
+        <if test="userPassword !=null and userPassword !=''">
+            user_password = #{userPassword},
+        </if>
+        <if test="userEmail !=null and userEmail !=''">
+            user_email = #{userEmail},
+        </if>
+        <if test="userMobile !=null and userMobile !=''">
+            user_mobile = #{userMobile},
+        </if>
+        <if test="creator !=null and creator !=''">
+            creator = #{creator},
+        </if>
+        <if test="gmtCreate !=null and gmtCreate !=''">
+            gmt_create = #{gmtCreate},
+        </if>
+        <if test="updater !=null and updater !=''">
+            updater = #{updater},
+        </if>
+        <if test="gmtModified !=null and gmtModified !=''">
+            gmt_modified = #{gmtModified},
+        </if>
+        <if test="delFlage !=null and delFlage !=''">
+            del_flage = #{delFlage}
+        </if>
+        id = #{id}
+        WHERE id = #{id}
+    </update>
+    
+</mapper>

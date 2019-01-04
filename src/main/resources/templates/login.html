@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>登录界面</title>
+    <link rel="stylesheet" href="css/plugins/layui/layui.css" />
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <style type="text/css">
+        /*.layui-layout-admin{display:none;}*/
+    </style>
+</head>
+<body class="layui-layout-body layui-login">
+<!--上背景-->
+<div class="up-bg"></div>
+<div class="down-bg"></div>
+<!--下背景-->
+<div class="layui-layout-admin layui-login-box layui-clear">
+    <!--信息展示-->
+    <div class="layui-layout-left layui-left">
+        <div class="layui-left">
+            <h5 class="text-center"><img src="img/login/text1.png" alt="" /></h5>
+            <div class="text-center">
+                <img src="img/login/module1.png" alt="" />
+            </div>
+            <p>平台提供了最新的咨询信息，物流运输信息以及车辆货源信息，足不出户阅尽行业大事小情</p>
+        </div>
+        <div class="layui-left">
+            <h5 class="text-center"><img src="img/login/text2.png" alt="" /></h5>
+            <div class="text-center">
+                <img src="img/login/module2.png" alt="" />
+            </div>
+            <p>平台运用智能精细的数据分析，可以方便快捷得到自己想要的数据信息</p>
+        </div>
+        <div class="layui-left">
+            <h5 class="text-center"><img src="img/login/text3.png" alt="" /></h5>
+            <div class="text-center">
+                <img src="img/login/module3.png" alt="" />
+            </div>
+            <p>成为平台用户，可以在瓶内进行发布自己的货源，让全天下的车辆为“我”所用</p>
+        </div>
+        <div class="layui-left">
+            <h5 class="text-center"><img src="img/login/text4.png" alt="" /></h5>
+            <div class="text-center">
+                <img src="img/login/module4.png" alt="" />
+            </div>
+            <p>成为平台企业用户可以对平台上其他用户发布的货源进行抢单，扩充自己的货源</p>
+        </div>
+        <div class="layui-left">
+            <h5 class="text-center"><img src="img/login/text5.png" alt="" /></h5>
+            <div class="text-center">
+                <img src="img/login/module5.png" alt="" />
+            </div>
+            <p>成为平台企业用户可以对自己的车队进行线上管理，运输货物，让自己的车队车辆，运尽天下货物</p>
+        </div>
+    </div>
+    <!--end-->
+    <div class="layui-layout-right layui-left">
+        <div class="layui-form layui-fluid layui-form-main">
+            <img src="img/login/bgBottom.png" alt="" class="login-bbg">
+            <div class="layui-login-title">
+                <h3 class="text-center">途邦运联平台</h3>
+                <h4 class="text-center">TUBANG&nbsp;LOGISTICS&nbsp;PLATFORM</h4>
+            </div>
+            <div class="layui-main front">
+                <div class="layui-form-item login-intro">
+                    <p><b>用户登录</b><span>User login</span></p>
+                </div>
+                <form action="" id="loginForm">
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <input type="text" name="mobile" autocomplete="off"  lay-verify='username' id="userName" class="layui-input" placeholder="请输入用户名或手机号"/>
+                            <i class="layui-icon">&#xe66f;</i>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <input type="password" name="password" autocomplete="off" lay-verify='password' id="password" class="layui-input" placeholder="请输入密码"/>
+                            <i class="layui-icon">&#xe673;</i>
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-form-login">
+                        <button type="button" lay-submit lay-filter="*" class="layui-input-login layui-btn-primary layui-btn">登录</button>
+                    </div>
+                    <div class="layui-form-item font-size0 text-right">
+                        <a href="javascript:;" class="pwd-forget">忘记密码</a>
+                        <a class="registe">免费注册</a>
+                    </div>
+                </form>
+            </div>
+            <!--back-->
+            <div class="layui-form layui-fluid back">
+                <div class="layui-main">
+                    <div class="layui-form-item">
+                        <h3 class="text-center">选择注册类型</h3>
+                    </div>
+                    <div class="layui-form-item login-type">
+                        <p class="text-center"><input type="button" value="物流企业" onclick="loginType(this)"/><span><i class="fa fa-check"></i></span></p>
+                    </div>
+                    <div class="layui-form-item login-type">
+                        <p class="text-center"><input type="button" class="active" onclick="loginType(this)" value="我是货主"/><span class="span-active"><i class="fa fa-check"></i></span></p>
+                    </div>
+
+                    <div class="layui-form-item text-center login-btn-box">
+                        <button id="toCreate" class="layui-btn layui-btn-primary">确认创建用户</button>
+                    </div>
+                    <div class="layui-form-item warn-login-box">
+                        <p class="text-center warn-login">(账户类型一经创建，不得修改)</p>
+                    </div>
+                    <div class="layui-form-item text-center login-login">
+                        <a class="login-back">登录</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!--<p class="text-center copyRight">Copyright&nbsp;&copy;&nbsp;2012-2016 <a href="">途邦物流平台</a>Powered By <a href="">tubangwuliu</a>V1.2.6</p>-->
+</div>
+<!--找回密码-->
+<div class="get-pwd layui-form layui-text layui-clear" id="get-pwd">
+    <form id="forgetForm">
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-left">手机号</label>
+            <div class="layui-input-block layui-left">
+                <input type="text" class="layui-input" id="mobile" name="mobile"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-left">图片验证码</label>
+            <div class="layui-input-block layui-left">
+                <input type="text" class="layui-input layui-input-short margin-right15" id="codeImsg" name="verifyInput"/>
+            </div>
+            <div class="layui-input-block layui-left">
+                <img class="vcode-img" alt="验证码图片" title="验证码图片" src="http://139.129.231.71:8011/validateCode" >
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-left">短信验证</label>
+            <div class="layui-input-block layui-left">
+                <input type="text" class="layui-input layui-input-short margin-right15" id="smsCaptcha" name="smsCaptcha"/>
+            </div>
+            <div class="layui-input-block layui-left">
+                <button class="layui-btn layui-btn-success" type="button" onclick="sendcode(this)">短信发送</button>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-left">密码</label>
+            <div class="layui-input-block layui-left">
+                <input type="password" class="layui-input" id="newPassword" name="newPassword"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-left">确认密码</label>
+            <div class="layui-input-block layui-left">
+                <input type="password" class="layui-input" id="confirmPassword" name="confirmPassword"/>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="js/jquery-1.11.3.js"></script>
+<script src="js/plugins/layui/layui.js"></script>
+<script src="/js/configurl.js?v=0.11"></script>
+<script src="/js/function.js?v=0.11"></script>
+<script src="js/login.js"></script>
+</body>
+</html>
