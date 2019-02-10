@@ -1,15 +1,24 @@
 package com.root.cognition;
 
+import com.root.cognition.until.ThreadsTools;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import java.util.concurrent.ExecutorService;
 
 /**
  * 启动项
  * @author LineInkBook
  */
+@EnableTransactionManagement
 @MapperScan("com.root.cognition.*.dao")
 @SpringBootApplication
+@EnableCaching
+
 public class CognitionApplication {
     public static void main(String[] args) {
         SpringApplication.run(CognitionApplication.class, args);

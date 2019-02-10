@@ -1,0 +1,56 @@
+<head th:fragment="header">
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title></title>
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+    <link href="favicon.ico" rel="shortcut icon">
+    <!--bootstrap框架样式-->
+    <link href="/css/plugins/bootstrap/bootstrap.css"
+          rel="stylesheet" th:href="@{/css/plugins/bootstrap/bootstrap.css}">
+    <!--图标字体样式库-->
+    <link href="/css/plugins/font-awesome/font-awesome.css"
+          rel="stylesheet" th:href="@{/css/plugins/font-awesome/font-awesome.css}">
+    <!--bootstrap表格样式-->
+    <link href="/css/plugins/bootstrap-table/bootstrap-table.css"
+          rel="stylesheet" th:href="@{/css/plugins/bootstrap-table/bootstrap-table.css}">
+    <!--富文本编辑框-->
+    <link href="/css/plugins/summernote/summernote-0.8.8.css" rel="stylesheet">
+    <!--css动画-->
+    <!--<link href="css/animate.css" rel="stylesheet" th:href="@{/css/animate.css}">-->
+    <!--选择框样式-->
+    <!--<link href="/css/plugins/chosen/chosen.css" rel="stylesheet">-->
+</head>
+
+
+<div th:fragment="footer">
+    <script src="/js/plugins/jquery-3.3.1.min.js"
+            th:src="@{/js/plugins/jquery-3.3.1.min.js}"></script>
+    <script src="/js/plugins/bootstrap/bootstrap.min.js?v=3.3.6"></script>
+    <script src="/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+    <script src="/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="/js/plugins/validate/jquery.validate.min.js"></script>
+    <script src="/js/plugins/validate/messages_zh.min.js"></script>
+    <script src="/js/plugins/jsTree/jstree.min.js"></script>
+    <script src="/js/plugins/jqTreeGrid/jquery.treegrid.min.js"></script>
+    <script src="/js/plugins/jqTreeGrid/jquery.treegrid.extension.js"></script>
+    <script src="/js/plugins/jqTreeGrid/jquery.treegrid.bootstrap3.js"></script>
+    <script src="/js/plugins/chosen/chosen.jquery.js"></script>
+    <script src="/js/plugins/layer/layer.js"></script>
+    <script src="/js/content.js?v=1.0.0"></script>
+    <!--summernote-->
+    <script src="/js/plugins/summernote/summernote.js"></script>
+    <script src="/js/plugins/summernote/summernote-zh-CN.min.js"></script>
+    <script src="/js/ajax-util.js"></script>
+</div>
+
+<!--
+    th:insert:保留自己的主标签，保留th:fragment的主标签。
+    th:replace:不要自己的主标签，保留th:fragment的主标签。
+    th:include:保留自己的主标签，不要th:fragment的主标签。（官方3.0后不推荐）
+-->
+<!-- 还未用到的插件
+   1.bootstrap-grid.css     bootstrap网格布局方法
+
+-->

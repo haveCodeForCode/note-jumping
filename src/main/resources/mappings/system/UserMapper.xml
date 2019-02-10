@@ -1,24 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.root.cognition.system.dao.user.UserDao">
+<!--   公共dao层
+     public T get(String id);
+     public T getByEntity(T entity);
+     public List<T> findList(T entity);
+     public List<T> findAllList();
+     public int insert(T entity);
+     public int update(T entity);
+     public int delete(String id);
+     public int delete(T entity);-->
+<mapper namespace="com.root.cognition.system.dao.UserDao">
 
-    <sql id="userColumns">
-      a.id      AS "id",
-      a.user_id AS "userId",
-      a.user_name AS "userName";
-      a.user_password AS "userPassword";
-      a.user_email AS "userEmail";
-      a.user_mobile AS "userMobile";
-    </sql>
-
-    <!--<sql id="userinfoJoins">-->
-    <!--LEFT JOIN sys_userinfo uif ON a.id = uif.user_id-->
-    <!--LEFT JOIN user_purse upur ON a.id = upur.USER_ID-->
-    <!--LEFT JOIN sys_trade_rule r ON a.rule_type = r.id-->
-    <!--</sql>-->
-
-    <select id="loginway" resultType="com.root.cognition.system.entity.user.User">
+    <select id="loginway" resultType="com.root.cognition.system.entity.User">
         SELECT
         <include refid="userColumns"/>
         FROM sys_user a
@@ -27,15 +21,15 @@
 
 
     <!-- 根据id获得用户 -->
-    <select id="get" parameterType="string" resultType="com.root.cognition.system.dao.user.UserDao">
+    <select id="get" parameterType="string" resultType="com.root.cognition.system.dao.UserDao">
         SELECT
         <include refid="userColumns"/>
         FROM sys_user a
         WHERE a.id = #{id}
     </select>
 
-    <select id="getByEntity" parameterType="com.root.cognition.system.dao.user.UserDao"
-            resultType="com.root.cognition.system.dao.user.UserDao">
+    <select id="getByEntity" parameterType="com.root.cognition.system.dao.UserDao"
+            resultType="com.root.cognition.system.dao.UserDao">
         SELECT
         <include refid="userColumns"/>
         FROM sys_user a
@@ -57,7 +51,7 @@
     </select>
 
     <!--多条查询用户信息 -->
-    <select id="findList" resultType="com.root.cognition.system.dao.user.UserDao">
+    <select id="findList" resultType="com.root.cognition.system.dao.UserDao">
         SELECT
         <include refid="userColumns"/>
         FROM sys_user a
@@ -72,17 +66,15 @@
         </where>
     </select>
 
-    <!-- 查询全部用户 -->
-    <!--<select id="findAllList" resultType="User">-->
-    <!--SELECT-->
-    <!--<include refid="userColumns"/>-->
-    <!--FROM sys_user a-->
-    <!--<include refid="userJoins"/>-->
-    <!--WHERE a.del_flag = #{DEL_FLAG_NORMAL}-->
-    <!--ORDER BY c.code, o.code, a.name-->
-    <!--</select>-->
+    <select id="findAllList" resultType="com.root.cognition.system.dao.UserDao">
+        SELECT
+        <include refid="userColumns"/>
+        FROM sys_user a
+        WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+    </select>
 
-    <!-- 查询全部用户数目 -->
+
+    <!--查询全部用户数目 -->
     <!--<select id="findAllCount" resultType="long">-->
     <!--SELECT-->
     <!--COUNT(1)-->
@@ -198,5 +190,24 @@
         id = #{id}
         WHERE id = #{id}
     </update>
-    
+
+
+    <sql id="userColumns">
+          a.id      AS "id",
+          a.user_number AS "userNumber",
+          a.user_name AS "userName",
+          a.user_password AS "userPassword",
+          a.user_email AS "userEmail",
+          a.user_mobile AS "userMobile",
+          a.creator AS "creator",
+          a.gmt_create AS "gmtCreate",
+          a.updater AS "updater",
+          a.gmt_modified AS "gmtModified",
+          a.del_flage AS "delFlage"
+    </sql>
+
+    <sql id="userJoins">
+      LEFT JOIN sys_userinfo uif ON a.id = uif.user_id
+    </sql>
+
 </mapper>

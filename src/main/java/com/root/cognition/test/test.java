@@ -1,9 +1,12 @@
 package com.root.cognition.test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import com.root.cognition.until.ThreadsTools;
+
+import java.util.concurrent.*;
+
+import static java.lang.Thread.sleep;
+
 
 /**
  * @author 王睿
@@ -12,15 +15,37 @@ import java.util.Map;
 public class test {
 
     public static void main(String[] args) {
-        /**
-         * 验证Map声明使用的方法
-         */
+        ExecutorService singleThreadPool = ThreadsTools.startThreadPool(
+                1,10,ThreadsTools.buildThreadFactory("test-pool"));
+        for (int i=0;i<10;i++) {
+            String number = String.valueOf(i);
+            singleThreadPool.execute(() -> study("u->"+number));
+        }
+//        singleThreadPool.shutdown();
+    }
+
+    public static void study(String value){
+        try {
+            int n=30;
+            for (int i =0;i<n;i++){
+                sleep(1000);
+                System.out.println(value+"size"+i);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+}
+
+    /**
+     * 验证Map声明使用的方法
         List value1 =new ArrayList();
         List value2 =new ArrayList();
         Map<String,String> gh=new HashMap<>();
         int n = 10;
-        int i = 0;
-        while (i<n){
+        int i = bootstrap;
+            while (i<n){
             Map<String,String> wh = new HashMap<>();
             String n1 = n+"";
             String i1 = i+"";
@@ -31,7 +56,6 @@ public class test {
             n=n-1;
             i++;
         }
-        System.out.println(value1);
-        System.err.println(value2);
-    }
-}
+            System.out.println(value1);
+            System.err.println(value2);
+     */
