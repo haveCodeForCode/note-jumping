@@ -1,8 +1,9 @@
 package com.root.cognition.system.dao;
 
 import com.root.cognition.system.entity.User;
-import com.root.cognition.system.persistence.CrudDao;
+import com.root.cognition.common.persistence.BaseDao;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 
 /**
@@ -10,7 +11,14 @@ import org.apache.ibatis.annotations.Mapper;
  * @version 2018/12/24
  */
 @Mapper
-public interface UserDao extends CrudDao<User> {
+@Repository("UserDao")
+public interface UserDao extends BaseDao<User> {
 
-     User loginway(User user);
+    /**
+     * 通过id获取user与Role
+     * 其中Role
+     * @param id
+     * @return
+     */
+    User getWithRole (String id);
 }

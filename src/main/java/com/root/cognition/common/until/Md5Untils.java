@@ -1,6 +1,7 @@
-package com.root.cognition.until;
+package com.root.cognition.common.until;
 
 
+import com.root.cognition.common.config.DataDic;
 import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.Cipher;
@@ -16,6 +17,8 @@ import java.util.Map;
 
 
 /**
+ * Md5工具类
+ *
  * @author 王睿
  * @version 2018/12/25
  */
@@ -89,8 +92,8 @@ public class Md5Untils {
 
     public static String publicDecrypt(String data, RSAPublicKey publicKey) {
         try {
-            System.out.println("解除封印");
             Cipher cipher = Cipher.getInstance(RSA_ALGORITHM);
+            System.out.println("公钥解除封印");
             cipher.init(Cipher.DECRYPT_MODE, publicKey);
             //密匙类型  加密解密  串长度  密匙长度
             return new String(rsaSplitCodec(cipher, Cipher.DECRYPT_MODE, Base64.decodeBase64(data), publicKey.getModulus().bitLength()), CHARSET);
@@ -143,7 +146,7 @@ public class Md5Untils {
      * 对于串长度比较长的算法
      *
      * @param cipher
-     * @param opmode
+     * @param opmode 加密还是解密
      * @param datas
      * @param keySize
      * @return
@@ -185,7 +188,7 @@ public class Md5Untils {
      * 得到公钥
      *
      * @param publicKey 密钥字符串（经过base64编码）
-     * @throws Exception
+     * @throws NoSuchAlgorithmException
      */
     public static RSAPublicKey getPublicKey(String publicKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
         //通过X509编码的Key指令获得公钥对象
@@ -209,6 +212,7 @@ public class Md5Untils {
     public static RSAPrivateKey getPrivateKey(String privateKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
         //通过PKCS#8编码的Key指令获得私钥对象
         KeyFactory keyFactory = KeyFactory.getInstance(RSA_ALGORITHM);
+        //
         PKCS8EncodedKeySpec pkcs8KeySpec = new PKCS8EncodedKeySpec(Base64.decodeBase64(privateKey));
         RSAPrivateKey key = (RSAPrivateKey) keyFactory.generatePrivate(pkcs8KeySpec);
         return key;
@@ -216,7 +220,7 @@ public class Md5Untils {
 
     /**
      * 根据长度生成RAS密匙
-     *
+     * 返回公/私密匙对象
      * @param keySize
      * @return
      */
@@ -248,6 +252,51 @@ public class Md5Untils {
         return keyPairMap;
     }
 
+    /**
+     * 加解密方法实现
+     *
+     * @return ENCRY返回加密后的字符串
+     * DECRY返回解密后的字符串
+     */
+    public static Map<String, Object> encryAndDecryption(String key, String keyState) {
+        String state = DataDic.FAIL;
+        Map<String, String> keyMap = Md5Untils.createKeys(512);
+
+        String publicKey = keyMap.get("publicKey");
+        String privateKey = keyMap.get("privateKey");
+
+        Map<String, Object> codeData = new HashMap<>();
+        try {
+            if (DataDic.ENCRY.equals(keyState)) {
+                String data = Md5Untils.publicEncrypt(key, Md5Untils.getPublicKey(publicKey));
+                state = DataDic.SUCCESS;
+                codeData.put("data", data);
+                codeData.put("state", state);
+            }
+            if (DataDic.DECRY.equals(keyState)) {
+                String data = Md5Untils.privateDecrypt(key, Md5Untils.getPrivateKey(privateKey));
+                state = DataDic.SUCCESS;
+                codeData.put("data", data);
+                codeData.put("state", state);
+            }
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            codeData.put("state", state);
+            codeData.put("data", e);
+        } catch (InvalidKeySpecException e) {
+            e.printStackTrace();
+            codeData.put("state", state);
+            codeData.put("data", e);
+        }
+        return codeData;
+    }
+
+
+    /**
+     * 加/解密案例
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         Map<String, String> keys = new HashMap<>();
         Map<String, String> keyMap = Md5Untils.createKeys(512);

@@ -13,6 +13,7 @@ public class EhCacheConfig {
 
     /**
      * ehcache缓存初始化设置
+     *
      * @return
      */
 
@@ -24,7 +25,7 @@ public class EhCacheConfig {
     }
 
     @Bean("cacheManager2")
-    CacheManager cacheManager(){
+    CacheManager cacheManager() {
         return CacheManager.create();
     }
 }

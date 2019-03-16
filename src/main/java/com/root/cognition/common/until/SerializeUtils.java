@@ -1,4 +1,4 @@
-package com.root.cognition.until;
+package com.root.cognition.common.until;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +15,7 @@ public class SerializeUtils {
 
     /**
      * 反序列化
+     *
      * @param bytes
      * @return
      */
@@ -32,16 +33,14 @@ public class SerializeUtils {
                 ObjectInputStream objectInputStream = new ObjectInputStream(byteStream);
                 try {
                     result = objectInputStream.readObject();
-                }
-                catch (ClassNotFoundException ex) {
+                } catch (ClassNotFoundException ex) {
                     throw new Exception("Failed to deserialize object type", ex);
                 }
-            }
-            catch (Throwable ex) {
+            } catch (Throwable ex) {
                 throw new Exception("Failed to deserialize", ex);
             }
         } catch (Exception e) {
-            logger.error("Failed to deserialize",e);
+            logger.error("Failed to deserialize", e);
         }
         return result;
     }
@@ -52,6 +51,7 @@ public class SerializeUtils {
 
     /**
      * 序列化
+     *
      * @param object
      * @return
      */
@@ -64,7 +64,7 @@ public class SerializeUtils {
         }
         try {
             ByteArrayOutputStream byteStream = new ByteArrayOutputStream(128);
-            try  {
+            try {
                 if (!(object instanceof Serializable)) {
                     throw new IllegalArgumentException(SerializeUtils.class.getSimpleName() + " requires a Serializable payload " +
                             "but received an object of type [" + object.getClass().getName() + "]");
@@ -72,13 +72,12 @@ public class SerializeUtils {
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteStream);
                 objectOutputStream.writeObject(object);
                 objectOutputStream.flush();
-                result =  byteStream.toByteArray();
-            }
-            catch (Throwable ex) {
+                result = byteStream.toByteArray();
+            } catch (Throwable ex) {
                 throw new Exception("Failed to serialize", ex);
             }
         } catch (Exception ex) {
-            logger.error("Failed to serialize",ex);
+            logger.error("Failed to serialize", ex);
         }
         return result;
     }

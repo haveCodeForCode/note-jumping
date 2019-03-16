@@ -3,17 +3,20 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.root.cognition.system.dao.MenuDao">
 
-    <select id="loginway" resultType="com.root.cognition.system.entity.User">
-        SELECT
-        <include refid="menuColumns"/>
-        FROM sys_user a
-        WHERE (a.user_name = #{userName} OR a.user_email = #{userEmail} OR a.user_mobile = #{userMobile})
+<!--********************自定义查询语句*****************************-->
+
+    <select id="listMenuByUserId"  resultType="com.root.cognition.system.entity.Menu">
+            SELECT
+
+            FROM sys_menu SYSM
+            LEFT JION       ON
     </select>
 
-    <select id="listMenuByUserId" resultType="com.root.cognition.system.entity.Menu"></select>
+    <select id="listUserPerms" resultType="java.lang.String">
 
-    <select id="listUserPerms" resultType="java.lang.String"></select>
+    </select>
 
+<!--**************************************************************-->
 
     <!-- 根据id获得用户 -->
     <select id="get" parameterType="string" resultType="com.root.cognition.system.dao.UserDao">
@@ -27,7 +30,7 @@
             resultType="com.root.cognition.system.dao.UserDao">
         SELECT
         <include refid="menuColumns"/>
-        FROM sys_user a
+        FROM sys_menu a
         <where>
             a.del_flag = #{DEL_FLAG_NORMAL}
             <if test="id !=null and id !=''">
@@ -46,13 +49,18 @@
     </select>
 
     <sql id="menuColumns">
-      menu_number AS  "menuNumber",
-      parent_id   AS  "parentId",
-      menu_name   AS  "menuName",
-      menu_url    AS  "menuUrl",
-      menu_parms  AS  "menuPerms",
-      menu_type   AS  "menuType",
-      menu_icon   AS  "menuIcon",
-      order_num   AS  "orderNum"
+      a.id AS "id",
+      a.menu_number AS  "menuNumber",
+      a.parent_id   AS  "parentId",
+      a.menu_name   AS  "menuName",
+      a.menu_url    AS  "menuUrl",
+      a.menu_parms  AS  "menuPerms",
+      a.menu_type   AS  "menuType",
+      a.menu_icon   AS  "menuIcon",
+      a.order_num   AS  "orderNum",
+      a.create_by AS "createBy",
+      a.create_time AS "createTime",
+      a.update_by AS "updateBy",
+      a.update_time AS "updateTime"
     </sql>
 </mapper>

@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * session 监控实现
+ *
  * @author LineInkBook
  */
 public class BaseSessionListener implements SessionListener {
@@ -18,14 +19,17 @@ public class BaseSessionListener implements SessionListener {
 
     /**
      * 设置新增session 监控（数量1）
+     *
      * @param session
      */
     @Override
     public void onStart(Session session) {
         sessionCount.incrementAndGet();
     }
+
     /**
      * 去掉session监听
+     *
      * @param session
      */
     @Override
@@ -35,6 +39,7 @@ public class BaseSessionListener implements SessionListener {
 
     /**
      * 异常则清除session监听
+     *
      * @param session
      */
     @Override
@@ -44,7 +49,10 @@ public class BaseSessionListener implements SessionListener {
 
     /**
      * 获取数量
+     *
      * @return
      */
-    public int getSessionCount(){return sessionCount.get();}
+    public int getSessionCount() {
+        return sessionCount.get();
+    }
 }

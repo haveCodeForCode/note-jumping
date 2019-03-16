@@ -1,33 +1,39 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<!--   公共dao层
-     public T get(String id);
-     public T getByEntity(T entity);
-     public List<T> findList(T entity);
-     public List<T> findAllList();
-     public int insert(T entity);
-     public int update(T entity);
-     public int delete(String id);
-     public int delete(T entity);-->
 <mapper namespace="com.root.cognition.system.dao.UserDao">
 
-    <select id="loginway" resultType="com.root.cognition.system.entity.User">
+
+    <!--UserRole实体类方法-->
+    <select id="getWithRole" parameterType="string" resultType="com.root.cognition.system.domain.UserRoleDo">
         SELECT
-        <include refid="userColumns"/>
-        FROM sys_user a
-        WHERE (a.user_name = #{userName} OR a.user_email = #{userEmail} OR a.user_mobile = #{userMobile})
+          su.user_id   AS "user.id",
+          su.user_name AS "user.userName",
+          su.user_password AS "user.userPassword",
+          su.user_email AS "user.userEmail",
+          su.user_mobile AS "user.userMobile",
+          sr.role_id	  AS "role.id",
+          sr.role_name AS "role.roleName",
+          sr.role_sign AS "role.roleSign",
+          sr.role_
+        FROM sys_user su
+        LEFT JOIN user_role_info uri ON  su.user_id = uri.user_id
+        LEFT JOIN sys_role sr ON uri ON  sr.role_id = uri.role_id
+        WHERE a.id = #{id}
     </select>
 
+
+    <!--////////***************基础方法*******************///////-->
 
     <!-- 根据id获得用户 -->
     <select id="get" parameterType="string" resultType="com.root.cognition.system.dao.UserDao">
         SELECT
         <include refid="userColumns"/>
         FROM sys_user a
-        WHERE a.id = #{id}
+        WHERE a.user_id = #{id}
     </select>
 
+    <!--获取的条件都是user表里的唯一值-->
     <select id="getByEntity" parameterType="com.root.cognition.system.dao.UserDao"
             resultType="com.root.cognition.system.dao.UserDao">
         SELECT
@@ -36,7 +42,7 @@
         <where>
             a.del_flag = #{DEL_FLAG_NORMAL}
             <if test="id !=null and id !=''">
-                AND a.id = #{id}
+                AND a.user_id = #{id}
             </if>
             <if test="userName !=null and userName !=''">
                 AND a.user_name = #{userName}
@@ -58,156 +64,96 @@
         <where>
             a.del_flag = #{DEL_FLAG_NORMAL}
             <if test="id !=null and id !=''">
-                AND a.id = #{id}
+                AND a.user_id = #{id}
             </if>
-            <if test="userId !=null and userId !=''">
-                AND a.user_id = #{userId}
+            <if test="userName !=null and userName !=''">
+                AND a.user_name = #{userName}
             </if>
         </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
     </select>
 
-    <select id="findAllList" resultType="com.root.cognition.system.dao.UserDao">
-        SELECT
-        <include refid="userColumns"/>
-        FROM sys_user a
-        WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+    <!--查询用户数目 -->
+    <select id="count" resultType="int">
+        select count(*) from sys_user
     </select>
-
-
-    <!--查询全部用户数目 -->
-    <!--<select id="findAllCount" resultType="long">-->
-    <!--SELECT-->
-    <!--COUNT(1)-->
-    <!--FROM sys_user a-->
-    <!--WHERE a.del_flag = #{DEL_FLAG_NORMAL}-->
-    <!--</select>-->
 
     <!-- 插入用户 -->
     <insert id="insert">
         INSERT INTO sys_user(
-        <if test="userNumber !=null and userNumber !''">
-            user_number,
-        </if>
-        <if test="userName !=null and userName !=''">
-            user_name,
-        </if>
-        <if test="userPassword !=null and userPassword !=''">
-            user_password,
-        </if>
+        `user_id`,
+        `user_name`,
+        `user_password`,
         <if test="userEmail !=null and userEmail !=''">
-            user_email,
+            `user_email`,
         </if>
         <if test="userMobile !=null and userMobile !=''">
-            user_mobile,
+            `user_mobile`,
         </if>
-        <if test="creator !=null and creator !=''">
-            creator,
-        </if>
-        <if test="gmtCreate !=null and gmtCreate !=''">
-            gmt_create,
-        </if>
-        <if test="updater !=null and updater !=''">
-            updater,
-        </if>
-        <if test="gmtModified !=null and gmtModified !=''">
-            gmt_modified,
-        </if>
-        <if test="delFlage !=null and delFlage !=''">
-            del_flage,
-        </if>
-        id
+        `create_by`,
+        `create_time`,
+        `update_by`,
+        `update_time`,
+        `del_flage`
         ) VALUES (
-        <if test="userId !=null and userId !=''">
-            #{userId},
-        </if>
-        <if test="userNumber !=null and userNumber !''">
-            #{userNumber}
-        </if>
-        <if test="userName !=null and userName !=''">
+        #{id},
             #{userName},
-        </if>
-        <if test="userPassword !=null and userPassword !=''">
             #{userPassword},
-        </if>
         <if test="userEmail !=null and userEmail !=''">
             #{userEmail},
         </if>
         <if test="userMobile !=null and userMobile !=''">
             #{userMobile},
         </if>
-        <if test="creator !=null and creator !=''">
-            #{creator},
-        </if>
-        <if test="gmtCreate !=null and gmtCreate !=''">
+        #{createBy},
             #{gmtCreate},
-        </if>
-        <if test="updater !=null and updater !=''">
             #{updater},
-        </if>
-        <if test="gmtModified !=null and gmtModified !=''">
             #{gmtModified},
-        </if>
-        <if test="delFlage !=null and delFlage !=''">
             #{delFlage}
-        </if>
-        #{id}
         )
     </insert>
 
     <!-- 更新用户 -->
     <update id="update">
         UPDATE sys_user SET
-        <if test="userId !=null and userId !=''">
-            user_number = #{userId},
-        </if>
-        <if test="userName !=null and userName !=''">
-            user_name = #{userName},
-        </if>
-        <if test="userPassword !=null and userPassword !=''">
-            user_password = #{userPassword},
-        </if>
+        `user_id` = #{id},
+        `user_name` = #{userName},
+        `user_password` = #{userPassword},
         <if test="userEmail !=null and userEmail !=''">
-            user_email = #{userEmail},
+            `user_email` = #{userEmail},
         </if>
         <if test="userMobile !=null and userMobile !=''">
-            user_mobile = #{userMobile},
+            `user_mobile` = #{userMobile},
         </if>
-        <if test="creator !=null and creator !=''">
-            creator = #{creator},
-        </if>
-        <if test="gmtCreate !=null and gmtCreate !=''">
-            gmt_create = #{gmtCreate},
-        </if>
-        <if test="updater !=null and updater !=''">
-            updater = #{updater},
-        </if>
-        <if test="gmtModified !=null and gmtModified !=''">
-            gmt_modified = #{gmtModified},
-        </if>
-        <if test="delFlage !=null and delFlage !=''">
-            del_flage = #{delFlage}
-        </if>
-        id = #{id}
+        `create_by` = #{createBy},
+        `create_time` = #{createTime},
+        `update_by` = #{updateBy},
+        `updateTime` = #{updateTime},
+        `del_flage` = #{delFlage}
         WHERE id = #{id}
     </update>
 
-
     <sql id="userColumns">
-          a.id      AS "id",
-          a.user_number AS "userNumber",
+          a.user_id   AS "id",
           a.user_name AS "userName",
           a.user_password AS "userPassword",
           a.user_email AS "userEmail",
           a.user_mobile AS "userMobile",
           a.creator AS "creator",
-          a.gmt_create AS "gmtCreate",
+          a.create_time AS "createTime",
           a.updater AS "updater",
-          a.gmt_modified AS "gmtModified",
+          a.update_time AS "updateTime",
           a.del_flage AS "delFlage"
-    </sql>
-
-    <sql id="userJoins">
-      LEFT JOIN sys_userinfo uif ON a.id = uif.user_id
     </sql>
 
 </mapper>

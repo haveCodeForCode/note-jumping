@@ -8,30 +8,72 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * 用户服务接口
+ * 用户业务层接口
+ *
  * @author LineInkBook
  */
 @Service
 public interface UserService {
 
+  ///***************联查方法 *****************///
+
     /**
-     * 根据id获取User实体
-     * @param id
-     * @return
+     * 根据id获取User与Role
+     *
+     * @param id 用户id
+     * @return 返回用户
      */
-   public User get(String id);
+    User getWithRole(String id);
 
-   public User getByEntity(String id);
+    /**
+     * 根据User中唯一值获取user与Role
+     * @param user User对象
+     * @return  User对象
+     */
+    User getByEntityWithRole(User user);
 
-   public List<User> list();
 
-   public int save(User user);
+ ///***************通用方法 *****************///
 
-   public int update(User user);
+    /**
+     * 根据id获取User
+     *
+     * @param id 用户id
+     * @return 返回用户
+     */
+    User get(String id);
 
-   public int remove(String userId);
+    /**
+     * 根据User中唯一值获取user
+     * @param user User对象
+     * @return  User对象
+     */
+    User getByEntity(User user);
 
-   public int batchremove(Long[] userIds);
+
+    List<User> list();
+
+    int save(User user);
+
+    int update(User user);
+
+    int remove(String userId);
+
+    int batchremove(Long[] userIds);
 
     Set<String> listRoles(Long userId);
+
+    /**
+     * 存user登录信息，返回token
+     * @param username 用户账户
+     * @return tokenString token字符
+     */
+    String generateJwtToken(String username);
+
+    /**
+     * 获取上次token生成时的salt值和登录用户信息
+     * @param username 用户账号
+     * @return User
+     */
+    User getJwtTokenInfo(String username);
 }

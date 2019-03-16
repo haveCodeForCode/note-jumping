@@ -2,13 +2,14 @@ package com.root.cognition.system.config;
 
 import com.root.cognition.common.redis.RedisManager;
 import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.context.annotation.Bean;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @author LineInkBook
  */
+@Configuration
 public class RedisConfig {
 
     @Value("${spring.redis.host}")
@@ -31,12 +32,15 @@ public class RedisConfig {
     @Bean
     public RedisManager redisManager() {
         RedisManager redisManager = new RedisManager();
+        //配置redisManager
         redisManager.setRedisHost(redisHost);
         redisManager.setRedisPort(redisPort);
         // 配置缓存过期时间
         redisManager.setExpire(1800);
         redisManager.setRedisTimeout(redisTimeout);
         redisManager.setRedisPassword(redisPassword);
+        // 初始化缓存池
+        redisManager.init();
         return redisManager;
     }
 

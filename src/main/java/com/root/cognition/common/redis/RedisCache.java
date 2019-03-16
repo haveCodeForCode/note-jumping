@@ -1,8 +1,7 @@
 package com.root.cognition.common.redis;
 
 
-
-import com.root.cognition.until.SerializeUtils;
+import com.root.cognition.common.until.SerializeUtils;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 import org.apache.shiro.util.CollectionUtils;
@@ -13,37 +12,29 @@ import java.util.*;
 
 
 /**
- * 通过redis方法实现缓存同时加密
- * @author LineInkBook
- * @param <K>
- * @param <V>
+ * 通过redis方法实现(重写)Cache缓存方法同时加密
+ *  RedisManager(redis底层实现）->RedisCache(redis缓存实现）
+ * @author worry
  */
 public class RedisCache<K, V> implements Cache<K, V> {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
-     * 初始化redisManager接口
+     * 初始化redisManager实例
      */
     private RedisManager cache;
 
     /**
-     * redis密钥前缀
+     * redis的会话密钥
      */
-    private String keyPrefix = "shiro_redis_session:";
-
-    public String getKeyPrefix() {
-        return keyPrefix;
-    }
-
-    public void setKeyPrefix(String keyPrefix) {
-        this.keyPrefix = keyPrefix;
-    }
+    private String keyPrefix = "shiroSession_redisCache:";
 
     /**
      * 通过一个JedisManager实例构造RedisCache
+     * @param cache 缓存管理器实例
      */
-    public RedisCache(RedisManager cache){
+    private RedisCache(RedisManager cache) {
         if (cache == null) {
             throw new IllegalArgumentException("Cache argument cannot be null.");
         }
@@ -51,21 +42,24 @@ public class RedisCache<K, V> implements Cache<K, V> {
     }
 
     /**
-     *使用指定的Redis管理器加上密钥前缀。
-     * @param cache The cache manager instance
-     * @param prefix The Redis key prefix
+     * 使用指定的Redis管理器加上密钥前缀。
+     *
+     * @param cache  缓存管理器实例
+     * @param prefix 获取redis密钥前缀
      */
-    public RedisCache(RedisManager cache, String prefix){
-        this( cache );
+    public RedisCache(RedisManager cache, String prefix) {
+        //获取当前缓存对象为this
+        this(cache);
         // set the prefix
         this.keyPrefix = prefix;
     }
 
     /**
-     * 获取
-     * @param key
-     * @return
-     * @throws CacheException
+     * key获取cache中对象（重写cache获取方法）
+     *
+     * @param key               所获取对象的key值
+     * @return value            redis中key所对应的对象
+     * @throws CacheException   抛出异常
      */
     @Override
     public V get(K key) throws CacheException {
@@ -73,24 +67,25 @@ public class RedisCache<K, V> implements Cache<K, V> {
         try {
             if (key == null) {
                 return null;
-            }else{
+            } else {
                 byte[] rawValue = cache.redisGet(getByteKey(key));
+                //反序列化
                 @SuppressWarnings("unchecked")
-                V value = (V)SerializeUtils.deserialize(rawValue);
+                V value = (V) SerializeUtils.deserialize(rawValue);
                 return value;
             }
         } catch (Throwable t) {
             throw new CacheException(t);
         }
-
     }
 
     /**
-     * 存入
-     * @param key
-     * @param value
-     * @return
-     * @throws CacheException
+     *  key值存入（重写cache存入方法）
+     *
+     * @param key     存入对象的key值
+     * @param value   存入对象的value值
+     * @return        返回变量
+     * @throws CacheException 抛出异常
      */
     @Override
     public V put(K key, V value) throws CacheException {
@@ -104,10 +99,10 @@ public class RedisCache<K, V> implements Cache<K, V> {
     }
 
     /**
-     * 删除
-     * @param key
-     * @return
-     * @throws CacheException
+     * key值删除（重写cache删除方法）
+     *
+     * @param key  键值
+     * @throws CacheException 抛出异常
      */
     @Override
     public V remove(K key) throws CacheException {
@@ -122,7 +117,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
     }
 
     /**
-     *  清空
+     * 清空redis缓存（重写cache删除方法）
      */
     @Override
     public void clear() throws CacheException {
@@ -135,13 +130,14 @@ public class RedisCache<K, V> implements Cache<K, V> {
     }
 
     /**
-     * 缓存大小
+     * 测试缓存大小
+     * redisDbSize
      * @return
      */
     @Override
     public int size() {
         try {
-            Long longSize = new Long(cache.redisDbSize());
+            Long longSize = cache.redisDbSize();
             return longSize.intValue();
         } catch (Throwable t) {
             throw new CacheException(t);
@@ -150,6 +146,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
 
     /**
      * 钥匙存入缓存
+     *
      * @return
      */
     @SuppressWarnings("unchecked")
@@ -159,15 +156,30 @@ public class RedisCache<K, V> implements Cache<K, V> {
             Set<byte[]> keys = cache.redisKeys(this.keyPrefix + "*");
             if (CollectionUtils.isEmpty(keys)) {
                 return Collections.emptySet();
-            }else{
+            } else {
                 Set<K> newKeys = new HashSet<K>();
-                for(byte[] key:keys){
-                    newKeys.add((K)key);
+                for (byte[] key : keys) {
+                    newKeys.add((K) key);
                 }
                 return newKeys;
             }
         } catch (Throwable t) {
             throw new CacheException(t);
+        }
+    }
+
+    /**
+     * 给想获得byte[]型的key加上密匙
+     *
+     * @param key
+     * @return
+     */
+    private byte[] getByteKey(K key) {
+        if (key instanceof String) {
+            String preKey = this.keyPrefix + key;
+            return preKey.getBytes();
+        } else {
+            return SerializeUtils.serialize(key);
         }
     }
 
@@ -179,7 +191,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
                 List<V> values = new ArrayList<V>(keys.size());
                 for (byte[] key : keys) {
                     @SuppressWarnings("unchecked")
-                    V value = get((K)key);
+                    V value = get((K) key);
                     if (value != null) {
                         values.add(value);
                     }
@@ -190,21 +202,6 @@ public class RedisCache<K, V> implements Cache<K, V> {
             }
         } catch (Throwable t) {
             throw new CacheException(t);
-        }
-    }
-
-
-    /**
-     * 给想获得byte[]型的key加上密匙
-     * @param key
-     * @return
-     */
-    private byte[] getByteKey(K key){
-        if(key instanceof String){
-            String preKey = this.keyPrefix + key;
-            return preKey.getBytes();
-        }else{
-            return SerializeUtils.serialize(key);
         }
     }
 

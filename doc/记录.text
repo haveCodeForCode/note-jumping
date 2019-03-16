@@ -1,0 +1,26 @@
+<!-- 公共dao层 -->
+public T get(String id);
+public T getByEntity(T entity);
+public List<T> findList(T entity);
+public List<T> findAllList();
+public int insert(T entity);
+public int update(T entity);
+public int delete(String id);
+public int Delete(T entity);
+
+<--表格基本数据-->
+xxx.id AS "id",
+xxx.create_by AS "createBy",
+xxx.create_time AS "createTime",
+xxx.update_by AS "updateBy",
+xxx.update_time AS "updateTime"
+
+<where>
+    xxx.del_flag = 0
+</where>
+
+
+
+LEFT JOIN sys_userinfo uif ON a.id = uif.user_id
+
+

@@ -5,22 +5,20 @@ import com.root.cognition.common.redis.RedisCacheManager;
 import com.root.cognition.common.redis.RedisManager;
 import com.root.cognition.common.redis.RedisSessionDAO;
 import com.root.cognition.common.shiro.UserRealm;
-import com.root.cognition.until.DataDic;
+import com.root.cognition.common.config.DataDic;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.eis.MemorySessionDAO;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
-import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.LinkedHashMap;
-
 /**
  * 系统基本设置
+ *
  * @author LineInkBook
  */
 @Configuration
@@ -30,55 +28,34 @@ public class SystemConfig {
      * 使用类型缓存
      */
     @Value("${spring.cache.type}")
-    private String cacheType ;
-
-    @Autowired
-    private final EhCacheManager ehCacheManager;
-
-    public SystemConfig(EhCacheManager ehCacheManager) {
-        this.ehCacheManager = ehCacheManager;
-    }
-
+    private String cacheType;
 
     /**
-     * Shiro拦截器配置
-     * @param securityManager
-     * @return
+     * EhCache 构造注入
      */
-    @Bean
-    ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager){
-        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
-        shiroFilterFactoryBean.setSecurityManager(securityManager);
-        shiroFilterFactoryBean.setLoginUrl("/login");
-        shiroFilterFactoryBean.setSuccessUrl("/index");
-        shiroFilterFactoryBean.setUnauthorizedUrl("/403");
-        LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
-        filterChainDefinitionMap.put("/login","anon");
-        filterChainDefinitionMap.put("/css/**", "anon");
-        filterChainDefinitionMap.put("/js/**", "anon");
-        filterChainDefinitionMap.put("/fonts/**", "anon");
-        filterChainDefinitionMap.put("/img/**", "anon");
-        filterChainDefinitionMap.put("/toGuide","anon");
-//        filterChainDefinitionMap.put("/docs/**", "anon");
-//        filterChainDefinitionMap.put("/druid/**", "anon");
-//        filterChainDefinitionMap.put("/upload/**", "anon");
-//        filterChainDefinitionMap.put("/files/**", "anon");
-        filterChainDefinitionMap.put("/logout", "logout");
-        filterChainDefinitionMap.put("/", "anon");
-//        filterChainDefinitionMap.put("/blog", "anon");
-//        filterChainDefinitionMap.put("/blog/open/**", "anon");
-        filterChainDefinitionMap.put("/**", "authc");
-        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
-        return  shiroFilterFactoryBean;
-    }
+    private final EhCacheManager ehCacheManager;
+    /**
+     * Redis 构造注入
+     */
+    private final RedisManager redisManager;
 
+    /**
+     * @param ehCacheManager  EhCacheConfig(ehcache配置，启动)
+     * @param redisManager    Re
+     */
+    @Autowired
+    public SystemConfig(EhCacheManager ehCacheManager, RedisManager redisManager) {
+        this.ehCacheManager = ehCacheManager;
+        this.redisManager = redisManager;
+    }
 
     /**
      * 设置安全管理器放入缓存
+     *
      * @return
      */
     @Bean
-    public SecurityManager securityManager(){
+    public SecurityManager securityManager() {
         //声明用户权限
         UserRealm userReal = new UserRealm();
         //会话权限
@@ -86,9 +63,9 @@ public class SystemConfig {
         //设置realm
         securityManager.setRealm(userReal);
         //设置缓存实现方法，使用redis或者使用ehCache
-        if(DataDic.CAHE_TYPE_REDIS.equals(cacheType)){
+        if (DataDic.CAHE_TYPE_REDIS.equals(cacheType)) {
             securityManager.setCacheManager(rediscacheManager());
-        }else{
+        } else {
             securityManager.setCacheManager(ehCacheManager);
         }
         return securityManager;
@@ -102,13 +79,10 @@ public class SystemConfig {
      * @return
      */
     public RedisCacheManager rediscacheManager() {
-        //初始化redis对象
-        RedisManager redisManager = new RedisManager();
         //初始化redis缓存对象
         RedisCacheManager redisCacheManager = new RedisCacheManager();
         //将redis对象放入操作对象返回，完成redis初始化
         redisCacheManager.setRedisManager(redisManager);
-
         return redisCacheManager;
     }
 
@@ -127,6 +101,7 @@ public class SystemConfig {
 
     /**
      * sessionDao注入方式
+     *
      * @return
      */
     @Bean

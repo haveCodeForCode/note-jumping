@@ -1,15 +1,16 @@
 package com.root.cognition.system.entity;
 
-import com.root.cognition.system.persistence.DataEntity;
+import com.root.cognition.common.persistence.BaseEntity;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
 /**
+ * 用户信息
  * @author LineInkBook
  * @version 2018/12/24
  */
-public class UserInfo extends DataEntity<UserInfo> {
+public class UserInfo extends BaseEntity<UserInfo>{
 
     private static final long serialVersionUID = 1L;
 
@@ -18,52 +19,81 @@ public class UserInfo extends DataEntity<UserInfo> {
     }
 
     /**
+     * 用户关联字段
+     */
+    private String userId;
+
+    /**
      * 性别
+     * <p>
      * sex
      */
-    private Long sex;
+    private char sex;
+
     /**
      * 出身日期
+     * <p>
      * birth
      */
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birth;
+
     /**
      * 图片ID
+     * <p>
      * picId
      */
     private String picId;
-    /**
-     * 居住地
-     * liveAddress
-     */
-    private String liveAddress;
-    /**
-     * 爱好
-     * hobby
-     */
-    private String hobby;
+
     /**
      * 所住省份
+     * <p>
      * province
      */
     private String province;
+
     /**
      * 所在城市
+     * <p>
      * city
      */
     private String city;
+
     /**
      * 所在地区
+     * <p>
      * district
      */
     private String district;
 
-    public Long getSex() {
+    /**
+     * 居住地
+     * <p>
+     * liveAddress
+     */
+    private String liveAddress;
+
+    /**
+     * 爱好
+     * <p>
+     * hobby
+     */
+    private String hobby;
+
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public char getSex() {
         return sex;
     }
 
-    public void setSex(Long sex) {
+    public void setSex(char sex) {
         this.sex = sex;
     }
 
@@ -126,14 +156,21 @@ public class UserInfo extends DataEntity<UserInfo> {
     @Override
     public String toString() {
         return "UserInfo{" +
-                "sex=" + sex +
+                "userId='" + userId + '\'' +
+                ", sex=" + sex +
                 ", birth=" + birth +
                 ", picId='" + picId + '\'' +
-                ", liveAddress='" + liveAddress + '\'' +
-                ", hobby='" + hobby + '\'' +
                 ", province='" + province + '\'' +
                 ", city='" + city + '\'' +
                 ", district='" + district + '\'' +
+                ", liveAddress='" + liveAddress + '\'' +
+                ", hobby='" + hobby + '\'' +
+                ", id='" + id + '\'' +
+                ", createBy='" + createBy + '\'' +
+                ", updateBy='" + updateBy + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", delFlag='" + delFlag + '\'' +
                 '}';
     }
 }

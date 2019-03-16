@@ -1,60 +1,71 @@
 package com.root.cognition.system.entity;
 
-import com.root.cognition.system.persistence.DataEntity;
+import com.root.cognition.common.persistence.BaseEntity;
 
 /**
+ * 用户
  * @author LineInkBook
  * @version 2018/12/24
  */
-public class User extends DataEntity<User> {
+public class User extends BaseEntity<User> {
+
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * 用户名
+     * <p>
+     * userName
+     */
+    private String userName;
+
+    /**
+     * 用户密码
+     * <p>
+     * userPassword
+     */
+    private String userPassword;
+
+    /**
+     * 用户邮箱
+     * <p>
+     * userEmail
+     */
+    private String userEmail;
+
+    /**
+     * 手机号
+     * <p>
+     */
+    private String userMobile;
+
+    /**
+     * 用户角色
+     * <p>
+     * role
+     */
+    private String role;
+
+    /**
+     * 用户部门
+     * <p>
+     * dept
+     */
+    private String dept;
+
+    /**
+     * 用户信息
+     * <p>
+     * userInfo
+     */
+    private String userInfo;
+
 
     public User(String id) {
         super(id);
     }
-    /**
-     * 用户编号
-     *
-     * userNumber
-     */
-    private String userNumber;
-    /**
-     * 用户名
-     *
-     * userName
-     */
-    private String userName;
-    /**
-     * 用户密码
-     *
-     * userPassword
-     */
-    private String userPassword;
-    /**
-     * 用户邮箱
-     *
-     * userEmail
-     */
-    private String userEmail;
-    /**
-     * 手机号
-     *
-     * userMobile
-     */
-    private String userMobile;
-    /**
-     * 用户信息关联
-     *
-     * userInfo
-     */
-    private UserInfo userInfo;
 
-
-    public String getUserNumber() {
-        return userNumber;
-    }
-
-    public void setUserNumber(String userNumber) {
-        this.userNumber = userNumber;
+    public User() {
+        super();
     }
 
     public String getUserName() {
@@ -89,23 +100,46 @@ public class User extends DataEntity<User> {
         this.userMobile = userMobile;
     }
 
-    public UserInfo getUserInfo() {
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getDept() {
+        return dept;
+    }
+
+    public void setDept(String dept) {
+        this.dept = dept;
+    }
+
+    public String getUserInfo() {
         return userInfo;
     }
 
-    public void setUserInfo(UserInfo userInfo) {
+    public void setUserInfo(String userInfo) {
         this.userInfo = userInfo;
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "userNumber='" + userNumber + '\'' +
-                ", userName='" + userName + '\'' +
+                "userName='" + userName + '\'' +
                 ", userPassword='" + userPassword + '\'' +
                 ", userEmail='" + userEmail + '\'' +
                 ", userMobile='" + userMobile + '\'' +
-                ", userInfo=" + userInfo +
+                ", role='" + role + '\'' +
+                ", dept='" + dept + '\'' +
+                ", userInfo='" + userInfo + '\'' +
+                ", id='" + id + '\'' +
+                ", createBy='" + createBy + '\'' +
+                ", updateBy='" + updateBy + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", delFlag='" + delFlag + '\'' +
                 '}';
     }
 }

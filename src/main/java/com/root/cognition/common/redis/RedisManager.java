@@ -1,6 +1,5 @@
 package com.root.cognition.common.redis;
 
-import com.root.cognition.system.config.RedisConfig;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -8,28 +7,35 @@ import redis.clients.jedis.JedisPoolConfig;
 import java.util.Set;
 
 /**
- * redis 操作
- * @author LineInkBook
+ * redis 连接池、直接操作reids方法
+ *
+ * @author worry
  */
 public class RedisManager {
-
+    /**
+     * reids基础配置
+     *
+     * redisHost        --redis地址
+     * redisPassword    --redis密码
+     * redisPort        --redis端口号
+     * redidTimeout     --redis重连时间
+     */
     private String redisHost;
-
     private String redisPassword;
-
     private int redisPort;
-
     private int redisTimeout;
+
 
     private static JedisPool jedisPool = null;
 
     /**
-     * 初始化截止redis时间
+     * 初始化截止redis终端时间
      */
     private int expire = 1;
 
     /**
      * 初始化方法
+     * 通过地址（redisHost）端口号（redisPort）和密码（redisPassword）连接时间（redisTimeout）设置
      */
     public void init() {
         if (jedisPool == null) {
@@ -46,7 +52,7 @@ public class RedisManager {
 
 
     /**
-     * 从redis中获得value
+     * 利用key从redis中获得value
      *
      * @param key
      * @return
@@ -210,5 +216,13 @@ public class RedisManager {
 
     public void setExpire(int expire) {
         this.expire = expire;
+    }
+
+    public static JedisPool getJedisPool() {
+        return jedisPool;
+    }
+
+    public static void setJedisPool(JedisPool jedisPool) {
+        RedisManager.jedisPool = jedisPool;
     }
 }

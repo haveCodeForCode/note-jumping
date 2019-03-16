@@ -1,15 +1,14 @@
 package com.root.cognition.common.shiro;
 
-import com.root.cognition.system.config.ApplicationContextRegister;
+import com.root.cognition.system.service.MenuService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 
@@ -20,22 +19,32 @@ import java.util.Set;
 public class UserRealm extends AuthorizingRealm {
 
 
+    @Autowired
+    private MenuService menuService;
+
     /**
-     * 通过shiro获取数据
+     * 通过shiro鉴定权限获取数据
+     *
      * @param principalCollection
      * @return
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-//        String userId = ShiroManager.getUserId();
-//        MenuService menuService = ApplicationContextRegister.getBean(MenuService.class);
-//        Set<String> perms = menuService.listPerms(userId);
-//        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-//        info.setStringPermissions(perms);
-//        return info;
-        return null;
+        //通过shiro获取用户id
+        String userId = ShiroManager.getUserId();
+        //获取用户菜单
+        Set<String> perms = menuService.listPerms(userId);
+        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+        info.setStringPermissions(perms);
+        return info;
     }
 
+    /**
+     * 用户验证
+     * @param authenticationToken
+     * @return
+     * @throws AuthenticationException
+     */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
 //        String username = (String) token.getPrincipal();
