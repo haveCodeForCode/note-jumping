@@ -1,12 +1,11 @@
 package com.root.cognition.system.controller;
 
-import com.bootdo.common.annotation.Log;
-import com.bootdo.common.config.Constant;
-import com.bootdo.common.controller.BaseController;
-import com.bootdo.common.domain.Tree;
-import com.bootdo.common.utils.R;
-import com.bootdo.system.domain.MenuDO;
-import com.bootdo.system.service.MenuService;
+import com.root.cognition.common.config.DataDic;
+import com.root.cognition.common.persistence.BaseController;
+import com.root.cognition.common.persistence.Tree;
+import com.root.cognition.common.until.ResultMap;
+import com.root.cognition.system.entity.SysMenu;
+import com.root.cognition.system.service.MenuService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,14 +16,20 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author bootdo 1992lcg@163.com
+ * 菜单控制
+ * @author taoya
  */
 @RequestMapping("/sys/menu")
 @Controller
 public class MenuController extends BaseController {
 	String prefix = "system/menu";
 	@Autowired
-	MenuService menuService;
+	private MenuService menuService;
+
+	public void setMenuService(MenuService menuService) {
+		this.menuService = menuService;
+	}
+
 
 	@RequiresPermissions("sys:menu:menu")
 	@GetMapping()
@@ -35,96 +40,85 @@ public class MenuController extends BaseController {
 	@RequiresPermissions("sys:menu:menu")
 	@RequestMapping("/list")
 	@ResponseBody
-	List<MenuDO> list(@RequestParam Map<String, Object> params) {
-		List<MenuDO> menus = menuService.list(params);
-		return menus;
+	List<SysMenu> list(@RequestParam Map<String, Object> params) {
+		List<SysMenu> sysMenus = menuService.list(params);
+		return sysMenus;
 	}
 
-	@Log("添加菜单")
+	//	@Log("添加菜单")
 	@RequiresPermissions("sys:menu:add")
 	@GetMapping("/add/{pId}")
-	String add(Model model, @PathVariable("pId") Long pId) {
+	String add(Model model, @PathVariable("pId") String pId) {
 		model.addAttribute("pId", pId);
-		if (pId == 0) {
+		if (pId == DataDic.STRING_ZERO) {
 			model.addAttribute("pName", "根目录");
 		} else {
-			model.addAttribute("pName", menuService.get(pId).getName());
+			model.addAttribute("pName", menuService.get(pId).getMenuName());
 		}
 		return prefix + "/add";
 	}
 
-	@Log("编辑菜单")
+	//	@Log("编辑菜单")
 	@RequiresPermissions("sys:menu:edit")
 	@GetMapping("/edit/{id}")
-	String edit(Model model, @PathVariable("id") Long id) {
-		MenuDO mdo = menuService.get(id);
-		Long pId = mdo.getParentId();
-		model.addAttribute("pId", pId);
-		if (pId == 0) {
+	String edit(Model model, @PathVariable("id") String id) {
+		SysMenu sysMenu = menuService.get(id);
+		String parentId = sysMenu.getParentId();
+		model.addAttribute("pId", parentId);
+		if (parentId.equals(DataDic.STRING_ZERO)) {
 			model.addAttribute("pName", "根目录");
 		} else {
-			model.addAttribute("pName", menuService.get(pId).getName());
+			model.addAttribute("pName", menuService.get(parentId).getMenuName());
 		}
-		model.addAttribute("menu", mdo);
+		model.addAttribute("menu", sysMenu);
 		return prefix+"/edit";
 	}
 
-	@Log("保存菜单")
-	@RequiresPermissions("sys:menu:add")
+	//	@Log("保存菜单")
+	@RequiresPermissions("sys:sysMenu:add")
 	@PostMapping("/save")
 	@ResponseBody
-	R save(MenuDO menu) {
-		if (Constant.DEMO_ACCOUNT.equals(getUsername())) {
-			return R.error(1, "演示系统不允许修改,完整体验请部署程序");
-		}
-		if (menuService.save(menu) > 0) {
-			return R.ok();
+	ResultMap save(SysMenu sysMenu) {
+		if (menuService.save(sysMenu) > 0) {
+			return ResultMap.success();
 		} else {
-			return R.error(1, "保存失败");
+			return ResultMap.returnMap(1, "保存失败", null);
 		}
 	}
 
-	@Log("更新菜单")
-	@RequiresPermissions("sys:menu:edit")
+	//	@Log("更新菜单")
+	@RequiresPermissions("sys:sysMenu:edit")
 	@PostMapping("/update")
 	@ResponseBody
-	R update(MenuDO menu) {
-		if (Constant.DEMO_ACCOUNT.equals(getUsername())) {
-			return R.error(1, "演示系统不允许修改,完整体验请部署程序");
-		}
-		if (menuService.update(menu) > 0) {
-			return R.ok();
+	ResultMap update(SysMenu sysMenu) {
+		if (menuService.update(sysMenu) > 0) {
+			return ResultMap.success();
 		} else {
-			return R.error(1, "更新失败");
+			return ResultMap.returnMap(1, "更新失败", null);
 		}
 	}
 
-	@Log("删除菜单")
+	//	@Log("删除菜单")
 	@RequiresPermissions("sys:menu:remove")
 	@PostMapping("/remove")
 	@ResponseBody
-	R remove(Long id) {
-		if (Constant.DEMO_ACCOUNT.equals(getUsername())) {
-			return R.error(1, "演示系统不允许修改,完整体验请部署程序");
-		}
+	ResultMap remove(String id) {
 		if (menuService.remove(id) > 0) {
-			return R.ok();
+			return ResultMap.success();
 		} else {
-			return R.error(1, "删除失败");
+			return ResultMap.returnMap(1, "删除失败", null);
 		}
 	}
 
 	@GetMapping("/tree")
 	@ResponseBody
-	Tree<MenuDO> tree() {
-		Tree<MenuDO>  tree = menuService.getTree();
-		return tree;
+	Tree<SysMenu> tree() {
+		return menuService.getTree();
 	}
 
 	@GetMapping("/tree/{roleId}")
 	@ResponseBody
-	Tree<MenuDO> tree(@PathVariable("roleId") Long roleId) {
-		Tree<MenuDO> tree = menuService.getTree(roleId);
-		return tree;
+	Tree<SysMenu> tree(@RequestParam("roleId") String roleId) {
+		return menuService.getTree(roleId);
 	}
 }

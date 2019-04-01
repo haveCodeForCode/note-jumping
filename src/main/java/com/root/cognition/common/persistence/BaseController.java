@@ -2,11 +2,8 @@ package com.root.cognition.common.persistence;
 
 
 import com.root.cognition.common.shiro.ShiroUtils;
-import com.root.cognition.system.entity.User;
+import com.root.cognition.system.entity.SysUser;
 import org.springframework.stereotype.Controller;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 基础控制层
@@ -14,7 +11,7 @@ import java.util.Map;
  */
 @Controller
 public class BaseController {
-	public User getUser() {
+	public SysUser getUser() {
 		return ShiroUtils.getUser();
 	}
 

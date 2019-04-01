@@ -5,16 +5,16 @@
 
 
     <!--UserRole实体类方法-->
-    <select id="getWithRole" parameterType="string" resultType="com.root.cognition.system.domain.UserRoleDo">
+    <select id="getWithRole" parameterType="string" resultType="com.root.cognition.system.entity.SysUser">
         SELECT
-          su.user_id   AS "user.id",
-          su.user_name AS "user.userName",
-          su.user_password AS "user.userPassword",
-          su.user_email AS "user.userEmail",
-          su.user_mobile AS "user.userMobile",
-          sr.role_id	  AS "role.id",
-          sr.role_name AS "role.roleName",
-          sr.role_sign AS "role.roleSign",
+          su.user_id   AS "sysUser.id",
+          su.user_name AS "sysUser.userName",
+          su.user_password AS "sysUser.userPassword",
+          su.user_email AS "sysUser.userEmail",
+          su.user_mobile AS "sysUser.userMobile",
+          sr.role_id	  AS "sysRole.id",
+          sr.role_name AS "sysRole.roleName",
+          sr.role_sign AS "sysRole.roleSign",
           sr.role_
         FROM sys_user su
         LEFT JOIN user_role_info uri ON  su.user_id = uri.user_id
@@ -142,6 +142,10 @@
         `del_flage` = #{delFlage}
         WHERE id = #{id}
     </update>
+
+    <select id="listAllDept">
+		select DISTINCT dept_id from sys_user
+	</select>
 
     <sql id="userColumns">
           a.user_id   AS "id",

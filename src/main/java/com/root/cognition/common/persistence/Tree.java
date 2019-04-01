@@ -16,18 +16,22 @@ public class Tree<T> {
      * 节点ID
      */
     private String id;
+
     /**
      * 显示节点文本
      */
     private String text;
+
     /**
      * 节点状态，open closed
      */
     private Map<String, Object> state;
+
     /**
      * 节点是否被选中 true false
      */
     private boolean checked = false;
+
     /**
      * 节点属性
      */
@@ -42,10 +46,12 @@ public class Tree<T> {
      * 父ID
      */
     private String parentId;
+
     /**
      * 是否有父节点
      */
     private boolean hasParent = false;
+
     /**
      * 是否有子节点
      */

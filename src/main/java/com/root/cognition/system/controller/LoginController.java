@@ -1,10 +1,8 @@
 package com.root.cognition.system.controller;
 
-import com.root.cognition.system.entity.User;
+import com.root.cognition.system.entity.SysUser;
 import com.root.cognition.system.service.UserService;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,14 +65,14 @@ public class LoginController {
     }
 
     @PostMapping(value = "/login")
-    public ResponseEntity<Void> login(@RequestBody User loginUser, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<Void> login(@RequestBody SysUser loginSysUser, HttpServletRequest request, HttpServletResponse response) {
         Subject subject = SecurityUtils.getSubject();
 //        try {
 //            //将用户请求参数封装后，直接提交Shiro处理
-//            UsernamePasswordToken token = new UsernamePasswordToken(loginUser.getUserName(),loginUser.getUserPassword());
+//            UsernamePasswordToken token = new UsernamePasswordToken(loginSysUser.getUserName(),loginSysUser.getUserPassword());
 //            subject.login(token);
 //            //Shiro认证通过后会将user信息放到subject内，生成token并返回
-//            User user = (User) subject.getPrincipal();
+//            SysUser user = (SysUser) subject.getPrincipal();
 //            String newToken = userService.generateJwtToken(user.getUsername());
 //            response.setHeader("x-auth-token", newToken);
 //

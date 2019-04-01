@@ -5,7 +5,7 @@
 
 <!--********************自定义查询语句*****************************-->
 
-    <select id="listMenuByUserId"  resultType="com.root.cognition.system.entity.Menu">
+    <select id="listMenuByUserId" resultType="com.root.cognition.system.entity.SysMenu">
             SELECT
 
             FROM sys_menu SYSM
@@ -13,7 +13,13 @@
     </select>
 
     <select id="listUserPerms" resultType="java.lang.String">
-
+        select
+            distinct m.perms
+        from
+          sys_menu m
+        left join sys_role_menu rm on m.menu_id = rm.menu_id
+        left join sys_user_role ur on rm.role_id = ur.role_id
+        where ur.user_id= #{id}
     </select>
 
 <!--**************************************************************-->

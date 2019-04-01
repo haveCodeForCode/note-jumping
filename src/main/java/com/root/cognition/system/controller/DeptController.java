@@ -1,9 +1,13 @@
 package com.root.cognition.system.controller;
 
 
+import com.root.cognition.common.config.DataDic;
 import com.root.cognition.common.persistence.BaseController;
 import com.root.cognition.common.persistence.Tree;
-import com.root.cognition.system.entity.Dept;
+import com.root.cognition.system.entity.SysDept;
+import com.root.cognition.system.service.DeptService;
+import org.apache.ibatis.annotations.Param;
+import com.root.cognition.common.until.ResultMap;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,7 +32,7 @@ public class DeptController extends BaseController {
 
 	private String prefix = "system/dept";
 	@Autowired
-	private DeptService sysDeptService;
+	private DeptService deptService;
 
 	@GetMapping()
 	@RequiresPermissions("system:sysDept:sysDept")
@@ -40,35 +44,31 @@ public class DeptController extends BaseController {
 	@ResponseBody
 	@GetMapping("/list")
 	@RequiresPermissions("system:sysDept:sysDept")
-	public List<Dept> list() {
+	public List<SysDept> list() {
 		Map<String, Object> query = new HashMap<>(16);
-		List<Dept> sysDeptList = sysDeptService.list(query);
-		return sysDeptList;
+		List<SysDept> sysSysDeptList = deptService.list(query);
+		return sysSysDeptList;
 	}
 
 	@GetMapping("/add/{pId}")
 	@RequiresPermissions("system:sysDept:add")
-	String add(@PathVariable("pId") Long pId, Model model) {
+	String add(@Param("pId") String pId, Model model) {
 		model.addAttribute("pId", pId);
-		if (pId == 0) {
+		if (pId.equals(DataDic.STRING_ZERO)) {
 			model.addAttribute("pName", "总部门");
 		} else {
-			model.addAttribute("pName", sysDeptService.get(pId).getName());
+			model.addAttribute("pName", deptService.get(pId).getName());
 		}
 		return  prefix + "/add";
 	}
 
 	@GetMapping("/edit/{deptId}")
 	@RequiresPermissions("system:sysDept:edit")
-	String edit(@PathVariable("deptId") Long deptId, Model model) {
-		Dept sysDept = sysDeptService.get(deptId);
+	String edit(@Param("deptId") String deptId, Model model) {
+		SysDept sysDept = deptService.get(deptId);
 		model.addAttribute("sysDept", sysDept);
-		if(Constant.DEPT_ROOT_ID.equals(sysDept.getParentId())) {
-			model.addAttribute("parentDeptName", "无");
-		}else {
-			Dept parDept = sysDeptService.get(sysDept.getParentId());
-			model.addAttribute("parentDeptName", parDept.getName());
-		}
+		SysDept parSysDept = deptService.get(sysDept.getParentId());
+		model.addAttribute("parentDeptName", parSysDept.getName());
 		return  prefix + "/edit";
 	}
 
@@ -78,14 +78,11 @@ public class DeptController extends BaseController {
 	@ResponseBody
 	@PostMapping("/save")
 	@RequiresPermissions("system:sysDept:add")
-	public R save(Dept sysDept) {
-		if (Constant.DEMO_ACCOUNT.equals(getUsername())) {
-			return R.error(1, "演示系统不允许修改,完整体验请部署程序");
+	public ResultMap save(SysDept sysDept) {
+		if (deptService.save(sysDept) > 0) {
+			return ResultMap.success();
 		}
-		if (sysDeptService.save(sysDept) > 0) {
-			return R.ok();
-		}
-		return R.error();
+		return ResultMap.error();
 	}
 
 	/**
@@ -94,14 +91,11 @@ public class DeptController extends BaseController {
 	@ResponseBody
 	@RequestMapping("/update")
 	@RequiresPermissions("system:sysDept:edit")
-	public R update(Dept sysDept) {
-		if (Constant.DEMO_ACCOUNT.equals(getUsername())) {
-			return R.error(1, "演示系统不允许修改,完整体验请部署程序");
+	public ResultMap update(SysDept sysDept) {
+		if (deptService.update(sysDept) > 0) {
+			return ResultMap.success();
 		}
-		if (sysDeptService.update(sysDept) > 0) {
-			return R.ok();
-		}
-		return R.error();
+		return ResultMap.error();
 	}
 
 	/**
@@ -110,23 +104,20 @@ public class DeptController extends BaseController {
 	@PostMapping("/remove")
 	@ResponseBody
 	@RequiresPermissions("system:sysDept:remove")
-	public R remove(Long deptId) {
-		if (Constant.DEMO_ACCOUNT.equals(getUsername())) {
-			return R.error(1, "演示系统不允许修改,完整体验请部署程序");
-		}
+	public ResultMap remove(String deptId) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("parentId", deptId);
-		if(sysDeptService.count(map)>0) {
-			return R.error(1, "包含下级部门,不允许修改");
+		if(deptService.count(map)>0) {
+			return ResultMap.returnMap(1, "包含下级部门,不允许修改",null);
 		}
-		if(sysDeptService.checkDeptHasUser(deptId)) {
-			if (sysDeptService.remove(deptId) > 0) {
-				return R.ok();
+		if(deptService.checkDeptHasUser(deptId)) {
+			if (deptService.remove(deptId) > 0) {
+				return ResultMap.error();
 			}
 		}else {
-			return R.error(1, "部门包含用户,不允许修改");
+			return ResultMap.returnMap(1, "部门包含用户,不允许修改",null);
 		}
-		return R.error();
+		return ResultMap.error();
 	}
 
 	/**
@@ -135,19 +126,16 @@ public class DeptController extends BaseController {
 	@PostMapping("/batchRemove")
 	@ResponseBody
 	@RequiresPermissions("system:sysDept:batchRemove")
-	public R remove(@RequestParam("ids[]") Long[] deptIds) {
-		if (Constant.DEMO_ACCOUNT.equals(getUsername())) {
-			return R.error(1, "演示系统不允许修改,完整体验请部署程序");
-		}
-		sysDeptService.batchRemove(deptIds);
-		return R.ok();
+	public ResultMap remove(@RequestParam("ids[]") String[] deptIds) {
+		deptService.batchRemove(deptIds);
+		return ResultMap.success();
 	}
 
 	@GetMapping("/tree")
 	@ResponseBody
-	public Tree<Dept> tree() {
-		Tree<Dept> tree = new Tree<Dept>();
-		tree = sysDeptService.getTree();
+	public Tree<SysDept> tree() {
+		Tree<SysDept> tree = new Tree<SysDept>();
+		tree = deptService.getTree();
 		return tree;
 	}
 

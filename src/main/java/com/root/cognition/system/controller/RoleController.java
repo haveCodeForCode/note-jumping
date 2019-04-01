@@ -2,16 +2,18 @@ package com.root.cognition.system.controller;
 
 
 import com.root.cognition.common.persistence.BaseController;
-import com.root.cognition.system.entity.Role;
-import com.root.cognition.system.service.RoleService;
 import com.root.cognition.common.until.ResultMap;
+import com.root.cognition.system.entity.SysRole;
+import com.root.cognition.system.service.RoleService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 角色控制层
@@ -38,8 +40,9 @@ public class RoleController extends BaseController {
     @RequiresPermissions("sys:role:role")
     @GetMapping("/list")
     @ResponseBody()
-    List<Role> list() {
-        return roleService.list();
+    List<SysRole> list() {
+        Map<String, Object> map = new HashMap<>();
+        return roleService.list(map);
     }
 
     //	@Log("添加角色")
@@ -53,17 +56,17 @@ public class RoleController extends BaseController {
     @RequiresPermissions("sys:role:edit")
     @GetMapping("/edit/{id}")
     String edit(@PathVariable("id") String id, Model model) {
-        Role role = roleService.get(id);
-        model.addAttribute("role", role);
+        SysRole sysRole = roleService.get(id);
+        model.addAttribute("role", sysRole);
         return prefix + "/edit";
     }
 
     //	@Log("保存角色")
-    @RequiresPermissions("sys:role:add")
+    @RequiresPermissions("sys:sysRole:add")
     @PostMapping("/save")
     @ResponseBody()
-    ResultMap save(Role role) {
-        if (roleService.save(role) > 0) {
+    ResultMap save(SysRole sysRole) {
+        if (roleService.save(sysRole) > 0) {
             return ResultMap.success();
         } else {
             return ResultMap.error();
@@ -71,11 +74,12 @@ public class RoleController extends BaseController {
     }
 
     //	@Log("更新角色")
-    @RequiresPermissions("sys:role:edit")
+    @RequiresPermissions("sys:sysRole:edit")
     @PostMapping("/update")
     @ResponseBody()
-    ResultMap update(Role role) {
-        if (roleService.update(role) > 0) {
+    ResultMap update(SysRole sysRole) {
+        int state = roleService.update(sysRole);
+        if (roleService.update(sysRole) > 0) {
             return ResultMap.success();
         } else {
             return ResultMap.error();
@@ -86,7 +90,7 @@ public class RoleController extends BaseController {
     @RequiresPermissions("sys:role:remove")
     @PostMapping("/remove")
     @ResponseBody()
-    ResultMap delete(Long id) {
+    ResultMap delete(String id) {
         if (roleService.remove(id) > 0) {
             return ResultMap.success();
         } else {
@@ -98,8 +102,8 @@ public class RoleController extends BaseController {
     @RequiresPermissions("sys:role:batchRemove")
     @PostMapping("/batchRemove")
     @ResponseBody
-    ResultMap batchRemove(@RequestParam("ids[]") Long[] ids) {
-        int r = roleService.batchremove(ids);
+    ResultMap batchRemove(@RequestParam("ids[]") String[] ids) {
+        int r = roleService.batchDelect(ids);
         if (r > 0) {
             ResultMap.success();
         }

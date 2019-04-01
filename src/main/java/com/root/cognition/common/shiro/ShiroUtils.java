@@ -1,6 +1,6 @@
 package com.root.cognition.common.shiro;
 
-import com.root.cognition.system.entity.User;
+import com.root.cognition.system.entity.SysUser;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
@@ -22,9 +22,9 @@ public class ShiroUtils {
         return SecurityUtils.getSubject();
     }
 
-    public static User getUser() {
+    public static SysUser getUser() {
         Object object = getSubjct().getPrincipal();
-        return (User)object;
+        return (SysUser)object;
     }
     public static String getUserId() {
         return getUser().getId();

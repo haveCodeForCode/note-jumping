@@ -1,7 +1,9 @@
 package com.root.cognition.common.persistence;
 
 import org.apache.ibatis.annotations.Mapper;
+
 import java.util.List;
+import java.util.Map;
 
 /**
  * DAO支持类实现
@@ -20,25 +22,26 @@ public interface BaseDao<T> {
     /**
      * 获取单条数据（根据实体）
      *
-     * @param entity 对应实体类
+     * @param params 查询条件
      * @return entity   实体类
      */
-    T getByEntity(T entity);
+    T getByEntity(Map<String, Object> params);
 
     /**
      * 根据实体中内容，查询数据列表
      *
-     * @param entity 对应实体类
+     * @param params 查询条件
      * @return list<t> 实体类列
      */
-    List<T> findList(T entity);
+    List<T> findList(Map<String, Object> params);
 
     /**
      * 数量统计
-     * @param entity 实体类
+     *
+     * @param params 查询条件
      * @return int   数量
      */
-    int count(T entity);
+    int count(Map<String, Object> params);
 
     /**
      * 插入数据
@@ -51,25 +54,26 @@ public interface BaseDao<T> {
     /**
      * 更新数据
      *
-     * @param entity
-     * @return
+     * @param entity 实体类
+     * @return 数量
      */
     int update(T entity);
 
     /**
      * 删除数据（一般为逻辑删除，更新del_flag字段为1）
      *
-     * @param id
-     * @return
-     * @see public int delete(T entity)
+     * @param id 实体类的Id
+     * @return 数量
+     * @see public int remove(T entity)
      */
-    int delete(String id);
+    int remove(String id);
 
     /**
      * 删除一系列数据
-     * @param Ids
-     * @return
+     *
+     * @param ids 实体类id数组
+     * @return 数量
      */
-    int batchDelete(String[] Ids);
+    int batchRemove(String[] ids);
 
 }

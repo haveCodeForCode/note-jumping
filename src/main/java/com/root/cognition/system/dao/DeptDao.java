@@ -1,7 +1,7 @@
 package com.root.cognition.system.dao;
 
 import com.root.cognition.common.persistence.BaseDao;
-import com.root.cognition.system.entity.Dept;
+import com.root.cognition.system.entity.SysDept;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -14,9 +14,9 @@ import org.springframework.stereotype.Repository;
  */
 @Mapper
 @Repository("DeptDao")
-public interface DeptDao extends BaseDao<Dept> {
+public interface DeptDao extends BaseDao<SysDept> {
 
-	Long[] listParentDept();
+	String[] listParentDept();
 	
 	int getDeptUserNumber(String deptId);
 }

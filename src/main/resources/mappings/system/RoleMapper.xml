@@ -4,15 +4,13 @@
 <mapper namespace="com.root.cognition.system.dao.RoleDao">
 
 
-
-
-	<select id="get" resultType="com.root.cognition.system.entity.Role">
+    <select id="get" resultType="com.root.cognition.system.entity.SysRole">
 		select
 		`role_id`,`role_name`,`role_sign`,`remark`,`user_id_create`,`gmt_create`,`gmt_modified`
 		from sys_role where role_id = #{value}
 	</select>
 
-	<select id="findList" resultType="com.root.cognition.system.entity.Role">
+    <select id="findList" resultType="com.root.cognition.system.entity.SysRole">
 		select
 		`role_id`,`role_name`,`role_sign`,`remark`,`user_id_create`,`gmt_create`,`gmt_modified`
 		from sys_role
@@ -51,8 +49,8 @@
 		</where>
 	</select>
 
-	<insert id="save" parameterType="com.root.cognition.system.entity.Role"
-		useGeneratedKeys="true" keyProperty="roleId">
+    <insert id="save" parameterType="com.root.cognition.system.entity.SysRole"
+            useGeneratedKeys="true" keyProperty="roleId">
 		insert into sys_role
 		(
 		`role_name`,
@@ -73,7 +71,7 @@
 		)
 	</insert>
 
-	<update id="update" parameterType="com.root.cognition.system.entity.Role">
+    <update id="update" parameterType="com.root.cognition.system.entity.SysRole">
 		update sys_role
 		<set>
 			<if test="roleName != null">`role_name` = #{roleName}, </if>

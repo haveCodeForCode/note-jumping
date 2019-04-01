@@ -28,15 +28,15 @@ public class DataDic {
      * 成功
      * 失败
      */
-    static final String SUCCESS = "success";
-    static final String FAIL    = "fail";
+    public static final String SUCCESS = "success";
+    public static final String FAIL = "fail";
 
     /**
      * MD5加密
      * MD5解密
      */
-    static final String ENCRY = "encry";
-    static final String DECRY = "decry";
+    public static final String ENCRY = "encry";
+    public static final String DECRY = "decry";
 
     /**
      * 返回数据参数
@@ -54,4 +54,13 @@ public class DataDic {
     public static final int RETURN_STATUS_AUTHBUG = 0;
     public static final int RETURN_STATUS_INFOBUG = 2;
     public static final int RETURN_STATUS_OVERCONTROLBUG = 3;
+
+
+    /*** 部门根节点id */
+    public static Long DEPT_ROOT_ID = 0L;
+    /*** 缓存方式 */
+    public static String CACHE_TYPE_REDIS = "redis";
+    /*** 村务信息 */
+    public static String LOG_ERROR = "error";
+
 }

@@ -32,17 +32,11 @@ public class BuildTree {
 			}
 
 			for (Tree<T> parent : nodes) {
-
 				String id = parent.getId();
-
 				if (id != null && id.equals(pid)) {
-
 					parent.getChildren().add(children);
-
 					children.setHasParent(true);
-
 					parent.setChildren(true);
-
 					continue;
 				}
 			}
@@ -68,32 +62,39 @@ public class BuildTree {
 		return root;
 	}
 
+	/**
+	 *
+	 * @param nodes  实体类Tree对象数列
+	 * @param idParam
+	 * @param <T>
+	 * @return
+	 */
 	public static <T> List<Tree<T>> buildList(List<Tree<T>> nodes, String idParam) {
 		if (nodes == null) {
 			return null;
 		}
+
+		//初始化树列
 		List<Tree<T>> topNodes = new ArrayList<Tree<T>>();
-
+		//循环传进来的额数列
 		for (Tree<T> children : nodes) {
-
+			//获取该列的父级对象
 			String pid = children.getParentId();
+			//如果等于空或者等于0，则加入到列中
 			if (pid == null || idParam.equals(pid)) {
 				topNodes.add(children);
-
 				continue;
 			}
-
+			//
 			for (Tree<T> parent : nodes) {
 				String id = parent.getId();
 				if (id != null && id.equals(pid)) {
 					parent.getChildren().add(children);
 					children.setHasParent(true);
 					parent.setChildren(true);
-
 					continue;
 				}
 			}
-
 		}
 		return topNodes;
 	}

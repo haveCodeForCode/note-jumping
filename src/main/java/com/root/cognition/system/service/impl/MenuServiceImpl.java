@@ -1,12 +1,13 @@
 package com.root.cognition.system.service.impl;
 
 
+import com.root.cognition.common.persistence.Tree;
+import com.root.cognition.common.until.BuildTree;
 import com.root.cognition.system.dao.MenuDao;
 import com.root.cognition.system.dao.RoleMenuDao;
-import com.root.cognition.system.entity.Menu;
-import com.root.cognition.common.persistence.Tree;
+import com.root.cognition.system.entity.SysMenu;
 import com.root.cognition.system.service.MenuService;
-import com.root.cognition.common.until.BuildTree;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -16,131 +17,114 @@ import java.util.*;
 
 /**
  * 菜单服务层
- *
- * @author LineInkBook
+ * @author taoya
  */
 @Service
 @Transactional(readOnly = true, rollbackFor = Exception.class)
 public class MenuServiceImpl implements MenuService {
 
     private MenuDao menuDao;
-	private RoleMenuDao roleMenuDao;
-    private Menu menu;
 
+    private RoleMenuDao roleMenuDao;
 
     @Autowired
     public void setMenuDao(MenuDao menuDao) {
         this.menuDao = menuDao;
     }
     @Autowired
-    public void setRoleMenuDao(RoleMenuDao roleMenuDao){
+    public void setRoleMenuDao(RoleMenuDao roleMenuDao) {
         this.roleMenuDao = roleMenuDao;
     }
 
-    /**
-     * 获取角色菜单
-     * @param
-     * @return 树形菜单
-     */
-    @Cacheable("SysMenu")
+
     @Override
-    public Tree<Menu> getSysMenuTree(String id) {
-        List<Tree<Menu>> trees = new ArrayList<Tree<Menu>>();
-        List<Menu> menus = menuDao.listMenuByUserId(id);
-        //循环获取系统菜单
-        for (Menu sysMenu : menus) {
-            Tree<Menu> tree = new Tree<Menu>();
+    public SysMenu get(String id) {
+        return menuDao.get(id);
+    }
+
+    @Override
+    public SysMenu get(Map<String, Object> params) {
+        return menuDao.getByEntity(params);
+    }
+
+    @Transactional(readOnly = false, rollbackFor = Exception.class)
+    @Override
+    public int update(SysMenu sysMenu) {
+        return menuDao.update(sysMenu);
+    }
+
+    @Override
+    public List<SysMenu> list(Map<String, Object> params) {
+        return menuDao.findList(params);
+    }
+
+    @Transactional(readOnly = false, rollbackFor = Exception.class)
+    @Override
+    public int remove(String id) {
+        int result = menuDao.remove(id);
+        return result;
+    }
+
+    @Transactional(readOnly = false, rollbackFor = Exception.class)
+    @Override
+    public int save(SysMenu sysMenu) {
+        return menuDao.insert(sysMenu);
+    }
+
+    @Cacheable
+    @Override
+    public Tree<SysMenu> getSysMenuTree(String id) {
+        List<Tree<SysMenu>> trees = new ArrayList<Tree<SysMenu>>();
+        List<SysMenu> sysMenuList = menuDao.listMenuByUserId(id);
+        for (SysMenu sysMenu : sysMenuList) {
+            Tree<SysMenu> tree = new Tree<SysMenu>();
             tree.setId(sysMenu.getId().toString());
             tree.setParentId(sysMenu.getParentId().toString());
             tree.setText(sysMenu.getMenuName());
-
             Map<String, Object> attributes = new HashMap<>(16);
-
             attributes.put("url", sysMenu.getMenuUrl());
             attributes.put("icon", sysMenu.getMenuIcon());
             tree.setAttributes(attributes);
             trees.add(tree);
         }
         // 默认顶级菜单为０，根据数据库实际情况调整
-        Tree<Menu> tMenu = BuildTree.build(trees);
-        return tMenu;
-    }
-
-    @Override
-    public List<Menu> list(Menu menu) {
-        List<Menu> menus = menuDao.findList(menu);
-        return menus;
-    }
-
-    @Transactional(readOnly = false, rollbackFor = Exception.class)
-    @Override
-    public int remove(String id) {
-        int result = menuDao.delete(id);
-        return result;
-    }
-
-
-    @Transactional(readOnly = false, rollbackFor = Exception.class)
-    @Override
-    public int save(Menu menu) {
-        int r = menuMapper.save(menu);
-        return r;
-    }
-
-    @Transactional(readOnly = false, rollbackFor = Exception.class)
-    @Override
-    public int update(Menu menu) {
-        int r = menuDao.update(menu);
-        return r;
-    }
-
-    @Override
-    public Menu get(Long id) {
-        Menu menu = menuDao.get(id);
-        return menu;
-    }
-
-    @Override
-    public Set<String> listPerms(String userId) {
-        return null;
-    }
-
-    @Override
-    public Tree<Menu> getTree() {
-        List<Tree<Menu>> trees = new ArrayList<Tree<Menu>>();
-        List<Menu> menuDOs = menuDao.list(new HashMap<>(16));
-        for (Menu sysMenuDO : menuDOs) {
-            Tree<Menu> tree = new Tree<Menu>();
-            tree.setId(sysMenuDO.getMenuId().toString());
-            tree.setParentId(sysMenuDO.getParentId().toString());
-            tree.setText(sysMenuDO.getName());
-            trees.add(tree);
-        }
-        // 默认顶级菜单为０，根据数据库实际情况调整
-        Tree<Menu> t = BuildTree.build(trees);
+        Tree<SysMenu> t = BuildTree.build(trees);
         return t;
     }
 
     @Override
-    public Tree<Menu> getTree(Long id) {
-        // 根据roleId查询权限
-        List<Menu> menus = menuDao.list(new HashMap<String, Object>(16));
-        List<Long> menuIds = roleMenuDao.listMenuIdByRoleId(id);
-        List<Long> temp = menuIds;
-        for (Menu menu : menus) {
-            if (temp.contains(menu.getParentId())) {
-                menuIds.remove(menu.getParentId());
-            }
+    public Tree<SysMenu> getTree() {
+        List<Tree<SysMenu>> trees = new ArrayList<Tree<SysMenu>>();
+        List<SysMenu> sysMenuDOS = menuDao.findList(new HashMap<>(16));
+        for (SysMenu sysSysMenuDO : sysMenuDOS) {
+            Tree<SysMenu> tree = new Tree<SysMenu>();
+            tree.setId(sysSysMenuDO.getId().toString());
+            tree.setParentId(sysSysMenuDO.getParentId().toString());
+            tree.setText(sysSysMenuDO.getMenuName());
+            trees.add(tree);
         }
-        List<Tree<Menu>> trees = new ArrayList<Tree<Menu>>();
-        List<Menu> menuDOs = menuDao.list(new HashMap<String, Object>(16));
-        for (Menu sysMenuDO : menuDOs) {
-            Tree<Menu> tree = new Tree<Menu>();
-            tree.setId(sysMenuDO.getMenuId().toString());
-            tree.setParentId(sysMenuDO.getParentId().toString());
-            tree.setText(sysMenuDO.getName());
+        // 默认顶级菜单为０，根据数据库实际情况调整
+        Tree<SysMenu> t = BuildTree.build(trees);
+        return t;
+    }
+
+    @Override
+    public Tree<SysMenu> getTree(String id) {
+
+        List<Tree<SysMenu>> trees = new ArrayList<Tree<SysMenu>>();
+
+        // 根据角色ID查询菜单列
+        List<String> menuIds = roleMenuDao.listMenuIdByRoleId(id);
+
+        List<SysMenu> sysMenuDOS = menuDao.findList(new HashMap<String, Object>(16));
+
+        for (SysMenu sysSysMenuDO : sysMenuDOS) {
+            Tree<SysMenu> tree = new Tree<SysMenu>();
+            tree.setId(sysSysMenuDO.getId().toString());
+            tree.setParentId(sysSysMenuDO.getParentId().toString());
+            tree.setText(sysSysMenuDO.getMenuName());
             Map<String, Object> state = new HashMap<>(16);
-            Long menuId = sysMenuDO.getMenuId();
+            String menuId = sysSysMenuDO.getId();
             if (menuIds.contains(menuId)) {
                 state.put("selected", true);
             } else {
@@ -150,13 +134,13 @@ public class MenuServiceImpl implements MenuService {
             trees.add(tree);
         }
         // 默认顶级菜单为０，根据数据库实际情况调整
-        Tree<Menu> t = BuildTree.build(trees);
+        Tree<SysMenu> t = BuildTree.build(trees);
         return t;
     }
 
     @Override
-    public Set<String> listPerms(Long userId) {
-        List<String> perms = menuMapper.listUserPerms(userId);
+    public Set<String> menuListPerms(String userId) {
+        List<String> perms = menuDao.listUserPerms(userId);
         Set<String> permsSet = new HashSet<>();
         for (String perm : perms) {
             if (StringUtils.isNotBlank(perm)) {
@@ -167,22 +151,22 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public List<Tree<Menu>> listMenuTree(Long id) {
-        List<Tree<Menu>> trees = new ArrayList<Tree<MenuDO>>();
-        List<Menu> menuDOs = menuMapper.listMenuByUserId(id);
-        for (Menu sysMenuDO : menuDOs) {
-            Tree<Menu> tree = new Tree<Menu>();
-            tree.setId(sysMenuDO.getMenuId().toString());
-            tree.setParentId(sysMenuDO.getParentId().toString());
-            tree.setText(sysMenuDO.getName());
+    public List<Tree<SysMenu>> listMenuTree(String id) {
+        List<Tree<SysMenu>> trees = new ArrayList<Tree<SysMenu>>();
+        List<SysMenu> sysMenuDOS = menuDao.listMenuByUserId(id);
+        for (SysMenu sysSysMenuDO : sysMenuDOS) {
+            Tree<SysMenu> tree = new Tree<SysMenu>();
+            tree.setId(sysSysMenuDO.getId().toString());
+            tree.setParentId(sysSysMenuDO.getParentId().toString());
+            tree.setText(sysSysMenuDO.getMenuName());
             Map<String, Object> attributes = new HashMap<>(16);
-            attributes.put("url", sysMenuDO.getUrl());
-            attributes.put("icon", sysMenuDO.getIcon());
+            attributes.put("url", sysSysMenuDO.getMenuUrl());
+            attributes.put("icon", sysSysMenuDO.getMenuIcon());
             tree.setAttributes(attributes);
             trees.add(tree);
         }
         // 默认顶级菜单为０，根据数据库实际情况调整
-        List<Tree<Menu>> list = BuildTree.buildList(trees, "0");
+        List<Tree<SysMenu>> list = BuildTree.buildList(trees, "0");
         return list;
     }
 

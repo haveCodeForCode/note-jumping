@@ -1,40 +1,93 @@
 package com.root.cognition.system.service;
 
-
-import com.root.cognition.system.entity.Menu;
 import com.root.cognition.common.persistence.Tree;
+import com.root.cognition.system.entity.SysMenu;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
- * @author LineInkBook
+ * 菜单业务层
+ * @author taoya
  */
 @Service
 public interface MenuService {
-    /**
-     * 根据用户获取菜单
-     * @param id
-     * @return
-     */
-    Tree<Menu> getSysMenuTree(String id);
 
-    List<Tree<Menu>> listMenuTree(Long id);
+	/**
+	 * 根据id查询菜单
+	 * @param id
+	 * @return
+	 */
+	SysMenu get(String id);
 
-    Tree<Menu> getTree();
+	/**
+	 * 根据条件查询菜单
+	 * @param params
+	 * @return
+	 */
+	SysMenu get (Map<String, Object> params);
 
-    Tree<Menu> getTree(Long id);
+	/**
+	 * 根据entity更新菜单
+	 * @param sysMenu
+	 * @return
+	 */
+	int update(SysMenu sysMenu);
 
-    List<Menu> list(Menu menu);
+	/**
+	 * 获取菜单并形成树列
+	 * @return
+	 */
+	Tree<SysMenu> getTree();
 
-    int remove(String id);
+	/**
+	 * 获取id对应的树列
+	 * @param id
+	 * @return
+	 */
+	Tree<SysMenu> getTree(String id);
 
-    int save(Menu menu);
+	/**
+	 * 保存entity
+	 * @param sysMenu
+	 * @return
+	 */
+	int save(SysMenu sysMenu);
 
-    int update(Menu menu);
+	/**
+	 * 根据id移除
+	 * @param id
+	 * @return
+	 */
+	int remove(String id);
 
-    Menu get(Long id);
+	/**
+	 * 根据userid查询对应user菜单形成树
+	 * @param id
+	 * @return
+	 */
+	Tree<SysMenu> getSysMenuTree(String id);
 
-    Set<String> listPerms(String userId);
+	/**
+	 *
+	 * @param id
+	 * @return
+	 */
+	List<Tree<SysMenu>> listMenuTree(String id);
+
+	/**
+	 *
+	 * @param params
+	 * @return
+	 */
+	List<SysMenu> list(Map<String, Object> params);
+
+	/**
+	 *
+	 * @param userId
+	 * @return
+	 */
+	Set<String> menuListPerms(String userId);
 }
