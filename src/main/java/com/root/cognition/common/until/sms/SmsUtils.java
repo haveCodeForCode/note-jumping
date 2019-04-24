@@ -1,4 +1,4 @@
-//package com.root.cognition.common.until.sms;
+package com.root.cognition.common.until.sms;//package com.root.cognition.common.until.sms;
 //
 //import com.aliyuncs.DefaultAcsClient;
 //import com.aliyuncs.IAcsClient;

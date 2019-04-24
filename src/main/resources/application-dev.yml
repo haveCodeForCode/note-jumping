@@ -1,0 +1,17 @@
+spring:
+  #数据库编写（使用alibaba）
+  datasource:
+    name: first
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://104.128.228.215:3306/cognition?useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: db19960212
+  #redis配置
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password:
+    timeout: 12000
+    jedis:
+      pool:
+        max-active: 8

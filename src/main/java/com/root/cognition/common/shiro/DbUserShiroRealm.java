@@ -1,8 +1,8 @@
-//package com.root.cognition.common.shiro;
+package com.root.cognition.common.shiro;//package com.root.cognition.common.shiro;
 //
 //import com.root.cognition.system.config.ApplicationContextRegister;
 //import com.root.cognition.system.dao.UserDao;
-//import com.root.cognition.system.entity.SysUser;
+//import com.root.cognition.system.entity.User;
 //import com.root.cognition.system.service.MenuService;
 //import com.root.cognition.system.service.UserService;
 //import org.apache.shiro.authc.*;
@@ -63,7 +63,7 @@
 //
 //        UserDao userMapper = ApplicationContextRegister.getBean(UserDao.class);
 //        // 查询用户信息
-//        SysUser sysUser = userService.get(map);
+//        User sysUser = userService.get(map);
 //
 //        UsernamePasswordToken userpasswordToken = (UsernamePasswordToken) authenticationToken;
 //

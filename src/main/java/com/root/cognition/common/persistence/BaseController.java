@@ -2,7 +2,7 @@ package com.root.cognition.common.persistence;
 
 
 import com.root.cognition.common.shiro.ShiroUtils;
-import com.root.cognition.system.entity.SysUser;
+import com.root.cognition.system.entity.User;
 import org.springframework.stereotype.Controller;
 
 /**
@@ -11,16 +11,17 @@ import org.springframework.stereotype.Controller;
  */
 @Controller
 public class BaseController {
-	public SysUser getUser() {
+
+	public User getUser() {
 		return ShiroUtils.getUser();
 	}
 
-	public String getUserId() {
+	public Long getUserId() {
 		return getUser().getId();
 	}
 
 	public String getUsername() {
-		return getUser().getUserName();
+		return getUser().getLoginName();
 	}
 
 }

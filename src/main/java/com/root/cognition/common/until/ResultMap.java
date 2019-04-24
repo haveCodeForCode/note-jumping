@@ -20,6 +20,17 @@ public class ResultMap extends HashMap<String, Object>{
         return returnMap;
     }
 
+    /**
+     * 返回成功状态与信息
+     *
+     * @return Map（state =0，msg=操作成功）
+     */
+    public static ResultMap success(String msg) {
+        ResultMap returnMap = new ResultMap();
+        returnMap.put("state", 0);
+        returnMap.put("msg", msg);
+        return returnMap;
+    }
 
     /**
      * 返回失败状态与信息
@@ -29,6 +40,18 @@ public class ResultMap extends HashMap<String, Object>{
         ResultMap returnMap = new ResultMap();
         returnMap.put("state",1);
         returnMap.put("msg","操作失败");
+        return returnMap;
+    }
+
+    /**
+     * 返回失败状态与信息
+     *
+     * @return Map(state = 1, msg = 操作失败 ）
+     */
+    public static ResultMap error(String msg) {
+        ResultMap returnMap = new ResultMap();
+        returnMap.put("state", 1);
+        returnMap.put("msg", msg);
         return returnMap;
     }
 

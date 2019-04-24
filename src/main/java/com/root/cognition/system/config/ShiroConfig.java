@@ -2,7 +2,7 @@ package com.root.cognition.system.config;
 
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
-import com.root.cognition.common.config.DataDic;
+import com.root.cognition.common.config.Constant;
 import com.root.cognition.common.redis.RedisCacheManager;
 import com.root.cognition.common.redis.RedisManager;
 import com.root.cognition.common.redis.RedisSessionDAO;
@@ -20,6 +20,7 @@ import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSource
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -55,24 +56,23 @@ public class ShiroConfig {
         //设置安全管理器
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         //登录地址
-        shiroFilterFactoryBean.setLoginUrl("/login");
-        //登录目录
+        shiroFilterFactoryBean.setLoginUrl("/toLogin");
         shiroFilterFactoryBean.setSuccessUrl("/index");
-        //未经授权页面切换
         shiroFilterFactoryBean.setUnauthorizedUrl("/403");
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
+        filterChainDefinitionMap.put("/", "anon");
         filterChainDefinitionMap.put("/login", "anon");
         filterChainDefinitionMap.put("/css/**", "anon");
         filterChainDefinitionMap.put("/js/**", "anon");
         filterChainDefinitionMap.put("/fonts/**", "anon");
         filterChainDefinitionMap.put("/img/**", "anon");
         filterChainDefinitionMap.put("/toGuide", "anon");
+        filterChainDefinitionMap.put("/getVerify", "anon");
 //        filterChainDefinitionMap.put("/docs/**", "anon");
 //        filterChainDefinitionMap.put("/druid/**", "anon");
 //        filterChainDefinitionMap.put("/upload/**", "anon");
 //        filterChainDefinitionMap.put("/files/**", "anon");
         filterChainDefinitionMap.put("/logout", "logout");
-        filterChainDefinitionMap.put("/", "anon");
 //        filterChainDefinitionMap.put("/blog", "anon");
 //        filterChainDefinitionMap.put("/blog/open/**", "anon");
         filterChainDefinitionMap.put("/**", "authc");
@@ -151,6 +151,7 @@ public class ShiroConfig {
 
     private final RedisManager redisManager;
 
+    @Autowired
     public ShiroConfig(RedisConfig redisConfig, RedisManager redisManager) {
         this.redisConfig = redisConfig;
         this.redisManager = redisConfig.redisManager();
@@ -169,7 +170,7 @@ public class ShiroConfig {
         //设置realm.
         securityManager.setRealm(userRealm());
         // 自定义缓存实现 使用redis
-        if (DataDic.CACHE_TYPE_REDIS.equals(cacheType)) {
+        if (Constant.CACHE_TYPE_REDIS.equals(cacheType)) {
             securityManager.setCacheManager(rediscacheManager());
         } else {
             securityManager.setCacheManager(ehCacheManager());
@@ -190,7 +191,6 @@ public class ShiroConfig {
         return redisCacheManager;
     }
 
-
     /**
      * RedisSessionDAO shiro sessionDao层的实现 通过redis
      * 使用的是shiro-redis开源插件
@@ -201,7 +201,6 @@ public class ShiroConfig {
         redisSessionDAO.setRedisManager(redisManager);
         return redisSessionDAO;
     }
-
 
     /**
      * 添加shiro 自主注入bean的生命周期管理
@@ -233,7 +232,7 @@ public class ShiroConfig {
 
     @Bean
     public SessionDAO sessionDAO() {
-        if (DataDic.CACHE_TYPE_REDIS.equals(cacheType)) {
+        if (Constant.CACHE_TYPE_REDIS.equals(cacheType)) {
             return redisSessionDAO();
         } else {
             return new MemorySessionDAO();

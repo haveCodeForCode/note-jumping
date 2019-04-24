@@ -2,7 +2,7 @@ package com.root.cognition.common.shiro;
 
 //slf4j日志
 
-import com.root.cognition.system.entity.SysUser;
+import com.root.cognition.system.entity.User;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
@@ -35,9 +35,9 @@ public class ShiroManager {
      *
      * @return
      */
-    public static String getUserId() {
-        SysUser sysUser = (SysUser) ShiroManager.getSessionObject();
-        return sysUser.getId();
+    public static Long getUserId() {
+        User user = (User) ShiroManager.getSessionObject();
+        return user.getId();
     }
 
     /**

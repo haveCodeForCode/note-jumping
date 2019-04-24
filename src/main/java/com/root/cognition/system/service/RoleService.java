@@ -1,6 +1,6 @@
 package com.root.cognition.system.service;
 
-import com.root.cognition.system.entity.SysRole;
+import com.root.cognition.system.entity.Role;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,12 +15,21 @@ import java.util.Map;
 public interface RoleService {
 
 	/**
+	 * 根据用户ID查询角色菜单
+	 *
+	 * @param userId 用户ID
+	 * @return 角色列
+	 */
+	List<Role> list(Long userId);
+
+//******************************************************
+	/**
 	 * 根据id 查询角色
 	 *
 	 * @param id
 	 * @return
 	 */
-	SysRole get(String id);
+	Role get(Long id);
 
 	/**
 	 * 根据条件查询
@@ -28,7 +37,7 @@ public interface RoleService {
 	 * @param params
 	 * @return
 	 */
-	SysRole get(Map<String, Object> params);
+	Role get(Map<String, Object> params);
 
 	/**
 	 * 按照条件查询批量角色
@@ -36,31 +45,30 @@ public interface RoleService {
 	 * @param params 查询条件
 	 * @return 角色列
 	 */
-	List<SysRole> list(Map<String, Object> params);
+	List<Role> findList(Map<String, Object> params);
 
 	/**
-	 * 根据用户ID查询角色菜单
-	 *
-	 * @param userId 用户ID
-	 * @return 角色列
+	 * 根据条件统计
+	 * @param map
+	 * @return
 	 */
-	List<SysRole> list(String userId);
+	int count(Map<String, Object> map);
 
 	/**
 	 * 获取用户实体保存角色
 	 *
-	 * @param sysRole
+	 * @param role
 	 * @return
 	 */
-	int save(SysRole sysRole);
+	int save(Role role);
 
 	/**
 	 * 根据实体类更新
 	 *
-	 * @param sysRole
+	 * @param role
 	 * @return
 	 */
-	int update(SysRole sysRole);
+	int update(Role role);
 
 	/**
 	 * 根据id 移除
@@ -68,7 +76,7 @@ public interface RoleService {
 	 * @param id
 	 * @return
 	 */
-	int remove(String id);
+	int delete(Long id);
 
 
 	/**
@@ -77,5 +85,6 @@ public interface RoleService {
 	 * @param ids
 	 * @return
 	 */
-	int batchDelect(String[] ids);
+	int batchDelect(Long[] ids);
+
 }

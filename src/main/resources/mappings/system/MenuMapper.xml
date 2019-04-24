@@ -1,72 +1,291 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="com.root.cognition.system.dao.MenuDao">
 
-<!--********************自定义查询语句*****************************-->
+	<select id="listMenuByUserId" resultType="com.root.cognition.system.entity.Menu">
+		select distinct
+		m.menu_id AS "id", m.parent_id AS parentId, m.name AS "name", m.url as "url",
+		m.perms as "perms",m.type AS "type",m.icon AS "icon",m.order_num AS "orderNum",
+		m.create_by AS "createBy",
+		m.create_time AS "createTime",
+		m.update_by	AS "updateBy",
+		m.update_time AS "updateTime",
+		m.del_flag 	AS "delFlag"
+		from sys_menu m
+			left join sys_role_menu rm on m.menu_id = rm.menu_id
+			left join sys_user_role ur on rm.role_id =ur.role_id
+		where ur.user_id = #{id} and m.type in(0,1)
+		order by
+		m.order_num
+	</select>
 
-    <select id="listMenuByUserId" resultType="com.root.cognition.system.entity.SysMenu">
-            SELECT
+	<select id="listUserPerms" resultType="java.lang.String">
+		select
+			distinct sm.perms
+		from sys_menu sm
+			left join sys_role_menu srm on sm.menu_id = srm.menu_id
+			left join sys_user_role sur on srm.role_id = sur.role_id
+		where sur.user_id = #{id}
+	</select>
 
-            FROM sys_menu SYSM
-            LEFT JION       ON
-    </select>
+	<!--**************************************************************************-->
 
-    <select id="listUserPerms" resultType="java.lang.String">
-        select
-            distinct m.perms
-        from
-          sys_menu m
-        left join sys_role_menu rm on m.menu_id = rm.menu_id
-        left join sys_user_role ur on rm.role_id = ur.role_id
-        where ur.user_id= #{id}
-    </select>
+	<select id="get" resultType="com.root.cognition.system.entity.Menu">
+		SELECT
+		<include refid="menuColumns"/>
+		FROM
+		sys_menu a
+		WHERE
+		a.menu_id = #{value}
+	</select>
 
-<!--**************************************************************-->
+	<select id="getByEntity" resultType="com.root.cognition.system.entity.Menu">
+		select
+		<include refid="menuColumns"/>
+		from sys_menu a
+		<where>
+			<if test="menuId != null and menuId != ''">
+				AND a.menu_id = #{menuId}
+			</if>
+			<if test="parentId != null and parentId != ''">
+				AND a.parent_id = #{parentId}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name = #{name}
+			</if>
+			<if test="url != null and url != ''">
+				AND a.url = #{url}
+			</if>
+			<if test="perms != null and perms != ''">
+				AND a.perms = #{perms}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="icon != null and icon != ''">
+				AND a.icon = #{icon}
+			</if>
+			<if test="orderNum != null and orderNum != ''">
+				AND a.order_num = #{orderNum}
+			</if>
+			<if test="createBy !=null and createBy !=''">
+				AND a.create_by = #{createBy}
+			</if>
+			<if test="createTime !=null">
+				AND a.create_time = #{createTime}
+			</if>
+			<if test="updateBy !=null and updateBy !=''">
+				AND a.update_by = #{updateBy}
+			</if>
+			<if test="updateTime !=null">
+				AND a.update_time = #{updateTime}
+			</if>
+		</where>
+	</select>
 
-    <!-- 根据id获得用户 -->
-    <select id="get" parameterType="string" resultType="com.root.cognition.system.dao.UserDao">
-        SELECT
-        <include refid="menuColumns"/>
-        FROM sys_menu a
-        WHERE a.id = #{id}
-    </select>
+	<select id="findList" resultType="com.root.cognition.system.entity.Menu">
+		select
+		<include refid="menuColumns"/>
+		from sys_menu a
+		<where>
+			a.del_flag = #{delFlag}
+			<if test="id != null and id != ''">
+				AND a.menu_id = #{id}
+			</if>
+			<if test="parentId != null and parentId != ''">
+				AND a.parent_id = #{parentId}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name = #{name}
+			</if>
+			<if test="url != null and url != ''">
+				AND a.url = #{url}
+			</if>
+			<if test="perms != null and perms != ''">
+				AND a.perms = #{perms}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="icon != null and icon != ''">
+				AND a.icon = #{icon}
+			</if>
+			<if test="orderNum != null and orderNum != ''">
+				AND a.order_num = #{orderNum}
+			</if>
+			<if test="createBy !=null and createBy !=''">
+				AND a.create_by = #{createBy}
+			</if>
+			<if test="createTime !=null">
+				AND a.create_time = #{createTime}
+			</if>
+			<if test="updateBy !=null and updateBy !=''">
+				AND a.update_by = #{updateBy}
+			</if>
+			<if test="updateTime !=null">
+				AND a.update_time = #{updateTime}
+			</if>
+		</where>
+		<choose>
+			<when test="sort != null and sort.trim() != ''">
+				order by ${sort} ${order}
+			</when>
+			<otherwise>
+				order by a.create_time desc
+			</otherwise>
+		</choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
 
-    <select id="getByEntity" parameterType="com.root.cognition.system.dao.UserDao"
-            resultType="com.root.cognition.system.dao.UserDao">
-        SELECT
-        <include refid="menuColumns"/>
-        FROM sys_menu a
-        <where>
-            a.del_flag = #{DEL_FLAG_NORMAL}
-            <if test="id !=null and id !=''">
-                AND a.id = #{id}
-            </if>
-            <if test="userName !=null and userName !=''">
-                AND a.user_name = #{menuNumber}
-            </if>
-            <if test="userEmail !=null and userEmail!=''">
-                AND a.user_email = #{parentId}
-            </if>
-            <if test="userMobile !=null and userMobile!=''">
-                AND a.user_mobile = #{menuPerms}
-            </if>
-        </where>
-    </select>
+	<select id="count" resultType="int">
+		select count(*) from sys_menu a
+		<where>
+			a.del_flag = #{delFlag}
+			<if test="menuId != null and menuId != ''">
+				AND a.menu_id = #{menuId}
+			</if>
+			<if test="parentId != null and parentId != ''">
+				AND a.parent_id = #{parentId}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name = #{name}
+			</if>
+			<if test="url != null and url != ''">
+				AND a.url = #{url}
+			</if>
+			<if test="perms != null and perms != ''">
+				AND a.perms = #{perms}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="icon != null and icon != ''">
+				AND a.icon = #{icon}
+			</if>
+			<if test="orderNum != null and orderNum != ''">
+				AND a.order_num = #{orderNum}
+			</if>
+			<if test="createBy !=null and createBy !=''">
+				AND a.create_by = #{createBy}
+			</if>
+			<if test="createTime !=null">
+				AND a.create_time = #{createTime}
+			</if>
+			<if test="updateBy !=null and updateBy !=''">
+				AND a.update_by = #{updateBy}
+			</if>
+			<if test="updateTime !=null">
+				AND a.update_time = #{updateTime}
+			</if>
+		</where>
+	</select>
 
-    <sql id="menuColumns">
-      a.id AS "id",
-      a.menu_number AS  "menuNumber",
-      a.parent_id   AS  "parentId",
-      a.menu_name   AS  "menuName",
-      a.menu_url    AS  "menuUrl",
-      a.menu_parms  AS  "menuPerms",
-      a.menu_type   AS  "menuType",
-      a.menu_icon   AS  "menuIcon",
-      a.order_num   AS  "orderNum",
-      a.create_by AS "createBy",
-      a.create_time AS "createTime",
-      a.update_by AS "updateBy",
-      a.update_time AS "updateTime"
-    </sql>
+	<insert id="insert" parameterType="com.root.cognition.system.entity.Menu">
+		insert into sys_menu
+		(
+		`menu_id`,
+		`parent_id`,
+		`name`,
+		`url`,
+		`perms`,
+		`type`,
+		`icon`,
+		`order_num`,
+		`create_by`,
+		`create_time`,
+		`update_by`,
+		`update_time`,
+		`del_flag`
+		)
+		values
+		(
+		#{id},
+		#{parentId},
+		#{name},
+		#{url},
+		#{perms},
+		#{type},
+		#{icon},
+		#{orderNum},
+	 	#{createBy},
+		#{createTime},
+		#{updateBy},
+		#{updateTime},
+		#{delFlag}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.root.cognition.system.entity.Menu">
+		update sys_menu
+		<set>
+			<if test="parentId != null and parentId !=''">
+				`parent_id` = #{parentId},
+			</if>
+			<if test="name != null and name !=''">
+				`name` = #{name},
+			</if>
+			<if test="url != null and url !=''">
+				`url` = #{url},
+			</if>
+			<if test="perms != null and perms !=''">
+				`perms` = #{perms},
+			</if>
+			<if test="type != null and type !=''">
+				`type` = #{type},
+			</if>
+			<if test="icon != null and icon !=''">
+				`icon` = #{icon},
+			</if>
+			<if test="orderNum != null and orderNum !=''">
+				`order_num` = #{orderNum},
+			</if>
+			<if test="createBy !=null and createBy !=''">
+				`create_by` = #{createBy},
+			</if>
+			<if test="createTime !=null">
+				`create_time` = #{createTime},
+			</if>
+			<if test="updateBy !=null and updateBy !=''">
+				`update_by` = #{updateBy},
+			</if>
+			<if test="updateTime !=null">
+				`update_time` = #{updateTime},
+			</if>
+			<if test="delFlag !=null and delFlag!=''">
+				`del_flag` = #{delFlag}
+			</if>
+		</set>
+		where menu_id = #{id}
+	</update>
+
+	<delete id="remove">
+		delete from sys_menu where menu_id = #{value}
+	</delete>
+
+	<delete id="batchRemove">
+		delete from sys_menu where menu_id in
+		<foreach item="menuId" collection="array" open="(" separator=","
+				 close=")">
+			#{menuId}
+		</foreach>
+	</delete>
+
+	<sql id="menuColumns">
+		a.menu_id AS "id",
+		a.parent_id AS "parentId",
+		a.name AS "name",
+		a.url AS "url",
+		a.perms AS "perms",
+		a.type	AS "type",
+		a.icon	AS "icon",
+		a.order_num AS "orderNum",
+		a.create_by	AS "createBy",
+		a.create_time AS "createTime",
+		a.update_by	AS "updateBy",
+		a.update_time AS "updateTime",
+		a.del_flag 	AS "delFlag"
+	</sql>
 </mapper>

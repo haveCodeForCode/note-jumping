@@ -39,8 +39,7 @@
 			</div>
 		</div>
 		<div style="position:absolute;top:40%; left:35%; z-index:2">
-			<a href="/index"> 欢 迎 前 往 认 知 </a>
-			<!--<p style="font-size: 100px;opacity: 1;">你好~欢迎前往  <a style="font-size: 100px" href="/index">认知</a></p>-->
+			<a style="font-size: 100px" href="/index">你好~欢迎前往 认知</a></p>
 		</div>
 		<script type="text/javascript" src="js/jquery-3.3.1.min.js" th:src="@{/js/plugins/jquery-3.0.0.js}"></script>
 		<script>
@@ -72,8 +71,8 @@
 			        // })
 			        $('.next').click(function(){
 			            play()
-			        })
-			//        点击下一个
+			        });
+					//点击下一个
 			        $('.prev').click(function(){
 			            index--;
 			            if(index==-1){
@@ -85,12 +84,12 @@
 			            }
 			            core(index);
 			        });
-			// 点击上一个
+					// 点击上一个
 			        function core(num){
 			            $('.bannerul').stop().animate({'margin-left': -($('.bannerul li').eq(0).innerWidth() * num)}, 1000);
 			            $(' .num li').eq(num).addClass('active').siblings().removeClass('active');
 			        }
-				}
+				};
 				
 				banner()
 			})

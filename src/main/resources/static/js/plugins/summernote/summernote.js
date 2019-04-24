@@ -573,7 +573,7 @@
         return false;
       }
 
-      // Chrome(v31.bootstrap), FF(v25.bootstrap.1) use DIV for paragraph
+      // Chrome(v31.0), FF(v25.0.1) use DIV for paragraph
       return node && /^DIV|^P|^LI|^H[1-7]/.test(node.nodeName.toUpperCase());
     };
 
@@ -2208,7 +2208,7 @@
         h2: 'Header 2',
         h3: 'Header 3',
         h4: 'Header 4',
-        h5: 'Header layui',
+        h5: 'Header 5',
         h6: 'Header 6'
       },
       lists: {
@@ -2311,7 +2311,7 @@
       'RIGHT': 39,
       'DOWN': 40,
 
-      // Number: bootstrap-9
+      // Number: 0-9
       'NUM0': 48,
       'NUM1': 49,
       'NUM2': 50,
@@ -7284,7 +7284,7 @@
             .attr('frameborder', 0)
             .attr('height', '310')
             .attr('width', '500')
-            .attr('src', 'http://v.qq.com/iframe/player.html?vid=' + vid + '&amp;auto=bootstrap');
+            .attr('src', 'http://v.qq.com/iframe/player.html?vid=' + vid + '&amp;auto=0');
       } else if (mp4Match || oggMatch || webmMatch) {
         $video = $('<video controls>')
             .attr('src', url)
@@ -7386,7 +7386,7 @@
 
       var body = [
         '<p class="text-center">',
-        '<a href="http://summernote.org/" target="_blank">Summernote bootstrap.8.8</a> · ',
+        '<a href="http://summernote.org/" target="_blank">Summernote 0.8.8</a> · ',
         '<a href="https://github.com/summernote/summernote" target="_blank">Project</a> · ',
         '<a href="https://github.com/summernote/summernote/issues" target="_blank">Issues</a>',
         '</p>'

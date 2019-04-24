@@ -1,7 +1,6 @@
 package com.root.cognition.common.persistence;
 
 
-import com.root.cognition.common.until.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +23,7 @@ public abstract class BaseService {
 //     * @param userAlias 用户表别名，多个用“,”逗号隔开，传递空，忽略此参数
 //     * @return 标准连接条件对象
 //     */
-//    public static String dataScopeFilter(SysUser user, String officeAlias, String userAlias) {
+//    public static String dataScopeFilter(User user, String officeAlias, String userAlias) {
 //        StringBuilder sqlString = new StringBuilder();
 //
 //        // 进行权限过滤，多个角色权限范围之间为或者关系。
@@ -33,29 +32,29 @@ public abstract class BaseService {
 //        // 超级管理员，跳过权限过滤
 //        if (!user.isAdmin()){
 //            boolean isDataScopeAll = false;
-//            for (SysRole r : user.getRoleList()){
+//            for (Role r : user.getRoleList()){
 //                for (String oa : StringUtils.split(officeAlias, ",")){
 //                    if (!dataScope.contains(r.getDataScope()) && StringUtils.isNotBlank(oa)){
-//                        if (SysRole.DATA_SCOPE_ALL.equals(r.getDataScope())){
+//                        if (Role.DATA_SCOPE_ALL.equals(r.getDataScope())){
 //                            isDataScopeAll = true;
 //                        }
-//                        else if (SysRole.DATA_SCOPE_COMPANY_AND_CHILD.equals(r.getDataScope())){
+//                        else if (Role.DATA_SCOPE_COMPANY_AND_CHILD.equals(r.getDataScope())){
 //                            sqlString.append(" OR " + oa + ".id = '" + user.getCompany().getId() + "'");
 //                            sqlString.append(" OR " + oa + ".parent_ids LIKE '" + user.getCompany().getParentIds() + user.getCompany().getId() + ",%'");
 //                        }
-//                        else if (SysRole.DATA_SCOPE_COMPANY.equals(r.getDataScope())){
+//                        else if (Role.DATA_SCOPE_COMPANY.equals(r.getDataScope())){
 //                            sqlString.append(" OR " + oa + ".id = '" + user.getCompany().getId() + "'");
 //                            // 包括本公司下的部门 （type=1:公司；type=2：部门）
 //                            sqlString.append(" OR (" + oa + ".parent_id = '" + user.getCompany().getId() + "' AND " + oa + ".type = '2')");
 //                        }
-//                        else if (SysRole.DATA_SCOPE_OFFICE_AND_CHILD.equals(r.getDataScope())){
+//                        else if (Role.DATA_SCOPE_OFFICE_AND_CHILD.equals(r.getDataScope())){
 //                            sqlString.append(" OR " + oa + ".id = '" + user.getOffice().getId() + "'");
 //                            sqlString.append(" OR " + oa + ".parent_ids LIKE '" + user.getOffice().getParentIds() + user.getOffice().getId() + ",%'");
 //                        }
-//                        else if (SysRole.DATA_SCOPE_OFFICE.equals(r.getDataScope())){
+//                        else if (Role.DATA_SCOPE_OFFICE.equals(r.getDataScope())){
 //                            sqlString.append(" OR " + oa + ".id = '" + user.getOffice().getId() + "'");
 //                        }
-//                        else if (SysRole.DATA_SCOPE_CUSTOM.equals(r.getDataScope())){
+//                        else if (Role.DATA_SCOPE_CUSTOM.equals(r.getDataScope())){
 ////							String officeIds =  StringUtils.join(r.getOfficeIdList(), "','");
 ////							if (StringUtils.isNotEmpty(officeIds)){
 ////								sqlString.append(" OR " + oa + ".id IN ('" + officeIds + "')");
@@ -63,7 +62,7 @@ public abstract class BaseService {
 //                            sqlString.append(" OR EXISTS (SELECT 1 FROM sys_role_office WHERE role_id = '" + r.getId() + "'");
 //                            sqlString.append(" AND office_id = " + oa +".id)");
 //                        }
-//                        //else if (SysRole.DATA_SCOPE_SELF.equals(r.getDataScope())){
+//                        //else if (Role.DATA_SCOPE_SELF.equals(r.getDataScope())){
 //                        dataScope.add(r.getDataScope());
 //                    }
 //                }
@@ -103,7 +102,7 @@ public abstract class BaseService {
 //     */
 //    public static void dataScopeFilter(BaseEntity<?> entity, String sqlMapKey, String officeWheres, String userWheres) {
 //
-//        SysUser user = entity.getCurrentUser();
+//        User user = entity.getCurrentUser();
 //
 //        // 如果是超级管理员，则不过滤数据
 //        if (user.isAdmin()) {
@@ -116,7 +115,7 @@ public abstract class BaseService {
 //        // 获取到最大的数据权限范围
 //        String roleId = "";
 //        int dataScopeInteger = 8;
-//        for (SysRole r : user.getRoleList()){
+//        for (Role r : user.getRoleList()){
 //            int ds = Integer.valueOf(r.getDataScope());
 //            if (ds == 9){
 //                roleId = r.getId();
@@ -131,7 +130,7 @@ public abstract class BaseService {
 //
 //        // 生成部门权限SQL语句
 //        for (String where : StringUtils.split(officeWheres, ",")){
-//            if (SysRole.DATA_SCOPE_COMPANY_AND_CHILD.equals(dataScopeString)){
+//            if (Role.DATA_SCOPE_COMPANY_AND_CHILD.equals(dataScopeString)){
 //                // 包括本公司下的部门 （type=1:公司；type=2：部门）
 //                sqlString.append(" AND EXISTS (SELECT 1 FROM SYS_OFFICE");
 //                sqlString.append(" WHERE type='2'");
@@ -139,24 +138,24 @@ public abstract class BaseService {
 //                sqlString.append(" OR parent_ids LIKE '" + user.getCompany().getParentIds() + user.getCompany().getId() + ",%')");
 //                sqlString.append(" AND " + where +")");
 //            }
-//            else if (SysRole.DATA_SCOPE_COMPANY.equals(dataScopeString)){
+//            else if (Role.DATA_SCOPE_COMPANY.equals(dataScopeString)){
 //                sqlString.append(" AND EXISTS (SELECT 1 FROM SYS_OFFICE");
 //                sqlString.append(" WHERE type='2'");
 //                sqlString.append(" AND id = '" + user.getCompany().getId() + "'");
 //                sqlString.append(" AND " + where +")");
 //            }
-//            else if (SysRole.DATA_SCOPE_OFFICE_AND_CHILD.equals(dataScopeString)){
+//            else if (Role.DATA_SCOPE_OFFICE_AND_CHILD.equals(dataScopeString)){
 //                sqlString.append(" AND EXISTS (SELECT 1 FROM SYS_OFFICE");
 //                sqlString.append(" WHERE (id = '" + user.getOffice().getId() + "'");
 //                sqlString.append(" OR parent_ids LIKE '" + user.getOffice().getParentIds() + user.getOffice().getId() + ",%')");
 //                sqlString.append(" AND " + where +")");
 //            }
-//            else if (SysRole.DATA_SCOPE_OFFICE.equals(dataScopeString)){
+//            else if (Role.DATA_SCOPE_OFFICE.equals(dataScopeString)){
 //                sqlString.append(" AND EXISTS (SELECT 1 FROM SYS_OFFICE");
 //                sqlString.append(" WHERE id = '" + user.getOffice().getId() + "'");
 //                sqlString.append(" AND " + where +")");
 //            }
-//            else if (SysRole.DATA_SCOPE_CUSTOM.equals(dataScopeString)){
+//            else if (Role.DATA_SCOPE_CUSTOM.equals(dataScopeString)){
 //                sqlString.append(" AND EXISTS (SELECT 1 FROM sys_role_office ro123456, sys_office o123456");
 //                sqlString.append(" WHERE ro123456.office_id = o123456.id");
 //                sqlString.append(" AND ro123456.role_id = '" + roleId + "'");
@@ -165,7 +164,7 @@ public abstract class BaseService {
 //        }
 //        // 生成个人权限SQL语句
 //        for (String where : StringUtils.split(userWheres, ",")){
-//            if (SysRole.DATA_SCOPE_SELF.equals(dataScopeString)){
+//            if (Role.DATA_SCOPE_SELF.equals(dataScopeString)){
 //                sqlString.append(" AND EXISTS (SELECT 1 FROM sys_user");
 //                sqlString.append(" WHERE id='" + user.getId() + "'");
 //                sqlString.append(" AND " + where + ")");

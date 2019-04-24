@@ -3,36 +3,90 @@
 
 <mapper namespace="com.root.cognition.system.dao.DeptDao">
 
-
-	<!--********************自定义查询语句*****************************-->
-
-
-
-
-	<!--**************************************************************-->
-
-    <select id="get" resultType="com.root.cognition.system.entity.SysDept">
-		select
-		`dept_id`,`parent_id`,`name`,`order_num`,`del_flag` from sys_dept
-		where dept_id = #{value}
+	<select id="listParentDept">
+		SELECT DISTINCT parent_id FROM sys_dept
 	</select>
 
-    <select id="findList" resultType="com.root.cognition.system.entity.SysDept">
-		select `dept_id`,`parent_id`,`name`,`order_num`,`del_flag` from
-		sys_dept
+	<!--***********************************************************************-->
+	<select id="get" resultType="com.root.cognition.system.entity.Dept">
+		SELECT
+		<include refid="deptColumns"/>
+		FROM
+		sys_dept a
+		WHERE a.dept_id = #{value}
+	</select>
+
+	<select id="getByEntity">
+		SELECT
+		<include refid="deptColumns"/>
+		FROM
+		sys_dept a
 		<where>
-			<if test="deptId != null and deptId != ''"> and dept_id = #{deptId} </if>
-			<if test="parentId != null and parentId != ''"> and parent_id = #{parentId} </if>
-			<if test="name != null and name != ''"> and name = #{name} </if>
-			<if test="orderNum != null and orderNum != ''"> and order_num = #{orderNum} </if>
-			<if test="delFlag != null and delFlag != ''"> and del_flag = #{delFlag} </if>
+			a.del_flag = #{delFlag}
+			<if test="id != null and id != ''">
+				AND a.dept_id = #{id}
+			</if>
+			<if test="parentId != null and parentId != ''">
+				AND a.parent_id = #{parentId}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name = #{name}
+			</if>
+			<if test="orderNum != null and orderNum != ''">
+				AND a.order_num = #{orderNum}
+			</if>
+			<if test="createBy !=null and createBy !=''">
+				AND a.create_by = #{createBy}
+			</if>
+			<if test="createTime !=null">
+				AND a.create_time = #{createTime}
+			</if>
+			<if test="updateBy !=null and updateBy !=''">
+				AND a.update_by = #{updateBy}
+			</if>
+			<if test="updateTime !=null">
+				AND a.update_time = #{updateTime}
+			</if>
+		</where>
+	</select>
+
+	<select id="findList" resultType="com.root.cognition.system.entity.Dept">
+		SELECT
+		<include refid="deptColumns"/>
+		FROM sys_dept a
+		<where>
+			a.del_flag = #{delFlag}
+			<if test="id != null and id != ''">
+				AND a.dept_id = #{id}
+			</if>
+			<if test="parentId != null and parentId != ''">
+				AND a.parent_id = #{parentId}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name = #{name}
+			</if>
+			<if test="orderNum != null and orderNum != ''">
+				AND a.order_num = #{orderNum}
+			</if>
+			<if test="createBy !=null and createBy !=''">
+				AND a.create_by = #{createBy}
+			</if>
+			<if test="createTime !=null">
+				AND a.create_time = #{createTime}
+			</if>
+			<if test="updateBy !=null and updateBy !=''">
+				AND a.update_by = #{updateBy}
+			</if>
+			<if test="updateTime !=null">
+				AND a.update_time = #{updateTime}
+			</if>
 		</where>
 		<choose>
 			<when test="sort != null and sort.trim() != ''">
 				order by ${sort} ${order}
 			</when>
 			<otherwise>
-				order by dept_id desc
+				order by a.create_time desc
 			</otherwise>
 		</choose>
 		<if test="offset != null and limit != null">
@@ -41,62 +95,109 @@
 	</select>
 
 	<select id="count" resultType="int">
-		select count(*) from sys_dept
+		SELECT count(*) FROM sys_dept a
 		<where>
-			<if test="deptId != null and deptId != ''"> and dept_id = #{deptId} </if>
-			<if test="parentId != null and parentId != ''"> and parent_id = #{parentId} </if>
-			<if test="name != null and name != ''"> and name = #{name} </if>
-			<if test="orderNum != null and orderNum != ''"> and order_num = #{orderNum} </if>
-			<if test="delFlag != null and delFlag != ''"> and del_flag = #{delFlag} </if>
+			a.del_flag = #{delFlag}
+			<if test="id != null and id != ''">
+				AND a.dept_id = #{id}
+			</if>
+			<if test="parentId != null and parentId != ''">
+				AND a.parent_id = #{parentId}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name = #{name}
+			</if>
+			<if test="orderNum != null and orderNum != ''">
+				AND a.order_num = #{orderNum}
+			</if>
+			<if test="createBy !=null and createBy !=''">
+				AND a.create_by = #{createBy}
+			</if>
+			<if test="createTime !=null">
+				AND a.create_time = #{createTime}
+			</if>
+			<if test="updateBy !=null and updateBy !=''">
+				AND a.update_by = #{updateBy}
+			</if>
+			<if test="updateTime !=null">
+				AND a.update_time = #{updateTime}
+			</if>
 		</where>
 	</select>
 
-    <insert id="save" parameterType="com.root.cognition.system.entity.SysDept"
-            useGeneratedKeys="true" keyProperty="deptId">
+	<insert id="insert" parameterType="com.root.cognition.system.entity.Dept">
 		insert into sys_dept
 		(
-		`parent_id`,
-		`name`,
-		`order_num`,
-		`del_flag`
+			`dept_id`,
+			`parent_id`,
+			`name`,
+			`order_num`,
+			`create_by`,
+			`create_time`,
+			`update_by`,
+			`update_time`,
+			`del_flag`
 		)
 		values
 		(
-		#{parentId},
-		#{name},
-		#{orderNum},
-		#{delFlag}
+			#{id},
+			#{parentId},
+			#{name},
+			#{orderNum},
+			#{createBy},
+			#{createTime},
+			#{updateBy},
+			#{updateTime},
+			#{delFlag}
 		)
 	</insert>
 
-    <update id="update" parameterType="com.root.cognition.system.entity.SysDept">
-		update sys_dept
+	<update id="update" parameterType="com.root.cognition.system.entity.Dept">
+		UPDATE sys_dept
 		<set>
-			<if test="parentId != null">`parent_id` = #{parentId}, </if>
-			<if test="name != null">`name` = #{name}, </if>
-			<if test="orderNum != null">`order_num` = #{orderNum}, </if>
-			<if test="delFlag != null">`del_flag` = #{delFlag}</if>
+			<if test="">
+
+			</if>
+			<if test="parentId != null and parentId !=''">
+				`parent_id` = #{parentId},
+			</if>
+			<if test="name != null and name !=''">
+				`name` = #{name},
+			</if>
+			<if test="orderNum != null and orderNum !=''">
+				`order_num` = #{orderNum},
+			</if>
+			<if test="delFlag != null and delFlag !=''">
+				`del_flag` = #{delFlag}
+			</if>
 		</set>
-		where dept_id = #{deptId}
+		WHERE dept_id = #{deptId}
 	</update>
 
 	<delete id="remove">
-		delete from sys_dept where dept_id = #{value}
+	    DELETE FROM sys_dept WHERE dept_id = #{value}
 	</delete>
 
 	<delete id="batchRemove">
-		delete from sys_dept where dept_id in
+		DELETE FROM sys_dept WHERE dept_id in
 		<foreach item="deptId" collection="array" open="(" separator=","
 			close=")">
 			#{deptId}
 		</foreach>
 	</delete>
 
-    <select id="listParentDept">
-		select DISTINCT parent_id from sys_dept
-	</select>
 
-    <select id="getDeptUserNumber" resultType="int">
-		select count(*) from sys_user where dept_id = #{value}
-	</select>
+	<sql id="deptColumns">
+		a.dept_id 	AS "id",
+		a.parent_id	AS "parentId",
+		a.name	  	AS "name",
+		a.order_num	AS "orderNum",
+		a.create_by	AS "createBy",
+		a.create_time AS "createTime",
+		a.update_by	AS "updateBy",
+		a.update_time AS "updateTime",
+		a.del_flag 	AS "delFlag"
+	</sql>
+
+
 </mapper>

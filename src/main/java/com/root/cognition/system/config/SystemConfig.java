@@ -1,11 +1,11 @@
 package com.root.cognition.system.config;
 
 
+import com.root.cognition.common.config.DataDic;
 import com.root.cognition.common.redis.RedisCacheManager;
 import com.root.cognition.common.redis.RedisManager;
 import com.root.cognition.common.redis.RedisSessionDAO;
 import com.root.cognition.common.shiro.UserRealm;
-import com.root.cognition.common.config.DataDic;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.eis.MemorySessionDAO;

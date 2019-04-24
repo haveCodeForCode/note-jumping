@@ -1,7 +1,7 @@
 package com.root.cognition.system.dao;
 
 import com.root.cognition.common.persistence.BaseDao;
-import com.root.cognition.system.entity.SysUserRole;
+import com.root.cognition.system.entity.UserRole;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -16,15 +16,15 @@ import java.util.List;
  */
 @Mapper
 @Repository("UserRelationDao")
-public interface UserRoleDao extends BaseDao<SysUserRole> {
+public interface UserRoleDao extends BaseDao<UserRole> {
 
-	List<String> listRoleId(String userId);
+	List<Long> listRoleId(Long userId);
 
-	int removeByUserId(String userId);
+	int removeByUserId(Long userId);
 
-	int removeByRoleId(String roleId);
+	int removeByRoleId(Long roleId);
 
-	int batchSave(List<SysUserRole> list);
+	int batchSave(List<UserRole> list);
 
-	int batchRemoveByUserId(String[] ids);
+	int batchRemoveByUserId(Long[] ids);
 }

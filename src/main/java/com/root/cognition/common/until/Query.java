@@ -1,5 +1,8 @@
 package com.root.cognition.common.until;
 
+import com.root.cognition.common.config.Constant;
+
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -28,6 +31,13 @@ public class Query extends LinkedHashMap<String, Object> {
 		this.put("offset", offset);
 		this.put("page", offset / limit + 1);
 		this.put("limit", limit);
+		this.put("delFlag", Constant.DEL_FLAG_NORMAL);
+	}
+
+	public static Map<String, Object> withDelFlag() {
+		Map<String, Object> params = new HashMap<>(16);
+		params.put("delFlag", Constant.DEL_FLAG_NORMAL);
+		return params;
 	}
 
 	public int getOffset() {

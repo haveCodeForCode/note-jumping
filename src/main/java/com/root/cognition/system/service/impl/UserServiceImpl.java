@@ -3,13 +3,17 @@ package com.root.cognition.system.service.impl;
 
 import com.root.cognition.common.persistence.Tree;
 import com.root.cognition.common.until.BuildTree;
+import com.root.cognition.common.until.Query;
 import com.root.cognition.common.until.StringUtils;
+import com.root.cognition.common.until.codegenerate.SnowFlake;
 import com.root.cognition.system.dao.DeptDao;
 import com.root.cognition.system.dao.UserDao;
+import com.root.cognition.system.dao.UserInfoDao;
 import com.root.cognition.system.dao.UserRoleDao;
-import com.root.cognition.system.entity.SysDept;
-import com.root.cognition.system.entity.SysUser;
-import com.root.cognition.system.entity.SysUserRole;
+import com.root.cognition.system.entity.Dept;
+import com.root.cognition.system.entity.User;
+import com.root.cognition.system.entity.UserInfo;
+import com.root.cognition.system.entity.UserRole;
 import com.root.cognition.system.service.DeptService;
 import com.root.cognition.system.service.UserService;
 import org.apache.commons.lang3.ArrayUtils;
@@ -22,6 +26,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 
+/**
+ * @author taoya
+ */
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -35,6 +42,8 @@ public class UserServiceImpl implements UserService {
     private DeptDao deptDao;
 
     private DeptService deptService;
+
+    private UserInfoDao userInfoDao;
 
     //    @Autowired
 //    private FileService sysFileService;
@@ -60,29 +69,55 @@ public class UserServiceImpl implements UserService {
         this.deptService = deptService;
     }
 
+    @Autowired
+    public void setUserInfoDao(UserInfoDao userInfoDao) {
+        this.userDao = userDao;
+    }
+
 
     @Override
 //    @Cacheable(value = "user",key = "#id")
-    public SysUser get(String id) {
-        List<String> roleIds = userRoleDao.listRoleId(id);
-        SysUser sysUser = userDao.get(id);
-        sysUser.setDept(deptDao.get(sysUser.getId()).getName());
-        sysUser.setRoleIds(roleIds);
-        return sysUser;
+    public User getbyUserId(Long userId) {
+        User user = userDao.get(userId);
+        //用户对应角色ids
+        List<Long> roleIds = userRoleDao.listRoleId(userId);
+        user.setRoleIds(roleIds);
+        //部门ID
+        user.setDeptId(deptDao.get(user.getId()).getId());
+        //条件查询声明
+        Map<String, Object> query = Query.withDelFlag();
+        query.put("userId", userId);
+        UserInfo userInfo = userInfoDao.getByEntity(query);
+        if (userInfo != null && !"".equals(userInfo.getId())) {
+            user.setUserInfoId(userInfo.getId());
+        } else {
+            //如果查不到则增加
+            UserInfo sysUserInfo = new UserInfo();
+            Long userInfoNumber = SnowFlake.createSFid();
+            sysUserInfo.setId(userInfoNumber);
+            userInfoDao.insert(sysUserInfo);
+            user.setUserInfoId(userInfoNumber);
+        }
+        return user;
     }
 
     @Override
-    public SysUser get(Map<String, Object> params) {
+    public User get(Long id) {
+        return userDao.get(id);
+    }
+
+    @Override
+    public User get(Map<String, Object> params) {
         return userDao.getByEntity(params);
     }
 
     @Override
-    public List<SysUser> list(Map<String, Object> map) {
+    public List<User> list(Map<String, Object> map) {
         String deptId = map.get("deptId").toString();
         if (StringUtils.isNotBlank(deptId)) {
-            String deptIdl = String.valueOf(deptId);
-            List<String> childIds = deptService.listChildrenIds(deptIdl);
-            childIds.add(deptIdl);
+            long deptIdL = Long.parseLong(deptId);
+            List<Long> childIds = deptService.listChildrenIds(deptIdL);
+            childIds.add(deptIdL);
             map.put("deptId", null);
             map.put("deptIds", childIds);
         }
@@ -94,48 +129,50 @@ public class UserServiceImpl implements UserService {
         return userDao.count(map);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
-    public int save(SysUser sysUser) {
-        int count = userDao.insert(sysUser);
-        String userId = sysUser.getId();
-        List<String> roles = sysUser.getRoleIds();
-        userRoleDao.removeByUserId(userId);
-        List<SysUserRole> list = new ArrayList<>();
-        for (String roleId : roles) {
-            SysUserRole ur = new SysUserRole();
-            ur.setUserId(userId);
-            ur.setRoleId(roleId);
-            list.add(ur);
-        }
-        if (list.size() > 0) {
-            userRoleDao.batchSave(list);
-        }
-        return count;
+    public int save(User user) {
+        int insert = userDao.insert(user);
+        batchModifyRoles(user);
+        return insert;
     }
 
     @Override
-    public int update(SysUser sysUser) {
-        int r = userDao.update(sysUser);
-        String userId = sysUser.getId();
-        List<String> roles = sysUser.getRoleIds();
-        userRoleDao.removeByUserId(userId);
-        List<SysUserRole> list = new ArrayList<>();
-        for (String roleId : roles) {
-            SysUserRole sysUserRole = new SysUserRole();
-            sysUserRole.setUserId(userId);
-            sysUserRole.setRoleId(roleId);
-            list.add(sysUserRole);
+    public int update(User user) {
+        int update = userDao.update(user);
+        batchModifyRoles(user);
+        return update;
+    }
+
+    /**
+     * 批量修改用户角色信息
+     *
+     * @param user 用户对象
+     */
+    private void batchModifyRoles(User user) {
+        try {
+            Long userId = user.getId();
+            List<Long> roles = user.getRoleIds();
+            userRoleDao.removeByUserId(userId);
+            List<UserRole> list = new ArrayList<>();
+            for (Long roleId : roles) {
+                UserRole userRole = new UserRole();
+                userRole.setUserId(userId);
+                userRole.setRoleId(roleId);
+                list.add(userRole);
+            }
+            if (list.size() > 0) {
+                userRoleDao.batchSave(list);
+            }
+        } catch (Exception e) {
+            e.fillInStackTrace();
+            throw e;
         }
-        if (list.size() > 0) {
-            userRoleDao.batchSave(list);
-        }
-        return r;
     }
 
     //    @CacheEvict(value = "user")
     @Override
-    public int remove(String userId) {
+    public int delete(Long userId) {
         userRoleDao.removeByUserId(userId);
         return userDao.remove(userId);
     }
@@ -155,8 +192,8 @@ public class UserServiceImpl implements UserService {
 //    @Override
 //    public int resetPwd(UserVO userVO, UserDO userDO) throws Exception {
 //        if (Objects.equals(userVO.getUserDO().getUserId(), userDO.getUserId())) {
-//            if (Objects.equals(MD5Utils.encrypt(userDO.getUsername(), userVO.getPwdOld()), userDO.getPassword())) {
-//                userDO.setPassword(MD5Utils.encrypt(userDO.getUsername(), userVO.getPwdNew()));
+//            if (Objects.equals(Md5Utils.encrypt(userDO.getUsername(), userVO.getPwdOld()), userDO.getPassword())) {
+//                userDO.setPassword(Md5Utils.encrypt(userDO.getUsername(), userVO.getPwdNew()));
 //                return userMapper.update(userDO);
 //            } else {
 //                throw new Exception("输入的旧密码有误！");
@@ -172,61 +209,62 @@ public class UserServiceImpl implements UserService {
 //        if ("admin".equals(userDO.getUsername())) {
 //            throw new Exception("超级管理员的账号不允许直接重置！");
 //        }
-//        userDO.setPassword(MD5Utils.encrypt(userDO.getUsername(), userVO.getPwdNew()));
+//        userDO.setPassword(Md5Utils.encrypt(userDO.getUsername(), userVO.getPwdNew()));
 //        return userMapper.update(userDO);
 //
 //
 //    }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
-    public int batchremove(String[] userIds) {
+    public int batchDelete(Long[] userIds) {
         int count = userDao.batchRemove(userIds);
         userRoleDao.batchRemoveByUserId(userIds);
         return count;
     }
 
+
     @Override
-    public Tree<SysDept> getTree() {
-        List<Tree<SysDept>> trees = new ArrayList<Tree<SysDept>>();
-        List<SysDept> sysDepts = deptDao.findList(new HashMap<String, Object>(16));
+    public Tree<Dept> getTree() {
+        List<Tree<Dept>> trees = new ArrayList<Tree<Dept>>();
+        List<Dept> depts = deptDao.findList(new HashMap<String, Object>(16));
         String[] pDepts = deptDao.listParentDept();
         String[] uDepts = userDao.listAllDept();
         String[] allDepts = (String[]) ArrayUtils.addAll(pDepts, uDepts);
-        for (SysDept sysDept : sysDepts) {
-            if (!ArrayUtils.contains(allDepts, sysDept.getId())) {
+        for (Dept dept : depts) {
+            if (!ArrayUtils.contains(allDepts, dept.getId())) {
                 continue;
             }
-            Tree<SysDept> tree = new Tree<SysDept>();
-            tree.setId(sysDept.getId().toString());
-            tree.setParentId(sysDept.getParentId().toString());
-            tree.setText(sysDept.getName());
+            Tree<Dept> tree = new Tree<Dept>();
+            tree.setId(dept.getId().toString());
+            tree.setParentId(dept.getParentId().toString());
+            tree.setText(dept.getName());
             Map<String, Object> state = new HashMap<>(16);
             state.put("opened", true);
-            state.put("mType", "sysDept");
+            state.put("mType", "dept");
             tree.setState(state);
             trees.add(tree);
         }
-        List<SysUser> sysUsers = userDao.findList(new HashMap<String, Object>(16));
-        for (SysUser sysUser : sysUsers) {
-            Tree<SysDept> tree = new Tree<SysDept>();
-            tree.setId(sysUser.getId().toString());
-            tree.setParentId(sysUser.getDept().toString());
-            tree.setText(sysUser.getUserName());
+        List<User> users = userDao.findList(new HashMap<String, Object>(16));
+        for (User user : users) {
+            Tree<Dept> tree = new Tree<Dept>();
+            tree.setId(user.getId().toString());
+            tree.setParentId(user.getDeptId().toString());
+            tree.setText(user.getLoginName());
             Map<String, Object> state = new HashMap<>(16);
             state.put("opened", true);
-            state.put("mType", "sysUser");
+            state.put("mType", "user");
             tree.setState(state);
             trees.add(tree);
         }
         // 默认顶级菜单为０，根据数据库实际情况调整
-        Tree<SysDept> deptTree = BuildTree.build(trees);
+        Tree<Dept> deptTree = BuildTree.build(trees);
         return deptTree;
     }
 
     @Override
-    public int updatePersonal(SysUser sysUserDO) {
-        return userDao.update(sysUserDO);
+    public int updatePersonal(User userDO) {
+        return userDao.update(userDO);
     }
 
 //    @Override

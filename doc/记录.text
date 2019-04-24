@@ -19,8 +19,7 @@ xxx.update_time AS "updateTime"
     xxx.del_flag = 0
 </where>
 
-
-
-LEFT JOIN sys_userinfo uif ON a.id = uif.user_id
+//将"offset" “limit”两个数据进行转换
+Query query = new Query(params);
 
 

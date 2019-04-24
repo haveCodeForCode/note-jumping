@@ -4,6 +4,7 @@
 package com.root.cognition.common.until;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import com.root.cognition.common.until.codegenerate.IdGen;
 
 import java.util.concurrent.*;
 
@@ -21,7 +22,7 @@ public class ThreadsTools {
         if (!FactoryName.isEmpty() && "".equals(FactoryName)) {
             newNameThreadFactory = new ThreadFactoryBuilder().setNameFormat(FactoryName).build();
         } else {
-            newNameThreadFactory = new ThreadFactoryBuilder().setNameFormat(IdGenerate.uuid()).build();
+            newNameThreadFactory = new ThreadFactoryBuilder().setNameFormat(IdGen.uuid()).build();
         }
         return newNameThreadFactory;
     }

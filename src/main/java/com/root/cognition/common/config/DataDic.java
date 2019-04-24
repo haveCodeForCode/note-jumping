@@ -2,7 +2,7 @@ package com.root.cognition.common.config;
 
 
 /**
- * 项目常用数据
+ * 项目常用变量
  *
  * @author LineInkBook
  */
@@ -58,8 +58,6 @@ public class DataDic {
 
     /*** 部门根节点id */
     public static Long DEPT_ROOT_ID = 0L;
-    /*** 缓存方式 */
-    public static String CACHE_TYPE_REDIS = "redis";
     /*** 村务信息 */
     public static String LOG_ERROR = "error";
 

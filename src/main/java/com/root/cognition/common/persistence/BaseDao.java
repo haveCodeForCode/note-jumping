@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * DAO支持类实现
+ * DAO支持类实现 (9条)
  * @author worry
  */
 @Mapper
@@ -17,7 +17,7 @@ public interface BaseDao<T> {
      * @param id 表主键
      * @return 实体类
      */
-    T get(String id);
+    T get(Long id);
 
     /**
      * 获取单条数据（根据实体）
@@ -66,7 +66,7 @@ public interface BaseDao<T> {
      * @return 数量
      * @see public int remove(T entity)
      */
-    int remove(String id);
+    int remove(Long id);
 
     /**
      * 删除一系列数据
@@ -74,6 +74,6 @@ public interface BaseDao<T> {
      * @param ids 实体类id数组
      * @return 数量
      */
-    int batchRemove(String[] ids);
+    int batchRemove(Long[] ids);
 
 }

@@ -1,7 +1,7 @@
 package com.root.cognition.system.service;
 
 import com.root.cognition.common.persistence.Tree;
-import com.root.cognition.system.entity.SysMenu;
+import com.root.cognition.system.entity.Menu;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,78 +16,98 @@ import java.util.Set;
 public interface MenuService {
 
 	/**
+	 * 获取菜单并形成树列
+	 *
+	 * @return
+	 */
+	Tree<Menu> getTree();
+
+	/**
+	 * 获取id对应的树列
+	 *
+	 * @param id
+	 * @return
+	 */
+	Tree<Menu> getTree(Long id);
+
+	/**
+	 * 根据userid查询对应user菜单形成树
+	 *
+	 * @param id
+	 * @return
+	 */
+	Tree<Menu> getSysMenuTree(Long id);
+
+	/**
+	 * 根据用户id查询对应的数据
+	 *
+	 * @param id
+	 * @return
+	 */
+	List<Tree<Menu>> listMenuTree(Long id);
+
+	/**
+	 * @param userId
+	 * @return
+	 */
+	Set<String> menuListPerms(Long userId);
+
+//*************************************************
+
+	/**
 	 * 根据id查询菜单
 	 * @param id
 	 * @return
 	 */
-	SysMenu get(String id);
+	Menu get(Long id);
 
 	/**
 	 * 根据条件查询菜单
 	 * @param params
 	 * @return
 	 */
-	SysMenu get (Map<String, Object> params);
+	Menu get(Map<String, Object> params);
+
+	/**
+	 * 根据条件查询
+	 * @param params
+	 * @return
+	 */
+	List<Menu> findList(Map<String, Object> params);
+
+	/**
+	 * 根据条件统计
+	 * @param map
+	 * @return
+	 */
+	int count(Map<String, Object> map);
 
 	/**
 	 * 根据entity更新菜单
-	 * @param sysMenu
+	 * @param menu
 	 * @return
 	 */
-	int update(SysMenu sysMenu);
-
-	/**
-	 * 获取菜单并形成树列
-	 * @return
-	 */
-	Tree<SysMenu> getTree();
-
-	/**
-	 * 获取id对应的树列
-	 * @param id
-	 * @return
-	 */
-	Tree<SysMenu> getTree(String id);
+	int update(Menu menu);
 
 	/**
 	 * 保存entity
-	 * @param sysMenu
+	 * @param menu
 	 * @return
 	 */
-	int save(SysMenu sysMenu);
+	int save(Menu menu);
 
 	/**
 	 * 根据id移除
 	 * @param id
 	 * @return
 	 */
-	int remove(String id);
+	int delete(Long id);
 
 	/**
-	 * 根据userid查询对应user菜单形成树
-	 * @param id
+	 * 批量删除
+	 * @param menuIds
 	 * @return
 	 */
-	Tree<SysMenu> getSysMenuTree(String id);
+	int batchDelete(Long[] menuIds);
 
-	/**
-	 *
-	 * @param id
-	 * @return
-	 */
-	List<Tree<SysMenu>> listMenuTree(String id);
-
-	/**
-	 *
-	 * @param params
-	 * @return
-	 */
-	List<SysMenu> list(Map<String, Object> params);
-
-	/**
-	 *
-	 * @param userId
-	 * @return
-	 */
-	Set<String> menuListPerms(String userId);
 }

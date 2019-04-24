@@ -2,13 +2,12 @@ package com.root.cognition.system.service.impl;
 
 
 import com.root.cognition.common.config.DataDic;
-import com.root.cognition.common.until.StringUtils;
 import com.root.cognition.system.dao.RoleDao;
 import com.root.cognition.system.dao.RoleMenuDao;
 import com.root.cognition.system.dao.UserDao;
 import com.root.cognition.system.dao.UserRoleDao;
+import com.root.cognition.system.entity.Role;
 import com.root.cognition.system.entity.RoleMenu;
-import com.root.cognition.system.entity.SysRole;
 import com.root.cognition.system.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -59,44 +58,49 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public SysRole get(Map<String, Object> params) {
+    public Role get(Map<String, Object> params) {
         return roleDao.getByEntity(params);
     }
 
     @Override
-    public SysRole get(String id) {
+    public Role get(Long id) {
         return roleDao.get(id);
     }
 
     @Override
-    public List<SysRole> list(Map<String, Object> params) {
+    public List<Role> findList(Map<String, Object> params) {
         return roleDao.findList(params);
     }
 
     @Override
-    public List<SysRole> list(String userId) {
-        List<String> rolesIds = userRoleDao.listRoleId(userId);
-        List<SysRole> sysRoles = roleDao.findList(new HashMap<>(16));
-        for (SysRole sysRole : sysRoles) {
-//            sysRole.setRoleSign("false");
-            for (String roleId : rolesIds) {
-                if (Objects.equals(sysRole.getId(), roleId)) {
-//                    sysRole.setRoleSign("true");
+    public int count(Map<String, Object> map) {
+        return roleDao.count(map);
+    }
+
+    @Override
+    public List<Role> list(Long userId) {
+        List<Long> rolesIds = userRoleDao.listRoleId(userId);
+        List<Role> roles = roleDao.findList(new HashMap<>(16));
+        for (Role role : roles) {
+//            role.setRoleSign("false");
+            for (Long roleId : rolesIds) {
+                if (Objects.equals(role.getId(), roleId)) {
+//                    role.setRoleSign("true");
                     break;
                 }
             }
         }
-        return sysRoles;
+        return roles;
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public int save(SysRole sysRole) {
-        int count = roleDao.insert(sysRole);
-        List<String> menuIds = sysRole.getMenuIds();
-        String roleId = sysRole.getId();
+    public int save(Role role) {
+        int count = roleDao.insert(role);
+        List<Long> menuIds = role.getMenuIds();
+        Long roleId = role.getId();
         List<RoleMenu> rms = new ArrayList<>();
-        for (String menuId : menuIds) {
+        for (Long menuId : menuIds) {
             RoleMenu rmDo = new RoleMenu();
             rmDo.setRoleId(roleId);
             rmDo.setMenuId(menuId);
@@ -111,7 +115,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public int remove(String id) {
+    public int delete(Long id) {
         int count = roleDao.remove(id);
         userRoleDao.removeByRoleId(id);
         roleMenuDao.removeByRoleId(id);
@@ -119,20 +123,20 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public int update(SysRole sysRole) {
+    public int update(Role role) {
         //更新角色对象
-        int r = roleDao.update(sysRole);
+        int r = roleDao.update(role);
         //获取角色中菜单列
-        List<String> menuIds = sysRole.getMenuIds();
+        List<Long> menuIds = role.getMenuIds();
         //获取角色id
-        String roleId = sysRole.getId();
-        if (StringUtils.isNotEmpty(roleId)) {
+        Long roleId = role.getId();
+        if (roleId != null) {
             return DataDic.RETURN_STATUS_INFOBUG;
         }
         //移除所有角色id相关的菜单
         roleMenuDao.removeByRoleId(roleId);
         List<RoleMenu> roleMenuList = new ArrayList<>();
-        for (String menuId : menuIds) {
+        for (Long menuId : menuIds) {
             RoleMenu roleMenu = new RoleMenu();
             roleMenu.setRoleId(roleId);
             roleMenu.setMenuId(menuId);
@@ -145,8 +149,9 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public int batchDelect(String[] ids) {
+    public int batchDelect(Long[] ids) {
         return roleDao.batchRemove(ids);
     }
+
 
 }

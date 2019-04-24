@@ -5,7 +5,7 @@ import com.root.cognition.common.config.DataDic;
 import com.root.cognition.common.persistence.Tree;
 import com.root.cognition.common.until.BuildTree;
 import com.root.cognition.system.dao.DeptDao;
-import com.root.cognition.system.entity.SysDept;
+import com.root.cognition.system.entity.Dept;
 import com.root.cognition.system.service.DeptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +23,7 @@ import java.util.Map;
 @Service
 public class DeptServiceImpl implements DeptService {
 
+
     private DeptDao deptDao;
 
     @Autowired
@@ -30,13 +31,19 @@ public class DeptServiceImpl implements DeptService {
         this.deptDao = deptDao;
     }
 
+
     @Override
-    public SysDept get(String deptId) {
+    public Dept get(Long deptId) {
         return deptDao.get(deptId);
     }
 
     @Override
-    public List<SysDept> list(Map<String, Object> map) {
+    public Dept get(Map<String, Object> map) {
+        return deptDao.getByEntity(map);
+    }
+
+    @Override
+    public List<Dept> findList(Map<String, Object> map) {
         return deptDao.findList(map);
     }
 
@@ -46,72 +53,71 @@ public class DeptServiceImpl implements DeptService {
     }
 
     @Override
-    public int save(SysDept sysDept) {
-        return deptDao.insert(sysDept);
+    public int save(Dept dept) {
+        return deptDao.insert(dept);
     }
 
     @Override
-    public int update(SysDept sysDept) {
-        return deptDao.update(sysDept);
+    public int update(Dept dept) {
+        return deptDao.update(dept);
     }
 
     @Override
-    public int remove(String deptId) {
+    public int delete(Long deptId) {
         return deptDao.remove(deptId);
     }
 
     @Override
-    public int batchRemove(String[] deptIds) {
+    public int batchDelete(Long[] deptIds) {
         return deptDao.batchRemove(deptIds);
     }
 
+
     @Override
-    public Tree<SysDept> getTree() {
-        List<Tree<SysDept>> trees = new ArrayList<Tree<SysDept>>();
-        List<SysDept> sysSysDepts = deptDao.findList(new HashMap<String, Object>(16));
-        for (SysDept sysDept : sysSysDepts) {
-            Tree<SysDept> tree = new Tree<SysDept>();
-
-            tree.setId(sysDept.getId().toString());
-
-            tree.setParentId(sysDept.getParentId().toString());
-
-            tree.setText(sysDept.getName());
-
+    public Tree<Dept> getTree() {
+        List<Tree<Dept>> trees = new ArrayList<Tree<Dept>>();
+        List<Dept> sysDepts = deptDao.findList(new HashMap<String, Object>(16));
+        for (Dept dept : sysDepts) {
+            Tree<Dept> tree = new Tree<Dept>();
+            tree.setId(dept.getId().toString());
+            tree.setParentId(dept.getParentId().toString());
+            tree.setText(dept.getName());
             Map<String, Object> state = new HashMap<>(16);
-
             state.put("opened", true);
-
             tree.setState(state);
             trees.add(tree);
         }
         // 默认顶级菜单为０，根据数据库实际情况调整
-        Tree<SysDept> tree = BuildTree.build(trees);
+        Tree<Dept> tree = BuildTree.build(trees);
         return tree;
     }
 
     @Override
-    public boolean checkDeptHasUser(String deptId) {
+    public boolean checkDeptHasUser(Long deptId) {
         // TODO Auto-generated method stub
         //查询部门以及此部门的下级部门
-        int result = deptDao.getDeptUserNumber(deptId);
+        Map<String, Object> query = new HashMap<>();
+        query.put("id", deptId);
+        int result = deptDao.count(query);
         return result == DataDic.INT_ZERO;
     }
 
     @Override
-    public List<String> listChildrenIds(String parentId) {
-        List<SysDept> sysDeptDOS = list(null);
-        return treeMenuList(sysDeptDOS, parentId);
+    public List<Long> listChildrenIds(Long parentId) {
+        Map<String, Object> query = new HashMap<>();
+        query.put("parentId", parentId);
+        List<Dept> deptDOS = findList(query);
+        return treeMenuList(deptDOS, parentId);
     }
 
-    List<String> treeMenuList(List<SysDept> menuList, String pid) {
-        List<String> childIds = new ArrayList<>();
-        for (SysDept sysDept : menuList) {
+    List<Long> treeMenuList(List<Dept> menuList, Long pid) {
+        List<Long> childIds = new ArrayList<>();
+        for (Dept dept : menuList) {
             //遍历出父id等于参数的id，add进子节点集合
-            if (sysDept.getParentId() == pid) {
+            if (dept.getParentId().equals(pid)) {
                 //递归遍历下一级
-                treeMenuList(menuList, sysDept.getId());
-                childIds.add(sysDept.getId());
+                treeMenuList(menuList, dept.getId());
+                childIds.add(dept.getId());
             }
         }
         return childIds;

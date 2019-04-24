@@ -9,7 +9,7 @@
                   overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
                   timeToLiveSeconds="600" memoryStoreEvictionPolicy="LRU"/>
 
-    <cache name="sysUser" eternal="false" maxElementsInMemory="10000"
+    <cache name="user" eternal="false" maxElementsInMemory="10000"
            overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
            timeToLiveSeconds="0" memoryStoreEvictionPolicy="LFU"/>
 </ehcache>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.root.cognition.system.dao.UserInfoDao">
+
+
+    <!--////////***************基础方法*******************///////-->
+
+    <!-- 根据id查询用户信息 -->
+    <select id="get" parameterType="string" resultType="com.root.cognition.system.entity.UserInfo">
+        SELECT
+        <include refid="userColumns"/>
+        FROM sys_user_info a
+        WHERE a.userinfo_id = #{id}
+    </select>
+
+    <!--根据条件查询用户信息-->
+    <select id="getByEntity" resultType="com.root.cognition.system.entity.UserInfo">
+        SELECT
+        <include refid="userColumns"/>
+        FROM sys_user_info a
+        <where>
+            a.del_flag = #{delFlag}
+            <if test="userId !=null and userId !=''">
+                AND a.user_id = #{userId}
+            </if>
+            <if test="userName !=null and userName !=''">
+                AND a.user_name =#{userNmae}
+            </if>
+        </where>
+    </select>
+
+    <!--多条查询用户信息 -->
+    <select id="findList" resultType="com.root.cognition.system.entity.UserInfo">
+        SELECT
+        <include refid="userColumns"/>
+        FROM sys_user_info a
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            <if test="userName !=null and userName !=''">
+                AND a.user_name =#{userNmae}
+            </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <!--查询用户数目 -->
+    <select id="count" resultType="int">
+        select count(*) from sys_user_info
+    </select>
+
+    <!-- 插入用户 -->
+    <insert id="insert">
+        INSERT INTO sys_user_info(
+        `userinfo_id`,
+        `user_id`,
+        <if test="userName !=null and userName !=''">
+            `user_name`,
+        </if>
+        <if test="picId !=null and picId !=''">
+            `pic_id`,
+        </if>
+        `create_by`,
+        `create_time`,
+        `update_by`,
+        `update_time`,
+        `del_flage`
+        ) VALUES (
+        #{id},
+        #{userId},
+        <if test="userName !=null and userName !=''">
+            #{userName},
+        </if>
+        <if test="picId !=null and picId !=''">
+            #{picId},
+        </if>
+        #{createBy},
+        #{gmtCreate},
+        #{updater},
+        #{gmtModified},
+        #{delFlage}
+        )
+    </insert>
+
+    <!-- 更新用户 -->
+    <update id="update">
+        UPDATE sys_user_info SET
+        `user_id` = #{id},
+        <if test="userName !=null and userName !=''">
+            `user_name` = #{userName},
+        </if>
+        <if test="userMobile !=null and userMobile !=''">
+            `user_mobile` = #{userMobile},
+        </if>
+        `create_by` = #{createBy},
+        `create_time` = #{createTime},
+        `update_by` = #{updateBy},
+        `updateTime` = #{updateTime},
+        `del_flage` = #{delFlage}
+        WHERE id = #{id}
+    </update>
+
+    <sql id="userColumns">
+          a.userinfo_id AS "id",
+          a.user_id   AS "userId",
+          a.user_name AS "userName",
+          a.pic_id AS "picId",
+          a.creator AS "creator",
+          a.create_time AS "createTime",
+          a.updater AS "updater",
+          a.update_time AS "updateTime",
+          a.del_flage AS "delFlage"
+    </sql>
+
+</mapper>

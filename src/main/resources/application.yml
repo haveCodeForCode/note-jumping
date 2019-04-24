@@ -1,0 +1,46 @@
+﻿#端口配置
+server:
+  port: 8090
+  servlet:
+    session:
+      timeout: 1800
+
+spring:
+  #上传下载文件大小限制
+  servlet:
+    multipart:
+      max-file-size: 30MB
+      max-request-size: 10MB
+  #编码
+  http:
+    encoding:
+      charset: utf-8
+      enabled: true
+  #引用的其他文件
+  profiles:
+    active: dev
+  #页面设置 HTML
+  thymeleaf:
+    mode: HTML
+    cache: false
+  # jackson设置  ackson是一个简单基于Java应用库
+  # Jackson可以轻松的将Java对象转换成json对象和xml文档，同样也可以将json、xml转换成Java对象。
+  jackson:
+    time-zone: GMT+8
+    date-format: java.text.SimpleDateFormat
+  #springBoot热部署
+  devtools:
+    restart:
+      enabled: true
+  #页面是否加载缓存
+  freemarker:
+    cache: false
+  cache:
+    type: ehcache
+    ehcache:
+      config: classpath:config/ehcache.xml
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  type-aliases-package: com.root.cogniton.**.entity
+  mapper-locations: classpath:mappings/**/*Mapper.xml

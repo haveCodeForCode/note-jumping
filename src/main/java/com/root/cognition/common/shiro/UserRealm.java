@@ -2,9 +2,10 @@ package com.root.cognition.common.shiro;
 
 
 import com.root.cognition.common.config.DataDic;
+import com.root.cognition.common.until.Query;
 import com.root.cognition.system.config.ApplicationContextRegister;
 import com.root.cognition.system.dao.UserDao;
-import com.root.cognition.system.entity.SysUser;
+import com.root.cognition.system.entity.User;
 import com.root.cognition.system.service.MenuService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -12,9 +13,7 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -39,7 +38,7 @@ public class UserRealm extends AuthorizingRealm {
 
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection arg0) {
-		String userId = ShiroUtils.getUserId();
+		Long userId = ShiroUtils.getUserId();
 		MenuService menuService = ApplicationContextRegister.getBean(MenuService.class);
 		Set<String> perms = menuService.menuListPerms(userId);
 		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
@@ -49,14 +48,14 @@ public class UserRealm extends AuthorizingRealm {
 
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-		String username = (String) token.getPrincipal();
-		Map<String, Object> map = new HashMap<>(16);
-		map.put("username", username);
+		String loginName = (String) token.getPrincipal();
 		String password = new String((char[]) token.getCredentials());
 
-		UserDao userMapper = ApplicationContextRegister.getBean(UserDao.class);
+		UserDao userDao = ApplicationContextRegister.getBean(UserDao.class);
 		// 查询用户信息
-		SysUser user = userMapper.getByEntity(map);
+		Map<String, Object> map = Query.withDelFlag();
+		map.put("loginName", loginName);
+		User user = userDao.getByEntity(map);
 
 		// 账号不存在
 		if (user == null) {

@@ -8,43 +8,50 @@ package com.root.cognition.system.entity;
 public class RoleMenu {
 
     /**
-     *
+     * 关联主键
      */
-    private String id;
-    /**
-     *
-     */
-    private String roleId;
-    /**
-     *
-     */
-    private String menuId;
+    private Long id;
 
-    public String getId() {
+    /**
+     * 角色表主键
+     */
+    private Long roleId;
+
+    /**
+     * 菜单表主键
+     */
+    private Long menuId;
+
+    public Long getId() {
         return id;
     }
-    public void setId(String id) {
+
+    public void setId(Long id) {
         this.id = id;
     }
-    public String getRoleId() {
+
+    public Long getRoleId() {
         return roleId;
     }
-    public void setRoleId(String roleId) {
+
+    public void setRoleId(Long roleId) {
         this.roleId = roleId;
     }
-    public String getMenuId() {
+
+    public Long getMenuId() {
         return menuId;
     }
-    public void setMenuId(String menuId) {
+
+    public void setMenuId(Long menuId) {
         this.menuId = menuId;
     }
 
     @Override
     public String toString() {
-        return "RoleMenuDO{" +
-                "id=" + id +
-                ", roleId=" + roleId +
-                ", menuId=" + menuId +
+        return "RoleMenu{" +
+                "id='" + id + '\'' +
+                ", roleId='" + roleId + '\'' +
+                ", menuId='" + menuId + '\'' +
                 '}';
     }
 

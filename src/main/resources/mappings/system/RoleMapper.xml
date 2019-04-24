@@ -3,32 +3,50 @@
 
 <mapper namespace="com.root.cognition.system.dao.RoleDao">
 
-
-    <select id="get" resultType="com.root.cognition.system.entity.SysRole">
-		select
-		`role_id`,`role_name`,`role_sign`,`remark`,`user_id_create`,`gmt_create`,`gmt_modified`
-		from sys_role where role_id = #{value}
+	<select id="get" resultType="com.root.cognition.system.entity.Role">
+		SELECT
+		<include refid="roleColumns"/>
+		FROM
+		sys_role
+		WHERE role_id = #{value}
 	</select>
 
-    <select id="findList" resultType="com.root.cognition.system.entity.SysRole">
+	<select id="findList" resultType="com.root.cognition.system.entity.Role">
 		select
-		`role_id`,`role_name`,`role_sign`,`remark`,`user_id_create`,`gmt_create`,`gmt_modified`
+		<include refid="roleColumns"/>
 		from sys_role
 		<where>
-			<if test="roleId != null and roleId != ''"> and role_id = #{roleId} </if>
-			<if test="roleName != null and roleName != ''"> and role_name = #{roleName} </if>
-			<if test="roleSign != null and roleSign != ''"> and role_sign = #{roleSign} </if>
-			<if test="remark != null and remark != ''"> and remark = #{remark} </if>
-			<if test="userIdCreate != null and userIdCreate != ''"> and user_id_create = #{userIdCreate} </if>
-			<if test="gmtCreate != null and gmtCreate != ''"> and gmt_create = #{gmtCreate} </if>
-			<if test="gmtModified != null and gmtModified != ''"> and gmt_modified = #{gmtModified} </if>
+			<if test="roleId != null and roleId != ''">
+				AND role_id = #{roleId}
+			</if>
+			<if test="roleName != null and roleName != ''">
+				AND role_name = #{roleName}
+			</if>
+			<if test="roleSign != null and roleSign != ''">
+				AND role_sign = #{roleSign}
+			</if>
+			<if test="remark != null and remark != ''">
+				AND remark = #{remark}
+			</if>
+			<if test="createBy !=null and createBy !=''">
+				AND a.create_by = #{createBy}
+			</if>
+			<if test="createTime !=null">
+				AND a.create_time = #{createTime}
+			</if>
+			<if test="updateBy !=null and updateBy !=''">
+				AND a.update_by = #{updateBy}
+			</if>
+			<if test="updateTime !=null">
+				AND a.update_time = #{updateTime}
+			</if>
 		</where>
 		<choose>
 			<when test="sort != null and sort.trim() != ''">
 				order by ${sort} ${order}
 			</when>
 			<otherwise>
-				order by role_id desc
+				order by a.create_time desc
 			</otherwise>
 		</choose>
 		<if test="offset != null and limit != null">
@@ -37,51 +55,103 @@
 	</select>
 
 	<select id="count" resultType="int">
-		select count(*) from sys_role
+		SELECT
+			count(*)
+		FROM sys_role a
 		<where>
-			<if test="roleId != null and roleId != ''"> and role_id = #{roleId} </if>
-			<if test="roleName != null and roleName != ''"> and role_name = #{roleName} </if>
-			<if test="roleSign != null and roleSign != ''"> and role_sign = #{roleSign} </if>
-			<if test="remark != null and remark != ''"> and remark = #{remark} </if>
-			<if test="userIdCreate != null and userIdCreate != ''"> and user_id_create = #{userIdCreate} </if>
-			<if test="gmtCreate != null and gmtCreate != ''"> and gmt_create = #{gmtCreate} </if>
-			<if test="gmtModified != null and gmtModified != ''"> and gmt_modified = #{gmtModified} </if>
+			<if test="id != null and id != ''">
+				AND a.role_id = #{id}
+			</if>
+			<if test="roleName != null and roleName != ''">
+				AND a.name = #{name}
+			</if>
+			<if test="cname !=null and cname !=''">
+				AND a.cname = #{cname}
+			</if>
+			<if test="permissions !=null and permissions !=''">
+				AND a.permissions = #{permissions}
+			</if>
+			<if test="dataScope !=null and dataScope !=''">
+				AND a.data_scope = #{dataScope}
+			</if>
+			<if test="remark != null and remark != ''">
+				AND a.remark = #{remark}
+			</if>
+			<if test="createBy !=null and createBy !=''">
+				AND a.create_by = #{createBy}
+			</if>
+			<if test="createTime !=null">
+				AND a.create_time = #{createTime}
+			</if>
+			<if test="updateBy !=null and updateBy !=''">
+				AND a.update_by = #{updateBy}
+			</if>
+			<if test="updateTime !=null">
+				AND a.update_time = #{updateTime}
+			</if>
 		</where>
 	</select>
 
-    <insert id="save" parameterType="com.root.cognition.system.entity.SysRole"
-            useGeneratedKeys="true" keyProperty="roleId">
+	<insert id="insert" parameterType="com.root.cognition.system.entity.Role">
 		insert into sys_role
 		(
-		`role_name`,
-		`role_sign`,
+		`role_id`,
+		`name`,
+		`cname`,
+		`permissions`,
+		`data_scope`,
 		`remark`,
-		`user_id_create`,
-		`gmt_create`,
-		`gmt_modified`
+		`create_by`,
+		`create_time`,
+		`update_by`,
+		`update_time`,
+		`del_flag`
 		)
 		values
 		(
-		#{roleName},
-		#{roleSign},
+		#{id},
+		#{name},
+		#{cname},
+		#{permissions},
+		#{dataScope},
 		#{remark},
-		#{userIdCreate},
-		#{gmtCreate},
-		#{gmtModified}
+		#{createBy},
+		#{createTime},
+		#{updateBy},
+		#{updateTime},
+		#{delFlag}
 		)
 	</insert>
 
-    <update id="update" parameterType="com.root.cognition.system.entity.SysRole">
+	<update id="update" parameterType="com.root.cognition.system.entity.Role">
 		update sys_role
 		<set>
-			<if test="roleName != null">`role_name` = #{roleName}, </if>
-			<if test="roleSign != null">`role_sign` = #{roleSign}, </if>
-			<if test="remark != null">`remark` = #{remark}, </if>
-			<if test="userIdCreate != null">`user_id_create` = #{userIdCreate}, </if>
-			<if test="gmtCreate != null">`gmt_create` = #{gmtCreate}, </if>
-			<if test="gmtModified != null">`gmt_modified` = #{gmtModified}</if>
+			<if test="roleName != null">
+				`role_name` = #{roleName},
+			</if>
+			<if test="roleSign != null">
+				`role_sign` = #{roleSign},
+			</if>
+			<if test="remark != null">
+				`remark` = #{remark},
+			</if>
+			<if test="createBy !=null and createBy !=''">
+				`create_by` = #{createBy},
+			</if>
+			<if test="createTime !=null">
+				create_time = #{createTime},
+			</if>
+			<if test="updateBy !=null and updateBy !=''">
+				`update_by` = #{updateBy},
+			</if>
+			<if test="updateTime !=null">
+				`update_time` = #{updateTime},
+			</if>
+			<if test="delFlag !=null and delFlag!=''">
+				`del_flag` = #{delFlag}
+			</if>
 		</set>
-		where role_id = #{roleId}
+		where role_id = #{id}
 	</update>
 
 	<delete id="remove">
@@ -95,5 +165,23 @@
 			#{roleId}
 		</foreach>
 	</delete>
+
+	<select id="countDayOfCreate" resultType="java.lang.Integer">
+       SELECT count(0) FROM sys_role WHERE date_format(create_time ,"%Y-%m-%d") = DATE_FORMAT(curdate(),"%Y-%m-%d")
+	</select>
+
+	<sql id="roleColumns">
+		a.role_id AS "id",
+		a.name AS "roleName"
+		a.cname AS "roleCname",
+		a.permissions AS "rolePermissions",
+		a.data_scope AS "dataScope"
+		a.remark AS "remark",
+		a.create_by	AS "createBy",
+		a.create_time AS "createTime",
+		a.update_by	AS "updateBy",
+		a.update_time AS "updateTime",
+		a.del_flag 	AS "delFlag"
+	</sql>
 
 </mapper>
