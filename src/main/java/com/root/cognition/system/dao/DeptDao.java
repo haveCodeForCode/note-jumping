@@ -23,4 +23,10 @@ public interface DeptDao extends BaseDao<Dept> {
 	 */
 	String[] listParentDept();
 
+	/**
+	 * 查询全部相关部门
+	 *
+	 * @return
+	 */
+	String[] listAllDept();
 }

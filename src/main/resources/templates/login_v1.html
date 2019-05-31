@@ -3,16 +3,15 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>BootDo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>congnition</title>
     <meta name="keywords" content="CarManger管理系统">
     <meta name="description" content="CarManger管理系统">
-    <link href="/css/plugins/bootstrap/bootstrap.min.css" rel="stylesheet">
-    <link href="/css/plugins/font-awesome/font-awesome.css" rel="stylesheet">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/font-awesome.css" rel="stylesheet">
     <link href="/css/animate.css" rel="stylesheet">
     <link href="/css/style.css" rel="stylesheet">
-    <link href="/css/login_v1.css" rel="stylesheet">
+    <link href="/css/login.css" rel="stylesheet">
 
     <!--<meta http-equiv="refresh" content="0;ie.html"/>-->
     <script>
@@ -25,8 +24,8 @@
 
 <body class="signin">
 
-<div class="signinpanel">
-    <div class="row">
+    <div class="signinpanel">
+        <div class="row">
         <div class="col-sm-7">
             <div class="signin-info">
                 <div class="logopanel m-b">
@@ -81,18 +80,18 @@
                         <a class="outside-login-btn wxoa actived oschina J-btnSwitchLoginType" target="_Blank"
                            href="https://www.oschina.net/p/bootdo">
                             <em><i class="fa fa-home"></i></em>
-                            <span>oschina主页</span>
+                            <span>微信</span>
                         </a>
                         <a class="outside-login-btn wxoa actived my J-btnSwitchLoginType" target="_Blank"
                            href="https://gitee.com/lcg0124/bootdo">
                             <em><i class="fa fa-git-square"></i></em>
-                            <span>码云仓库</span>
+                            <span>账号</span>
                         </a>
-                        <a class="outside-login-btn wxoa actived git J-btnSwitchLoginType" target="_Blank"
-                           href="https://github.com/lcg0124/bootdo">
-                            <em><i class="fa fa-github"></i></em>
-                            <span>GitHub仓库</span>
-                        </a>
+                        <!--<a class="outside-login-btn wxoa actived git J-btnSwitchLoginType" target="_Blank"-->
+                           <!--href="https://github.com/lcg0124/bootdo">-->
+                            <!--<em><i class="fa fa-github"></i></em>-->
+                            <!--<span>GitHub仓库</span>-->
+                        <!--</a>-->
                     </div>
                 </div>
 
@@ -107,16 +106,18 @@
 <!-- 全局js -->
 <script src="/js/jquery.min.js?v=2.1.4" th:src="@{/js/jquery.min.js?v=2.1.4}"></script>
 <script src="/js/bootstrap.min.js?v=3.3.6" th:src="@{/js/bootstrap.min.js?v=3.3.6}"></script>
-
 <!-- 自定义js -->
 <script src="/js/content.js?v=1.0.0" th:src="@{/js/content.js?v=1.0.0}"></script>
+
 
 <!-- jQuery Validation plugin javascript-->
 <script src="/js/ajax-util.js"></script>
 <script src="/js/plugins/validate/jquery.validate.min.js"
         th:src="@{/js/plugins/validate/jquery.validate.min.js}"></script>
-<script src="/js/plugins/validate/messages_zh.min.js" th:src="@{/js/plugins/validate/messages_zh.min.js}"></script>
-<script src="/js/plugins/layer/layer.min.js" th:src="@{/js/plugins/layer/layer.min.js}"></script>
+<script src="/js/plugins/validate/messages_zh.min.js"
+        th:src="@{/js/plugins/validate/messages_zh.min.js}"></script>
+<script src="/js/plugins/layer/layer.min.js"
+        th:src="@{/js/plugins/layer/layer.min.js}"></script>
 <script type="text/javascript">
     $(document).ready(function () {
         $("#login").on('click', function () {
@@ -140,7 +141,7 @@
             url: "/login",
             data: $('#signupForm').serialize(),
             success: function (response) {
-                alert("成功");
+                console.log(response);
                 console.log(response);
                 if (response.state == 0) {
                     var index = layer.load(1, {

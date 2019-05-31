@@ -3,10 +3,10 @@ package com.root.cognition.system.controller;
 import com.root.cognition.common.config.DataDic;
 import com.root.cognition.common.persistence.BaseController;
 import com.root.cognition.common.persistence.Tree;
+import com.root.cognition.common.until.Query;
 import com.root.cognition.common.until.ResultMap;
 import com.root.cognition.system.entity.Menu;
 import com.root.cognition.system.service.MenuService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,34 +22,38 @@ import java.util.Map;
 @RequestMapping("/sys/menu")
 @Controller
 public class MenuController extends BaseController {
-	String prefix = "system/menu";
-	@Autowired
+
+
 	private MenuService menuService;
 
+	@Autowired
 	public void setMenuService(MenuService menuService) {
 		this.menuService = menuService;
 	}
 
 
-	@RequiresPermissions("sys:menu:menu")
+	//	@RequiresPermissions("sys:menu:menu")
 	@GetMapping()
 	String menu(Model model) {
-		return prefix+"/menu";
+		return "system/menu/menu";
 	}
 
 	/**
 	 * @param params
 	 * @return
 	 */
-	@RequiresPermissions("sys:menu:menu")
+//	@RequiresPermissions("sys:menu:menu")
 	@RequestMapping("/list")
 	@ResponseBody
 	List<Menu> list(@RequestParam Map<String, Object> params) {
-		return menuService.findList(params);
+		// 查询列表数据
+		Map<String, Object> query = Query.withDelFlag();
+		List<Menu> menuList = menuService.findList(query);
+		return menuList;
 	}
 
 	//	@Log("添加菜单")
-	@RequiresPermissions("sys:menu:add")
+//	@RequiresPermissions("sys:menu:add")
 	@GetMapping("/add/{pId}")
 	String add(Model model, Long pId) {
 		model.addAttribute("pId", pId);
@@ -58,11 +62,11 @@ public class MenuController extends BaseController {
 		} else {
 			model.addAttribute("pName", menuService.get(pId).getName());
 		}
-		return prefix + "/add";
+		return "system/menu/add";
 	}
 
 	//	@Log("编辑菜单")
-	@RequiresPermissions("sys:menu:edit")
+//	@RequiresPermissions("sys:menu:edit")
 	@GetMapping("/edit/{id}")
 	String edit(Model model, Long id) {
 		Menu menu = menuService.get(id);
@@ -74,11 +78,11 @@ public class MenuController extends BaseController {
 			model.addAttribute("pName", menuService.get(parentId).getName());
 		}
 		model.addAttribute("menu", menu);
-		return prefix+"/edit";
+		return "system/menu/edit";
 	}
 
 	//	@Log("保存菜单")
-	@RequiresPermissions("sys:menu:add")
+//	@RequiresPermissions("sys:menu:add")
 	@PostMapping("/save")
 	@ResponseBody
 	ResultMap save(Menu menu) {
@@ -90,7 +94,7 @@ public class MenuController extends BaseController {
 	}
 
 	//	@Log("更新菜单")
-	@RequiresPermissions("sys:menu:edit")
+//	@RequiresPermissions("sys:menu:edit")
 	@PostMapping("/update")
 	@ResponseBody
 	ResultMap update(Menu menu) {
@@ -102,7 +106,7 @@ public class MenuController extends BaseController {
 	}
 
 	//	@Log("删除菜单")
-	@RequiresPermissions("sys:menu:remove")
+//	@RequiresPermissions("sys:menu:remove")
 	@PostMapping("/remove")
 	@ResponseBody
 	ResultMap remove(Long id) {

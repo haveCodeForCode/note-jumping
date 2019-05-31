@@ -47,33 +47,26 @@ function load(deptId) {
 				// 返回false将会终止请求
 				columns : [
 					{
-						checkbox : true
-					},
-					{
-						field : 'userId', // 列字段名
+						field : 'id', // 列字段名
 						title : '序号' // 列标题
 					},
 					{
-						field : 'name',
-						title : '姓名'
+						field : 'loginName',
+						title : '登陆名'
 					},
 					{
-						field : 'username',
-						title : '用户名'
-					},
-					{
-						field : 'email',
+						field : 'userEmail',
 						title : '邮箱'
 					},
 					{
-						field : 'status',
+						field : 'delFlag',
 						title : '状态',
 						align : 'center',
 						formatter : function(value, row, index) {
 							if (value == '0') {
-								return '<span class="label label-danger">禁用</span>';
-							} else if (value == '1') {
 								return '<span class="label label-primary">正常</span>';
+							} else if (value == '1') {
+								return '<span class="label label-danger">禁用</span>';
 							}
 						}
 					},

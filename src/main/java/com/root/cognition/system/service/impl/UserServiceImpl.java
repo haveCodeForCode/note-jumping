@@ -5,21 +5,19 @@ import com.root.cognition.common.persistence.Tree;
 import com.root.cognition.common.until.BuildTree;
 import com.root.cognition.common.until.Query;
 import com.root.cognition.common.until.StringUtils;
-import com.root.cognition.common.until.codegenerate.SnowFlake;
-import com.root.cognition.system.dao.DeptDao;
+import com.root.cognition.system.dao.RoleDao;
 import com.root.cognition.system.dao.UserDao;
 import com.root.cognition.system.dao.UserInfoDao;
 import com.root.cognition.system.dao.UserRoleDao;
-import com.root.cognition.system.entity.Dept;
-import com.root.cognition.system.entity.User;
-import com.root.cognition.system.entity.UserInfo;
-import com.root.cognition.system.entity.UserRole;
+import com.root.cognition.system.entity.*;
 import com.root.cognition.system.service.DeptService;
 import com.root.cognition.system.service.UserService;
+import com.root.cognition.system.vo.UserVo;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,18 +35,20 @@ public class UserServiceImpl implements UserService {
 
     private UserDao userDao;
 
+    private RoleDao roleDao;
+
     private UserRoleDao userRoleDao;
-
-    private DeptDao deptDao;
-
-    private DeptService deptService;
 
     private UserInfoDao userInfoDao;
 
-    //    @Autowired
+    private DeptService deptService;
+
+
+//    @Autowired
 //    private FileService sysFileService;
 //    @Autowired
 //    private BootdoConfig bootdoConfig;
+
     @Autowired
     public void setUserDao(UserDao userDao) {
         this.userDao = userDao;
@@ -60,8 +60,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Autowired
-    public void setDeptDao(DeptDao deptDao) {
-        this.deptDao = deptDao;
+    public void setRoleDao(RoleDao roleDao) {
+        this.roleDao = roleDao;
     }
 
     @Autowired
@@ -71,34 +71,32 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     public void setUserInfoDao(UserInfoDao userInfoDao) {
-        this.userDao = userDao;
+        this.userInfoDao = userInfoDao;
     }
 
 
+    /***
+     * 声明用户相关所有对象
+     * @param userId
+     * @return
+     */
+    @Cacheable(value = "zero", key = "targetClass + methodName +#p0")
     @Override
-//    @Cacheable(value = "user",key = "#id")
-    public User getbyUserId(Long userId) {
-        User user = userDao.get(userId);
-        //用户对应角色ids
-        List<Long> roleIds = userRoleDao.listRoleId(userId);
-        user.setRoleIds(roleIds);
-        //部门ID
-        user.setDeptId(deptDao.get(user.getId()).getId());
-        //条件查询声明
+    public UserVo getbyUserId(Long userId) {
+        UserVo userVo = new UserVo();
         Map<String, Object> query = Query.withDelFlag();
         query.put("userId", userId);
+        User user = userDao.getByEntity(query);
+        userVo.setUser(user);
+        //用户信息
         UserInfo userInfo = userInfoDao.getByEntity(query);
-        if (userInfo != null && !"".equals(userInfo.getId())) {
-            user.setUserInfoId(userInfo.getId());
-        } else {
-            //如果查不到则增加
-            UserInfo sysUserInfo = new UserInfo();
-            Long userInfoNumber = SnowFlake.createSFid();
-            sysUserInfo.setId(userInfoNumber);
-            userInfoDao.insert(sysUserInfo);
-            user.setUserInfoId(userInfoNumber);
-        }
-        return user;
+        userVo.setUserInfo(userInfo);
+        //用户角色
+        List<Role> roles = roleDao.findWithUserId(userId);
+        userVo.setRoles(roles);
+        //部门ID
+        userVo.setDept(deptService.get(user.getId()));
+        return userVo;
     }
 
     @Override
@@ -152,13 +150,14 @@ public class UserServiceImpl implements UserService {
     private void batchModifyRoles(User user) {
         try {
             Long userId = user.getId();
-            List<Long> roles = user.getRoleIds();
+            UserVo userVo = getbyUserId(userId);
+            List<Role> roles = userVo.getRoles();
             userRoleDao.removeByUserId(userId);
             List<UserRole> list = new ArrayList<>();
-            for (Long roleId : roles) {
+            for (Role role : roles) {
                 UserRole userRole = new UserRole();
                 userRole.setUserId(userId);
-                userRole.setRoleId(roleId);
+                userRole.setRoleId(role.getId());
                 list.add(userRole);
             }
             if (list.size() > 0) {
@@ -227,9 +226,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public Tree<Dept> getTree() {
         List<Tree<Dept>> trees = new ArrayList<Tree<Dept>>();
-        List<Dept> depts = deptDao.findList(new HashMap<String, Object>(16));
-        String[] pDepts = deptDao.listParentDept();
-        String[] uDepts = userDao.listAllDept();
+        List<Dept> depts = deptService.findList(new HashMap<String, Object>(16));
+        String[] pDepts = deptService.listParentDept();
+        String[] uDepts = deptService.listAllDept();
         String[] allDepts = (String[]) ArrayUtils.addAll(pDepts, uDepts);
         for (Dept dept : depts) {
             if (!ArrayUtils.contains(allDepts, dept.getId())) {

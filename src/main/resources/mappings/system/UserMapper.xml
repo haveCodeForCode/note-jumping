@@ -3,10 +3,6 @@
 
 <mapper namespace="com.root.cognition.system.dao.UserDao">
 
-    <select id="listAllDept">
-        SELECT DISTINCT dept_id FROM sys_user
-	</select>
-
 
     <!--*********************************************************************-->
     <select id="get" resultType="com.root.cognition.system.entity.User">

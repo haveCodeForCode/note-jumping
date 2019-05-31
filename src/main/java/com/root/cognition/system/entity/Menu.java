@@ -60,7 +60,9 @@ public class Menu extends BaseEntity<Menu>{
      */
     private Integer orderNum;
 
-    public Menu(){};
+    public Menu(){
+        super();
+    }
 
     public Menu(long id) {
         super(id);

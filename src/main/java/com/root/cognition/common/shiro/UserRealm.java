@@ -14,6 +14,7 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -71,8 +72,7 @@ public class UserRealm extends AuthorizingRealm {
 		if (user.getDelFlag() == DataDic.STRING_ZERO) {
 			throw new LockedAccountException("账号已被锁定,请联系管理员");
 		}
-		SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, password, getName());
-		return info;
+		return new SimpleAuthenticationInfo(user, password, getName());
 	}
 
 }

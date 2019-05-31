@@ -35,7 +35,7 @@ public class Query extends LinkedHashMap<String, Object> {
 	}
 
 	public static Map<String, Object> withDelFlag() {
-		Map<String, Object> params = new HashMap<>(16);
+		Map<String,Object> params = new HashMap<>();
 		params.put("delFlag", Constant.DEL_FLAG_NORMAL);
 		return params;
 	}

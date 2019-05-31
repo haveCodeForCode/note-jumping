@@ -39,6 +39,19 @@ public interface DeptService {
 	 */
 	List<Long> listChildrenIds(Long parentId);
 
+	/**
+	 * 查找父级部门
+	 * @return
+	 */
+	String[]	listParentDept();
+
+	/**
+	 * 查询全部相关部门
+	 *
+	 * @return
+	 */
+	String[]	listAllDept();
+
 	//*************************************************
 
 	/**

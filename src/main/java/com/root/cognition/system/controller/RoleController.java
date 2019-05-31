@@ -2,6 +2,7 @@ package com.root.cognition.system.controller;
 
 
 import com.root.cognition.common.persistence.BaseController;
+import com.root.cognition.common.until.Query;
 import com.root.cognition.common.until.ResultMap;
 import com.root.cognition.system.entity.Role;
 import com.root.cognition.system.service.RoleService;
@@ -31,29 +32,30 @@ public class RoleController extends BaseController {
         this.roleService = roleService;
     }
 
-    @RequiresPermissions("sys:role:role")
+//    @RequiresPermissions("sys:role:role")
     @GetMapping()
     String role() {
         return prefix + "/role";
     }
 
-    @RequiresPermissions("sys:role:role")
+//    @RequiresPermissions("sys:role:role")
     @GetMapping("/list")
     @ResponseBody()
     List<Role> list() {
-        Map<String, Object> map = new HashMap<>();
-        return roleService.findList(map);
+        Map<String, Object> map = Query.withDelFlag();
+        List<Role> roleList = roleService.findList(map);
+        return roleList;
     }
 
     //	@Log("添加角色")
-    @RequiresPermissions("sys:role:add")
+//    @RequiresPermissions("sys:role:add")
     @GetMapping("/add")
     String add() {
         return prefix + "/add";
     }
 
     //	@Log("编辑角色")
-    @RequiresPermissions("sys:role:edit")
+//    @RequiresPermissions("sys:role:edit")
     @GetMapping("/edit/{id}")
     String edit(@PathVariable("id") Long id, Model model) {
         Role role = roleService.get(id);
@@ -62,7 +64,7 @@ public class RoleController extends BaseController {
     }
 
     //	@Log("保存角色")
-    @RequiresPermissions("sys:role:add")
+//    @RequiresPermissions("sys:role:add")
     @PostMapping("/save")
     @ResponseBody()
     ResultMap save(Role role) {
@@ -74,7 +76,7 @@ public class RoleController extends BaseController {
     }
 
     //	@Log("更新角色")
-    @RequiresPermissions("sys:role:edit")
+//    @RequiresPermissions("sys:role:edit")
     @PostMapping("/update")
     @ResponseBody()
     ResultMap update(Role role) {
@@ -87,7 +89,7 @@ public class RoleController extends BaseController {
     }
 
     //	@Log("删除角色")
-    @RequiresPermissions("sys:role:remove")
+//    @RequiresPermissions("sys:role:remove")
     @PostMapping("/remove")
     @ResponseBody()
     ResultMap delete(Long id) {
@@ -99,7 +101,7 @@ public class RoleController extends BaseController {
     }
 
     //	@Log("批量删除角色")
-    @RequiresPermissions("sys:role:batchRemove")
+//    @RequiresPermissions("sys:role:batchRemove")
     @PostMapping("/batchRemove")
     @ResponseBody
     ResultMap batchRemove(@RequestParam("ids[]") Long[] ids) {

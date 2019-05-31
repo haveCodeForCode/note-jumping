@@ -2,14 +2,16 @@ package com.root.cognition.system.controller;
 
 import com.root.cognition.common.persistence.BaseController;
 import com.root.cognition.common.persistence.Tree;
+import com.root.cognition.common.until.Query;
 import com.root.cognition.common.until.RandomValidateCodeUtil;
 import com.root.cognition.common.until.ResultMap;
 import com.root.cognition.common.until.StringUtils;
 import com.root.cognition.common.until.encrypt.Md5Utils;
 import com.root.cognition.system.entity.Menu;
+import com.root.cognition.system.entity.UserInfo;
 import com.root.cognition.system.service.MenuService;
-import com.root.cognition.system.service.UserInfoService;
 import com.root.cognition.system.service.UserService;
+import com.root.cognition.system.vo.UserVo;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -22,10 +24,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 登陆控制器
@@ -41,8 +45,6 @@ public class LoginController extends BaseController {
 
     private MenuService menuService;
 
-    private UserInfoService userInfoService;
-
 
     @Autowired
     public void setUserService(UserService userService) {
@@ -54,11 +56,6 @@ public class LoginController extends BaseController {
         this.menuService = menuService;
     }
 
-    @Autowired
-    public void setUserInfoService(UserInfoService userInfoService) {
-        this.userInfoService = userInfoService;
-    }
-
     /**
      * 间接转发方式（redirect）实际是两次HTTP请求，服务器端在响应第一次请求的时候，
      * 让浏览器再向另外一个URL发出请求，从而达到转发的目的。
@@ -68,7 +65,7 @@ public class LoginController extends BaseController {
      */
     @GetMapping("/")
     String welcome(Model model) {
-        return "redirect:/toGuide";
+        return "redirect:/toLogin";
     }
 
     /*** 网站引荐 */
@@ -80,12 +77,29 @@ public class LoginController extends BaseController {
     /*** 前往登陆页面*/
     @RequestMapping(value = "/toLogin")
     String toLogin() {
-        return "login";
+        return "login_v1";
     }
 
+    /**
+     * 后台管理页面
+     *
+     * @param model
+     * @return
+     */
     @GetMapping(value = "/index")
-    String index(Model model) {
+    String toindex(Model model) {
+        //获取用户菜单
         List<Tree<Menu>> menus = menuService.listMenuTree(getUserId());
+        UserVo userVo= userService.getbyUserId(getUserId());
+        model.addAttribute("userInfo",userVo.getUserInfo());
+        model.addAttribute("menus", menus);
+        return "index_v1";
+    }
+
+
+//    @RequestMapping(value = "/index")
+//    String index(Model model) {
+//        List<Tree<Menu>> menus = menuService.listMenuTree(getUserId());
 //        Map<String,Object> query = Query.withDelFlag();
 //        query.put("userId",getUserId());
 //        UserInfo userInfo = userInfoService.get(query);
@@ -101,13 +115,14 @@ public class LoginController extends BaseController {
 //        } else {
 //            model.addAttribute("picUrl", "/img/photo_s.jpg");
 //        }
-        model.addAttribute("menus", menus);
+//        model.addAttribute("menus", menus);
 //        model.addAttribute("username", userInfo.getUserName());
-        return "index_v1";
-    }
+//        return "index_v1";
+//    }
 
 
     @PostMapping(value = "/login")
+    @ResponseBody
     ResultMap login(String username, String password, String verify, HttpServletRequest request) {
         try {
             //从session中获取随机数
@@ -135,7 +150,6 @@ public class LoginController extends BaseController {
         } catch (AuthenticationException e) {
             System.err.println(e.getMessage());
             return ResultMap.error("e.getMessage()");
-//            return ResultMap.error("用户或密码错误");
         }
     }
 

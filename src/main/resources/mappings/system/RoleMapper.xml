@@ -1,32 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.root.cognition.system.dao.RoleDao">
+
+	<select id="findWithUserId" resultType="com.root.cognition.system.entity.Role">
+		SELECT
+		<include refid="roleColumns"/>
+		FROM
+		sys_role a
+		LEFT JOIN sys_user_role b ON a.role_id = b.role_id
+		WHERE b.user_id = #{UserId}
+	</select>
+
+	<!--*********************************************************************-->
 
 	<select id="get" resultType="com.root.cognition.system.entity.Role">
 		SELECT
 		<include refid="roleColumns"/>
 		FROM
-		sys_role
-		WHERE role_id = #{value}
+		sys_role a
+		WHERE a.role_id = #{value}
 	</select>
 
 	<select id="findList" resultType="com.root.cognition.system.entity.Role">
 		select
 		<include refid="roleColumns"/>
-		from sys_role
+		from sys_role a
 		<where>
-			<if test="roleId != null and roleId != ''">
-				AND role_id = #{roleId}
+				a.del_flag = #{delFlag}
+			<if test="Id != null and Id != ''">
+				AND a.role_id = #{Id}
 			</if>
-			<if test="roleName != null and roleName != ''">
-				AND role_name = #{roleName}
+			<if test="name != null and name != ''">
+				AND a.name = #{name}
 			</if>
-			<if test="roleSign != null and roleSign != ''">
-				AND role_sign = #{roleSign}
+			<if test="cname != null and cname != ''">
+				AND a.cname = #{cname}
+			</if>
+			<if test="permissions !=null and permissions !=''">
+				AND a.permissions = #{permissions}
 			</if>
 			<if test="remark != null and remark != ''">
-				AND remark = #{remark}
+				AND a.remark = #{remark}
 			</if>
 			<if test="createBy !=null and createBy !=''">
 				AND a.create_by = #{createBy}
@@ -139,7 +155,7 @@
 				`create_by` = #{createBy},
 			</if>
 			<if test="createTime !=null">
-				create_time = #{createTime},
+				`create_time` = #{createTime},
 			</if>
 			<if test="updateBy !=null and updateBy !=''">
 				`update_by` = #{updateBy},
@@ -166,16 +182,12 @@
 		</foreach>
 	</delete>
 
-	<select id="countDayOfCreate" resultType="java.lang.Integer">
-       SELECT count(0) FROM sys_role WHERE date_format(create_time ,"%Y-%m-%d") = DATE_FORMAT(curdate(),"%Y-%m-%d")
-	</select>
-
 	<sql id="roleColumns">
 		a.role_id AS "id",
-		a.name AS "roleName"
-		a.cname AS "roleCname",
-		a.permissions AS "rolePermissions",
-		a.data_scope AS "dataScope"
+		a.name AS "name",
+		a.cname AS "cname",
+		a.permissions AS "permissions",
+		a.data_scope AS "dataScope",
 		a.remark AS "remark",
 		a.create_by	AS "createBy",
 		a.create_time AS "createTime",

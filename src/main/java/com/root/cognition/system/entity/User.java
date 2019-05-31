@@ -2,8 +2,6 @@ package com.root.cognition.system.entity;
 
 import com.root.cognition.common.persistence.BaseEntity;
 
-import java.util.List;
-
 /**
  * 用户Entity
  * @author LineInkBook
@@ -39,13 +37,6 @@ public class User extends BaseEntity<User> {
      * <p>
      */
     private String userMobile;
-//**************零时变量************************
-    /**
-     * 用户信息
-     * <p>
-     * userInfo
-     */
-    private Long userInfoId;
 
     /**
      * 部门
@@ -54,35 +45,20 @@ public class User extends BaseEntity<User> {
      */
     private Long deptId;
 
-    /**
-     * 用户角色对象
-     * <p>
-     * roleIds
-     */
-    private List<Long> roleIds;
-
     public User(long id) {
         super(id);
     }
 
     public User() {
-
+        super();
     }
 
     public void setDeptId(Long deptId) {
         this.deptId = deptId;
     }
 
-    public void setRoleIds(List<Long> roleIds) {
-        this.roleIds = roleIds;
-    }
-
     public Long getDeptId() {
         return deptId;
-    }
-
-    public List<Long> getRoleIds() {
-        return roleIds;
     }
 
     public String getLoginName() {
@@ -117,14 +93,6 @@ public class User extends BaseEntity<User> {
         this.userMobile = userMobile;
     }
 
-    public Long getUserInfoId() {
-        return userInfoId;
-    }
-
-    public void setUserInfoId(Long userInfoId) {
-        this.userInfoId = userInfoId;
-    }
-
     @Override
     public String toString() {
         return "User{" +
@@ -132,9 +100,7 @@ public class User extends BaseEntity<User> {
                 ", userPassword='" + userPassword + '\'' +
                 ", userEmail='" + userEmail + '\'' +
                 ", userMobile='" + userMobile + '\'' +
-                ", userInfoId='" + userInfoId + '\'' +
                 ", deptId='" + deptId + '\'' +
-                ", roleIds=" + roleIds +
                 ", id='" + id + '\'' +
                 ", createBy='" + createBy + '\'' +
                 ", updateBy='" + updateBy + '\'' +

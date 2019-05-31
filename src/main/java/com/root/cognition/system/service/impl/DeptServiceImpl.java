@@ -4,9 +4,11 @@ package com.root.cognition.system.service.impl;
 import com.root.cognition.common.config.DataDic;
 import com.root.cognition.common.persistence.Tree;
 import com.root.cognition.common.until.BuildTree;
+import com.root.cognition.common.until.Query;
 import com.root.cognition.system.dao.DeptDao;
 import com.root.cognition.system.entity.Dept;
 import com.root.cognition.system.service.DeptService;
+import javafx.beans.binding.ObjectExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +32,6 @@ public class DeptServiceImpl implements DeptService {
     public void setDeptDao (DeptDao deptDao){
         this.deptDao = deptDao;
     }
-
 
     @Override
     public Dept get(Long deptId) {
@@ -73,15 +74,20 @@ public class DeptServiceImpl implements DeptService {
     }
 
 
+
+
     @Override
     public Tree<Dept> getTree() {
         List<Tree<Dept>> trees = new ArrayList<Tree<Dept>>();
-        List<Dept> sysDepts = deptDao.findList(new HashMap<String, Object>(16));
+        Map<String, Object> query =Query.withDelFlag();
+        List<Dept> sysDepts = deptDao.findList(query);
         for (Dept dept : sysDepts) {
             Tree<Dept> tree = new Tree<Dept>();
+
             tree.setId(dept.getId().toString());
             tree.setParentId(dept.getParentId().toString());
             tree.setText(dept.getName());
+
             Map<String, Object> state = new HashMap<>(16);
             state.put("opened", true);
             tree.setState(state);
@@ -108,6 +114,16 @@ public class DeptServiceImpl implements DeptService {
         query.put("parentId", parentId);
         List<Dept> deptDOS = findList(query);
         return treeMenuList(deptDOS, parentId);
+    }
+
+    @Override
+    public String[] listParentDept() {
+        return deptDao.listParentDept();
+    }
+
+    @Override
+    public String[] listAllDept() {
+        return deptDao.listAllDept();
     }
 
     List<Long> treeMenuList(List<Dept> menuList, Long pid) {

@@ -3,6 +3,11 @@
 
 <mapper namespace="com.root.cognition.system.dao.DeptDao">
 
+	<select id="listAllDept">
+        SELECT DISTINCT dept_id FROM sys_user
+	</select>
+
+
 	<select id="listParentDept">
 		SELECT DISTINCT parent_id FROM sys_dept
 	</select>
@@ -16,7 +21,7 @@
 		WHERE a.dept_id = #{value}
 	</select>
 
-	<select id="getByEntity">
+	<select id="getByEntity" resultType="com.root.cognition.system.entity.Dept">
 		SELECT
 		<include refid="deptColumns"/>
 		FROM

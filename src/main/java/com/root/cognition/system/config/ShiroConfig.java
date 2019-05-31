@@ -68,14 +68,14 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/img/**", "anon");
         filterChainDefinitionMap.put("/toGuide", "anon");
         filterChainDefinitionMap.put("/getVerify", "anon");
+        filterChainDefinitionMap.put("/logout", "logout");
+        filterChainDefinitionMap.put("/**", "authc");
 //        filterChainDefinitionMap.put("/docs/**", "anon");
 //        filterChainDefinitionMap.put("/druid/**", "anon");
 //        filterChainDefinitionMap.put("/upload/**", "anon");
 //        filterChainDefinitionMap.put("/files/**", "anon");
-        filterChainDefinitionMap.put("/logout", "logout");
 //        filterChainDefinitionMap.put("/blog", "anon");
 //        filterChainDefinitionMap.put("/blog/open/**", "anon");
-        filterChainDefinitionMap.put("/**", "authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }
@@ -160,8 +160,7 @@ public class ShiroConfig {
 
     @Bean
     UserRealm userRealm() {
-        UserRealm userRealm = new UserRealm();
-        return userRealm;
+        return new UserRealm();
     }
 
     @Bean

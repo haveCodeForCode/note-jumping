@@ -14,10 +14,4 @@ import org.springframework.stereotype.Repository;
 @Repository("UserDao")
 public interface UserDao extends BaseDao<User> {
 
-    /**
-     * 查询全部相关部门
-     * @return
-     */
-    String[] listAllDept();
-
 }

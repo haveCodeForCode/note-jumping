@@ -27,12 +27,12 @@ public class Dept extends BaseEntity<Dept> {
      */
     private Integer orderNum;
 
-    public Dept(Long id) {
-        super(id);
-    }
-
     public Dept(){
 
+    }
+
+    public Dept(Long id) {
+        super(id);
     }
 
     public Long getParentId() {

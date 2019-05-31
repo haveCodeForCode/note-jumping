@@ -32,14 +32,6 @@ public class UserInfo extends BaseEntity<UserInfo>{
      */
     private String picUrl;
 
-    public UserInfo(long id) {
-        super(id);
-    }
-
-    public UserInfo() {
-        super();
-    }
-
     public Long getUserId() {
         return userId;
     }

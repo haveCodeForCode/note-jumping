@@ -4,8 +4,11 @@ import com.root.cognition.common.until.codegenerate.SnowFlake;
 import com.root.cognition.system.dao.MenuDao;
 import com.root.cognition.system.entity.Dept;
 import com.root.cognition.system.entity.Menu;
+import com.root.cognition.system.entity.User;
+import com.root.cognition.system.entity.UserInfo;
 import com.root.cognition.system.service.DeptService;
 import com.root.cognition.system.service.MenuService;
+import com.root.cognition.system.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -29,18 +32,18 @@ public class MapperTest {
 
     private static final Logger logger = LoggerFactory.getLogger(MapperTest.class);
 
-    private MenuDao menuDao;
     private MenuService menuService;
-    @Autowired
-    public void setMenuDao(MenuDao menuDao) {
-        this.menuDao = menuDao;
-    }
+    private DeptService deptService;
+    private UserService userService;
+
+
+
     @Autowired
     public void setMenuService (MenuService menuService){this.menuService = menuService;}
-
-    private DeptService deptService;
     @Autowired
     public void setDeptService(DeptService deptService){this.deptService = deptService;}
+    @Autowired
+    public void setUserService(UserService userService){this.userService = userService;}
 
 
     @Test
@@ -50,27 +53,36 @@ public class MapperTest {
             System.out.println("测试开始");
             //简单验证结果集是否正确
             Map<String, Object> params = new HashMap<>();
-            params.put("delFlag",0);
+            params.put("delFlag","0");
+            params.put("name","研发二部");
+
+            Long chang = 566956667434958848L;
+
+//            params.put("userId","566956334545633280");
 //            Menu sysMenu=menuDao.get("MU201904070001");
 //            sysMenu.setIcon("hsgja");
 //            menuService.update(sysMenu);
-            List<Menu> oldList =menuService.findList(params);
-            List<Menu> newList = new ArrayList<>();
-            List<Long> sysMenusIds = new ArrayList<>();
-            for (Menu dept : oldList){
-                Long deptId = SnowFlake.createSFid();
-                sysMenusIds.add(dept.getId());
-                menuService.delete(dept.getId());
-                dept.setId(deptId);
-                dept.setCreateTime(new Date());
-                dept.setUpdateBy("566956334545633280");
-                dept.setUpdateTime(new Date());
-                dept.setCreateBy("566956334545633280");
-                menuService.save(dept);
-                System.out.println("更新"+deptId+"成功");
+//            UserInfo oldList =userInfoService.get(params);
+//            User user = userService.get(params);
+            Dept dept = deptService.get(chang);
+//            Menu menu = menuService.get(params);
+//            UserInfo userInfo = userInfoService.get(params);
+//            List<Menu> newList = new ArrayList<>();
+//            List<Long> sysMenusIds = new ArrayList<>();
+//            for (Menu dept : oldList){
+//                Long deptId = SnowFlake.createSFid();
+//                sysMenusIds.add(dept.getId());
+//                menuService.delete(dept.getId());
+//                dept.setId(deptId);
+//                dept.setCreateTime(new Date());
+//                dept.setUpdateBy("566956334545633280");
+//                dept.setUpdateTime(new Date());
+//                dept.setCreateBy("566956334545633280");
+//                menuService.save(dept);
+//                System.out.println("更新"+deptId+"成功");
 //                sysMenusUpData.add(sysMenu);
 //                sysMenusIds.add(sysMenu.getId());
-            }
+//            }
 //            Long[] strings = new Long[sysMenusIds.size()];
 //            sysMenusIds.toArray(strings);
 //            menuService.batchDelete(strings);

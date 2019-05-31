@@ -78,7 +78,7 @@ public class SystemConfig {
      *
      * @return
      */
-    public RedisCacheManager rediscacheManager() {
+    private RedisCacheManager rediscacheManager() {
         //初始化redis缓存对象
         RedisCacheManager redisCacheManager = new RedisCacheManager();
         //将redis对象放入操作对象返回，完成redis初始化

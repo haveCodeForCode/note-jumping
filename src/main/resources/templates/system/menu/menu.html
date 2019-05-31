@@ -9,11 +9,13 @@
 			<div class="ibox">
 				<div class="ibox-body">
 					<div id="exampleToolbar" role="group" class="t-bar">
-						<button shiro:hasPermission="sys:menu:add" type="button"
+						<!--shiro:hasPermission="sys:menu:add"-->
+						<button  type="button"
 							class="btn btn-primary" title="在根节点下添加菜单" onclick="add('0')">
 							<i class="fa fa-plus" aria-hidden="true"></i>添加
 						</button>
-						<button shiro:hasPermission="sys:menu:batchRemove" type="button"
+						<!--shiro:hasPermission="sys:menu:batchRemove"-->
+						<button  type="button"
 							class="btn btn-danger" onclick="batchRemove()">
 							<i class="fa fa-trash" aria-hidden="true"></i>删除
 						</button>
@@ -31,17 +33,20 @@
 				var s_remove_h = 'hidden';
 			</script>
 		</div>
-		<div shiro:hasPermission="sys:menu:add">
+		<!--shiro:hasPermission="sys:menu:add"-->
+		<div >
 			<script type="text/javascript">
 				s_add_h = '';
 			</script>
 		</div>
-		<div shiro:hasPermission="sys:menu:edit">
+		<!--shiro:hasPermission="sys:menu:edit"-->
+		<div >
 			<script type="text/javascript">
 				s_edit_h = '';
 			</script>
 		</div>
-		<div shiro:hasPermission="sys:menu:remove">
+		<!--shiro:hasPermission="sys:menu:remove"-->
+		<div >
 			<script type="text/javascript">
 				var s_remove_h = '';
 			</script>

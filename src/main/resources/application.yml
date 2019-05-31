@@ -6,6 +6,9 @@ server:
       timeout: 1800
 
 spring:
+  #允许bean定义重写 spring2.2
+  main:
+    allow-bean-definition-overriding: true
   #上传下载文件大小限制
   servlet:
     multipart:
@@ -19,10 +22,19 @@ spring:
   #引用的其他文件
   profiles:
     active: dev
-  #页面设置 HTML
+  #页面设置 HTML->较为严格 与 LEGACYHTML5->较为人性化
+  #   使用LEGACYHTML5的时候需要引入
+  #  <dependency>
+  #  <groupId>net.sourceforge.nekohtml</groupId>
+  #  <artifactId>nekohtml</artifactId>
+  #  <version>1.9.22</version>
+  #  </dependency>
   thymeleaf:
-    mode: HTML
+    mode: LEGACYHTML5
     cache: false
+    encoding: UTF-8
+    #    servlet:
+    #      content-type: text/html
   # jackson设置  ackson是一个简单基于Java应用库
   # Jackson可以轻松的将Java对象转换成json对象和xml文档，同样也可以将json、xml转换成Java对象。
   jackson:
@@ -35,10 +47,10 @@ spring:
   #页面是否加载缓存
   freemarker:
     cache: false
+
   cache:
+    #    type: redis
     type: ehcache
-    ehcache:
-      config: classpath:config/ehcache.xml
 mybatis:
   configuration:
     map-underscore-to-camel-case: true

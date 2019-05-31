@@ -3,13 +3,22 @@
 
 <mapper namespace="com.root.cognition.system.dao.UserRoleDao">
 
+	<!--*********************************************************************-->
+
 	<select id="get" resultType="com.root.cognition.system.entity.UserRole">
-		select `id`,`user_id`,`role_id` from
-		sys_user_role where id = #{value}
+		select
+		  `id`,`user_id`,`role_id`
+		from
+		  sys_user_role
+		where
+		  id = #{value}
 	</select>
 
-	<select id="list" resultType="com.root.cognition.system.entity.UserRole">
-		select `id`,`user_id`,`role_id` from sys_user_role
+	<select id="findList" resultType="com.root.cognition.system.entity.UserRole">
+		select
+		  `id`,`user_id`,`role_id`
+        from
+          sys_user_role
 		<where>
 			<if test="id != null and id != ''"> and id = #{id} </if>
 			<if test="userId != null and userId != ''"> and user_id = #{userId} </if>
@@ -37,7 +46,7 @@
 		</where>
 	</select>
 
-	<insert id="save" parameterType="com.root.cognition.system.entity.UserRole"
+	<insert id="insert" parameterType="com.root.cognition.system.entity.UserRole"
 		useGeneratedKeys="true" keyProperty="id">
 		insert into sys_user_role
 		(

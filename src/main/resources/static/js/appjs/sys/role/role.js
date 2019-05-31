@@ -39,12 +39,16 @@ function load() {
 								// 列表中显示复选框
 								},
 								{
-									field : 'roleId', // 列字段名
+									field : 'id', // 列字段名
 									title : '序号' // 列标题
 								},
 								{
-									field : 'roleName',
-									title : '角色名'
+									field : 'name', // 列字段名
+									title : '代码名称' // 列标题
+								},
+								{
+									field : 'cname',
+									title : '角色名称'
 								},
 								{
 									field : 'remark',

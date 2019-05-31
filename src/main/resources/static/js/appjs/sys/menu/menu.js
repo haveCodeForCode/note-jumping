@@ -6,8 +6,8 @@ var load = function () {
     $('#exampleTable')
         .bootstrapTreeTable(
             {
-                id: 'menuId',
-                code: 'menuId',
+                id: 'id',
+                code: 'id',
                 parentCode: 'parentId',
                 type: "GET", // 请求数据的ajax类型
                 url: prefix + '/list', // 请求数据的ajax的url
@@ -20,7 +20,7 @@ var load = function () {
                 columns: [
                     {
                         title: '编号',
-                        field: 'menuId',
+                        field: 'id',
                         visible: false,
                         align: 'center',
                         valign: 'center',
@@ -100,7 +100,7 @@ var load = function () {
                         }
                     }]
             });
-}
+};
 
 function reLoad() {
     load();

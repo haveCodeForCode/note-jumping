@@ -5,6 +5,8 @@ import com.root.cognition.system.entity.Role;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * 角色
  *
@@ -15,4 +17,10 @@ import org.springframework.stereotype.Repository;
 @Repository("RoleDao")
 public interface RoleDao extends BaseDao<Role> {
 
+    /**
+     * 根据用户id查询角色表
+     * @param userId
+     * @return
+     */
+    List<Role> findWithUserId(Long userId);
 }

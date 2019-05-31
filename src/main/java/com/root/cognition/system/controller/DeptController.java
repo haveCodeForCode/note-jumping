@@ -4,6 +4,7 @@ package com.root.cognition.system.controller;
 import com.root.cognition.common.config.DataDic;
 import com.root.cognition.common.persistence.BaseController;
 import com.root.cognition.common.persistence.Tree;
+import com.root.cognition.common.until.Query;
 import com.root.cognition.common.until.ResultMap;
 import com.root.cognition.system.entity.Dept;
 import com.root.cognition.system.service.DeptService;
@@ -39,10 +40,11 @@ public class DeptController extends BaseController {
 		this.deptService = deptService;
 	}
 
+
 	@GetMapping()
 	@RequiresPermissions("system:sysDept:sysDept")
 	String dept() {
-		return prefix + "/dept";
+		return "system/dept/dept";
 	}
 
 //	@ApiOperation(value="获取部门列表", notes="")
@@ -50,9 +52,18 @@ public class DeptController extends BaseController {
 	@GetMapping("/list")
 	@RequiresPermissions("system:sysDept:sysDept")
 	public List<Dept> list() {
-		Map<String, Object> query = new HashMap<>(16);
-		List<Dept> sysDeptList = deptService.findList(query);
-		return sysDeptList;
+		Map<String, Object> query = Query.withDelFlag();
+		List<Dept> deptList = deptService.findList(query);
+		for (Dept dept : deptList) {
+			if (dept.getParentId() != null) {
+				for (Dept deptOne : deptList) {
+					if (deptOne.getId().equals(dept.getParentId())) {
+						dept.setName(deptOne.getName());
+					}
+				}
+			}
+		}
+		return deptList;
 	}
 
 	@GetMapping("/add/{pId}")
@@ -64,7 +75,7 @@ public class DeptController extends BaseController {
 		} else {
 			model.addAttribute("pName", deptService.get(pId).getName());
 		}
-		return  prefix + "/add";
+		return "system/dept/add";
 	}
 
 	@GetMapping("/edit/{deptId}")
@@ -74,7 +85,7 @@ public class DeptController extends BaseController {
 		model.addAttribute("sysDept", dept);
 		Dept parDept = deptService.get(dept.getParentId());
 		model.addAttribute("parentDeptName", parDept.getName());
-		return  prefix + "/edit";
+		return "system/dept/edit";
 	}
 
 	/**
@@ -146,7 +157,7 @@ public class DeptController extends BaseController {
 
 	@GetMapping("/treeView")
 	String treeView() {
-		return  prefix + "/deptTree";
+		return "system/dept/deptTree";
 	}
 
 }

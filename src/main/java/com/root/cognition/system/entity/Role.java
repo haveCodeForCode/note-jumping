@@ -17,22 +17,21 @@ public class Role extends BaseEntity<Role> {
      * <p>
      * roleName
      */
-    private String roleName;
+    private String name;
 
     /**
      * 角色中文名称
      * <p>
      * roleEname
      */
-    private String roleCname;
-
+    private String cname;
 
     /**
      * 角色权限(对外）
      * <p>
      * roleType
      */
-    private String rolePermissions;
+    private String permissions;
 
     /**
      * 数据范围
@@ -47,7 +46,7 @@ public class Role extends BaseEntity<Role> {
      * remark
      */
     private String remark;
-
+//************临时变量***************
     /**
      * 角色菜单id列
      * <p>
@@ -55,40 +54,28 @@ public class Role extends BaseEntity<Role> {
      */
     private List<Long> menuIds;
 
-    public Role(long id) {
-        super(id);
+    public String getName() {
+        return name;
     }
 
-    public List<Long> getMenuIds() {
-        return menuIds;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setMenuIds(List<Long> menuIds) {
-        this.menuIds = menuIds;
+    public String getCname() {
+        return cname;
     }
 
-    public String getRoleName() {
-        return roleName;
+    public void setCname(String cname) {
+        this.cname = cname;
     }
 
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
+    public String getPermissions() {
+        return permissions;
     }
 
-    public String getRoleCname() {
-        return roleCname;
-    }
-
-    public void setRoleCname(String roleEname) {
-        this.roleCname = roleEname;
-    }
-
-    public String getRolePermissions() {
-        return rolePermissions;
-    }
-
-    public void setRolePermissions(String rolePermissions) {
-        this.rolePermissions = rolePermissions;
+    public void setPermissions(String permissions) {
+        this.permissions = permissions;
     }
 
     public String getDataScope() {
@@ -107,16 +94,24 @@ public class Role extends BaseEntity<Role> {
         this.remark = remark;
     }
 
+    public List<Long> getMenuIds() {
+        return menuIds;
+    }
+
+    public void setMenuIds(List<Long> menuIds) {
+        this.menuIds = menuIds;
+    }
+
     @Override
     public String toString() {
         return "Role{" +
-                "roleName='" + roleName + '\'' +
-                ", roleCname='" + roleCname + '\'' +
-                ", rolePermissions='" + rolePermissions + '\'' +
+                "name='" + name + '\'' +
+                ", cname='" + cname + '\'' +
+                ", permissions='" + permissions + '\'' +
                 ", dataScope='" + dataScope + '\'' +
                 ", remark='" + remark + '\'' +
                 ", menuIds=" + menuIds +
-                ", id='" + id + '\'' +
+                ", id=" + id +
                 ", createBy='" + createBy + '\'' +
                 ", updateBy='" + updateBy + '\'' +
                 ", createTime=" + createTime +

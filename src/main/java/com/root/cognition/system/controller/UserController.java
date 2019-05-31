@@ -29,15 +29,17 @@ import java.util.Map;
 @Controller
 public class UserController extends BaseController {
 	private String prefix="system/user"  ;
-	@Autowired
+
 	private UserService userService;
 	@Autowired
 	private RoleService roleService;
 //	@Autowired
 //	DictService dictService;
 
+	@Autowired
+	public void setUserService(UserService userService){this.userService = userService;}
 
-
+	public void setRoleService(RoleService roleService){this.roleService = roleService;}
 
 	@RequiresPermissions("sys:user:user")
 	@GetMapping("")
@@ -74,7 +76,7 @@ public class UserController extends BaseController {
 //		model.addAttribute("")
 		List<Role> roles = roleService.list(id);
 		model.addAttribute("roles", roles);
-		return prefix+"/edit";
+		return "system/user/edit";
 	}
 
 	@RequiresPermissions("sys:user:add")
@@ -151,7 +153,7 @@ public class UserController extends BaseController {
 		User userDO = new User();
 		userDO.setId(userId);
 		model.addAttribute("user", userDO);
-		return prefix + "/reset_pwd";
+		return "system/user/reset_pwd";
 	}
 
 //	@Log("提交更改用户密码")
@@ -194,17 +196,8 @@ public class UserController extends BaseController {
 
 	@GetMapping("/treeView")
 	String treeView() {
-		return  prefix + "/userTree";
+		return "system/user/userTree";
 	}
-
-//	@GetMapping("/personal")
-//	String personal(Model model) {
-//		User sysUserDO = userService.get(getUserId());
-//		model.addAttribute("user", sysUserDO);
-//		model.addAttribute("hobbyList",dictService.getHobbyList(sysUserDO));
-//		model.addAttribute("sexList",dictService.getSexList());
-//		return prefix + "/personal";
-//	}
 
 
 //	@ResponseBody

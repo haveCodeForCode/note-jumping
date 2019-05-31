@@ -3,6 +3,7 @@ package com.root.cognition.system.service;
 import com.root.cognition.common.persistence.Tree;
 import com.root.cognition.system.entity.Dept;
 import com.root.cognition.system.entity.User;
+import com.root.cognition.system.vo.UserVo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public interface UserService {
 	 * @param userid
 	 * @return
 	 */
-	User getbyUserId(Long userid);
+	UserVo getbyUserId(Long userid);
 
 	/**
 	 * 查询是否存在该用户
