@@ -1,18 +1,18 @@
 package com.root.cognition.system.controller;
 
 
+import com.root.cognition.common.config.Constant;
 import com.root.cognition.common.persistence.BaseController;
 import com.root.cognition.common.until.Query;
 import com.root.cognition.common.until.ResultMap;
+import com.root.cognition.common.until.StringUtils;
 import com.root.cognition.system.entity.Role;
 import com.root.cognition.system.service.RoleService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +23,6 @@ import java.util.Map;
 @RequestMapping("/sys/role")
 @Controller
 public class RoleController extends BaseController {
-    private String prefix = "system/role";
 
     private RoleService roleService;
 
@@ -35,7 +34,7 @@ public class RoleController extends BaseController {
 //    @RequiresPermissions("sys:role:role")
     @GetMapping()
     String role() {
-        return prefix + "/role";
+        return "system/role/role";
     }
 
 //    @RequiresPermissions("sys:role:role")
@@ -51,7 +50,7 @@ public class RoleController extends BaseController {
 //    @RequiresPermissions("sys:role:add")
     @GetMapping("/add")
     String add() {
-        return prefix + "/add";
+        return "system/role/add";
     }
 
     //	@Log("编辑角色")
@@ -60,7 +59,7 @@ public class RoleController extends BaseController {
     String edit(@PathVariable("id") Long id, Model model) {
         Role role = roleService.get(id);
         model.addAttribute("role", role);
-        return prefix + "/edit";
+        return "system/role/edit";
     }
 
     //	@Log("保存角色")
@@ -68,6 +67,10 @@ public class RoleController extends BaseController {
     @PostMapping("/save")
     @ResponseBody()
     ResultMap save(Role role) {
+//    存入id，并写入生成和更新人
+        role.preInsert(getUserId());
+        role.setPermissions(Constant.STRING_ZERO);
+        role.setDataScope(Constant.STRING_ZERO);
         if (roleService.save(role) > 0) {
             return ResultMap.success();
         } else {
@@ -80,8 +83,12 @@ public class RoleController extends BaseController {
     @PostMapping("/update")
     @ResponseBody()
     ResultMap update(Role role) {
+        //roleId转值id
+        if (!StringUtils.isEmpty(role.getRoleId())){
+            role.setId(Long.parseLong(role.getRoleId()));
+        }
         int state = roleService.update(role);
-        if (roleService.update(role) > 0) {
+        if (state > 0) {
             return ResultMap.success();
         } else {
             return ResultMap.error();
@@ -107,8 +114,9 @@ public class RoleController extends BaseController {
     ResultMap batchRemove(@RequestParam("ids[]") Long[] ids) {
         int r = roleService.batchDelect(ids);
         if (r > 0) {
-            ResultMap.success();
+            return ResultMap.success();
         }
         return ResultMap.error();
+
     }
 }

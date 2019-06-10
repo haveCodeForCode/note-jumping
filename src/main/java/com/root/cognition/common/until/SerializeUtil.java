@@ -9,9 +9,9 @@ import java.io.*;
  * @author bootdo 1992lcg@163.com
  * @version V1.bootstrap
  */
-public class SerializeUtils {
+public class SerializeUtil {
 
-    private static Logger logger = LoggerFactory.getLogger(SerializeUtils.class);
+    private static Logger logger = LoggerFactory.getLogger(SerializeUtil.class);
 
     /**
      * 反序列化
@@ -66,7 +66,7 @@ public class SerializeUtils {
             ByteArrayOutputStream byteStream = new ByteArrayOutputStream(128);
             try {
                 if (!(object instanceof Serializable)) {
-                    throw new IllegalArgumentException(SerializeUtils.class.getSimpleName() + " requires a Serializable payload " +
+                    throw new IllegalArgumentException(SerializeUtil.class.getSimpleName() + " requires a Serializable payload " +
                             "but received an object of type [" + object.getClass().getName() + "]");
                 }
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteStream);

@@ -1,4 +1,4 @@
-var prefix = "/sys/menu"
+var prefix = "/sys/menu";
 $(function() {
 	validateRule();
 	//打开图标列表
@@ -15,11 +15,13 @@ $(function() {
         });
     });
 });
+
 $.validator.setDefaults({
 	submitHandler : function() {
 		submit01();
 	}
 });
+
 function submit01() {
 	$.ajax({
 		cache : true,
@@ -28,10 +30,10 @@ function submit01() {
 		data : $('#signupForm').serialize(),
 		async : false,
 		error : function(request) {
-			laryer.alert("Connection error");
+			layer.alert("Connection error");
 		},
 		success : function(data) {
-			if (data.code == 0) {
+			if (data.state == 0) {
 				parent.layer.msg("保存成功");
 				parent.reLoad();
 				var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引

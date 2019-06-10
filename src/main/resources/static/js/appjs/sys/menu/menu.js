@@ -1,4 +1,4 @@
-var prefix = "/sys/menu"
+var prefix = "/sys/menu";
 $(document).ready(function () {
     load();
 });
@@ -84,17 +84,17 @@ var load = function () {
                             var e = '<a class="btn btn-primary btn-sm '
                                 + s_edit_h
                                 + '" href="#" mce_href="#" title="编辑" onclick="edit(\''
-                                + item.menuId
+                                + item.id
                                 + '\')"><i class="fa fa-edit"></i></a> ';
                             var p = '<a class="btn btn-primary btn-sm '
                                 + s_add_h
                                 + '" href="#" mce_href="#" title="添加下级" onclick="add(\''
-                                + item.menuId
+                                + item.id
                                 + '\')"><i class="fa fa-plus"></i></a> ';
                             var d = '<a class="btn btn-warning btn-sm '
                                 + s_remove_h
                                 + '" href="#" title="删除"  mce_href="#" onclick="remove(\''
-                                + item.menuId
+                                + item.id
                                 + '\')"><i class="fa fa-remove"></i></a> ';
                             return e + d + p;
                         }
@@ -128,7 +128,7 @@ function remove(id) {
                 'id': id
             },
             success: function (data) {
-                if (data.code == 0) {
+                if (data.state === 0) {
                     layer.msg("删除成功");
                     reLoad();
                 } else {
@@ -139,14 +139,14 @@ function remove(id) {
     })
 }
 
-function edit(id) {
+function edit(roleId) {
     layer.open({
         type: 2,
         title: '菜单修改',
         maxmin: true,
         shadeClose: false, // 点击遮罩关闭层
         area: ['800px', '520px'],
-        content: prefix + '/edit/' + id // iframe的url
+        content: prefix + '/edit/' + roleId // iframe的url
     });
 }
 

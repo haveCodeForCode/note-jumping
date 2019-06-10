@@ -2,6 +2,7 @@ package com.root.cognition.system.service.impl;
 
 
 import com.root.cognition.common.config.DataDic;
+import com.root.cognition.common.until.codegenerate.SnowFlake;
 import com.root.cognition.system.dao.RoleDao;
 import com.root.cognition.system.dao.RoleMenuDao;
 import com.root.cognition.system.dao.UserDao;
@@ -97,18 +98,20 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public int save(Role role) {
         int count = roleDao.insert(role);
-        List<Long> menuIds = role.getMenuIds();
-        Long roleId = role.getId();
-        List<RoleMenu> rms = new ArrayList<>();
-        for (Long menuId : menuIds) {
-            RoleMenu rmDo = new RoleMenu();
-            rmDo.setRoleId(roleId);
-            rmDo.setMenuId(menuId);
-            rms.add(rmDo);
-        }
-        roleMenuDao.removeByRoleId(roleId);
-        if (rms.size() > 0) {
-            roleMenuDao.batchSave(rms);
+        if (count>0) {
+            List<Long> menuIds = role.getMenuIds();
+            List<RoleMenu> rms = new ArrayList<>();
+            for (Long menuId : menuIds) {
+                RoleMenu rmDo = new RoleMenu();
+                rmDo.setId(SnowFlake.createSFid());
+                rmDo.setRoleId(role.getId());
+                rmDo.setMenuId(menuId);
+                rms.add(rmDo);
+            }
+            roleMenuDao.removeByRoleId(role.getId());
+            if (rms.size() > 0) {
+                roleMenuDao.batchSave(rms);
+            }
         }
         return count;
     }
@@ -130,7 +133,7 @@ public class RoleServiceImpl implements RoleService {
         List<Long> menuIds = role.getMenuIds();
         //获取角色id
         Long roleId = role.getId();
-        if (roleId != null) {
+        if (roleId == null) {
             return DataDic.RETURN_STATUS_INFOBUG;
         }
         //移除所有角色id相关的菜单
@@ -138,12 +141,13 @@ public class RoleServiceImpl implements RoleService {
         List<RoleMenu> roleMenuList = new ArrayList<>();
         for (Long menuId : menuIds) {
             RoleMenu roleMenu = new RoleMenu();
+            roleMenu.setId(SnowFlake.createSFid());
             roleMenu.setRoleId(roleId);
             roleMenu.setMenuId(menuId);
             roleMenuList.add(roleMenu);
         }
         if (roleMenuList.size() > 0) {
-            roleMenuDao.batchSave(roleMenuList);
+             r = roleMenuDao.batchSave(roleMenuList);
         }
         return r;
     }

@@ -1,14 +1,17 @@
 var menuIds;
+
 $(function() {
 	getMenuTreeData();
 	validateRule();
 });
+
 $.validator.setDefaults({
 	submitHandler : function() {
 		getAllSelectNodes();
 		update();
 	}
 });
+
 function loadMenuTree(menuTree) {
 	$('#menuTree').jstree({
 		"plugins" : [ "wholerow", "checkbox" ],
@@ -24,6 +27,7 @@ function loadMenuTree(menuTree) {
 	});
 	$('#menuTree').jstree('open_all');
 }
+
 function getAllSelectNodes() {
 	var ref = $('#menuTree').jstree(true); // 获得整个树
 	menuIds = ref.get_selected(); // 获得所有选中节点的，返回值为数组
@@ -32,19 +36,21 @@ function getAllSelectNodes() {
 	});
 	console.log(menuIds); 
 }
+
 function getMenuTreeData() {
-	var roleId = $('#roleId').val();
+	var id = $('#roleId').val();
 	$.ajax({
 		type : "GET",
-		url : "/sys/menu/tree/" + roleId,
+		url : "/sys/menu/tree/" + id,
 		success : function(data) {
 			loadMenuTree(data);
 		}
 	});
 }
+
 function update() {
 	$('#menuIds').val(menuIds);
-	var role = $('#signupForm').serialize();
+	role = $('#signupForm').serialize();
 	$.ajax({
 		cache : true,
 		type : "POST",
@@ -55,7 +61,7 @@ function update() {
 			alert("Connection error");
 		},
 		success : function(r) {
-			if (r.code == 0) {
+			if (r.state === 0) {
 				parent.layer.msg(r.msg);
 				parent.reLoad();
 				var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
@@ -68,6 +74,7 @@ function update() {
 		}
 	});
 }
+
 function validateRule() {
 	var icon = "<i class='fa fa-times-circle'></i> ";
 	$("#signupForm").validate({

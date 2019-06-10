@@ -3,6 +3,7 @@ package com.root.cognition.system.service.impl;
 
 import com.root.cognition.common.persistence.Tree;
 import com.root.cognition.common.until.BuildTree;
+import com.root.cognition.common.until.Query;
 import com.root.cognition.system.dao.MenuDao;
 import com.root.cognition.system.dao.RoleMenuDao;
 import com.root.cognition.system.entity.Menu;
@@ -35,6 +36,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
 
+
     @Override
     public Menu get(Long id) {
         return menuDao.get(id);
@@ -50,12 +52,22 @@ public class MenuServiceImpl implements MenuService {
         return menuDao.count(map);
     }
 
+    /**
+     * 根据对象更新
+     * @param menu
+     * @return
+     */
     @Transactional(readOnly = false, rollbackFor = Exception.class)
     @Override
     public int update(Menu menu) {
         return menuDao.update(menu);
     }
 
+    /**
+     * 根据条件查询
+     * @param params
+     * @return
+     */
     @Override
     public List<Menu> findList(Map<String, Object> params) {
         return menuDao.findList(params);
@@ -64,8 +76,7 @@ public class MenuServiceImpl implements MenuService {
     @Transactional(readOnly = false, rollbackFor = Exception.class)
     @Override
     public int delete(Long id) {
-        int result = menuDao.remove(id);
-        return result;
+        return menuDao.remove(id);
     }
 
     @Transactional(readOnly = false, rollbackFor = Exception.class)
@@ -74,22 +85,11 @@ public class MenuServiceImpl implements MenuService {
         return menuDao.insert(menu);
     }
 
-    //    @Cacheable
+    //@Cacheable
     @Override
     public Tree<Menu> getSysMenuTree(Long id) {
-        List<Tree<Menu>> trees = new ArrayList<Tree<Menu>>();
         List<Menu> menuList = menuDao.listMenuByUserId(id);
-        for (Menu menu : menuList) {
-            Tree<Menu> tree = new Tree<Menu>();
-            tree.setId(menu.getId().toString());
-            tree.setParentId(menu.getParentId().toString());
-            tree.setText(menu.getName());
-            Map<String, Object> attributes = new HashMap<>(16);
-            attributes.put("url", menu.getUrl());
-            attributes.put("icon", menu.getIcon());
-            tree.setAttributes(attributes);
-            trees.add(tree);
-        }
+        List<Tree<Menu>> trees = treeFormation(menuList);
         // 默认顶级菜单为０，根据数据库实际情况调整
         return BuildTree.build(trees);
     }
@@ -97,7 +97,9 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public Tree<Menu> getTree() {
         List<Tree<Menu>> trees = new ArrayList<Tree<Menu>>();
-        List<Menu> menuDOS = menuDao.findList(new HashMap<>(16));
+
+        Map<String, Object> query = Query.withDelFlag();
+        List<Menu> menuDOS = menuDao.findList(query);
         for (Menu sysMenuDO : menuDOS) {
             Tree<Menu> tree = new Tree<Menu>();
             tree.setId(sysMenuDO.getId().toString());
@@ -117,7 +119,8 @@ public class MenuServiceImpl implements MenuService {
         // 根据角色ID查询菜单列
         List<Long> menuIds = roleMenuDao.listMenuIdByRoleId(id);
 
-        List<Menu> menuDOS = menuDao.findList(new HashMap<String, Object>(16));
+        Map<String,Object> query = Query.withDelFlag();
+        List<Menu> menuDOS = menuDao.findList(query);
 
         for (Menu sysMenuDO : menuDOS) {
             Tree<Menu> tree = new Tree<Menu>();
@@ -152,9 +155,26 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public List<Tree<Menu>> listMenuTree(Long id) {
-        List<Tree<Menu>> trees = new ArrayList<Tree<Menu>>();
         List<Menu> menuDOS = menuDao.listMenuByUserId(id);
-        for (Menu sysMenuDO : menuDOS) {
+        List<Tree<Menu>> trees = treeFormation(menuDOS);
+        // 默认顶级菜单为０，根据数据库实际情况调整
+        return BuildTree.buildList(trees, "0");
+    }
+
+    @Override
+    public int batchDelete(Long[] menuIds) {
+        return menuDao.batchRemove(menuIds);
+    }
+
+    /**
+     * 形成树
+     *
+     * @param menuList
+     * @return
+     */
+    private List<Tree<Menu>> treeFormation(List<Menu> menuList) {
+        List<Tree<Menu>> trees = new ArrayList<Tree<Menu>>();
+        for (Menu sysMenuDO : menuList) {
             Tree<Menu> tree = new Tree<Menu>();
             tree.setId(sysMenuDO.getId().toString());
             tree.setParentId(sysMenuDO.getParentId().toString());
@@ -165,13 +185,6 @@ public class MenuServiceImpl implements MenuService {
             tree.setAttributes(attributes);
             trees.add(tree);
         }
-        // 默认顶级菜单为０，根据数据库实际情况调整
-        return BuildTree.buildList(trees, "0");
+        return trees;
     }
-
-    @Override
-    public int batchDelete(Long[] menuIds) {
-        return menuDao.batchRemove(menuIds);
-    }
-
 }

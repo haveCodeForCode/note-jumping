@@ -142,11 +142,17 @@
 	<update id="update" parameterType="com.root.cognition.system.entity.Role">
 		update sys_role
 		<set>
-			<if test="roleName != null">
-				`role_name` = #{roleName},
+			<if test="name != null">
+				`name` = #{name},
 			</if>
-			<if test="roleSign != null">
-				`role_sign` = #{roleSign},
+			<if test="cname != null">
+				`cname` = #{cname},
+			</if>
+			<if test="permissions != null">
+				`permissions` = #{permissions},
+			</if>
+			<if test="dataScope != null">
+				`data_scope` = #{dataScope},
 			</if>
 			<if test="remark != null">
 				`remark` = #{remark},
@@ -157,7 +163,7 @@
 			<if test="createTime !=null">
 				`create_time` = #{createTime},
 			</if>
-			<if test="updateBy !=null and updateBy !=''">
+			<if test="updateBy !=null and updateBy!=''">
 				`update_by` = #{updateBy},
 			</if>
 			<if test="updateTime !=null">

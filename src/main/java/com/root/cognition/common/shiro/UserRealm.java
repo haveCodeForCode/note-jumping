@@ -1,6 +1,7 @@
 package com.root.cognition.common.shiro;
 
 
+import com.root.cognition.common.config.Constant;
 import com.root.cognition.common.config.DataDic;
 import com.root.cognition.common.until.Query;
 import com.root.cognition.system.config.ApplicationContextRegister;
@@ -69,7 +70,7 @@ public class UserRealm extends AuthorizingRealm {
 		}
 
 		// 账号锁定
-		if (user.getDelFlag() == DataDic.STRING_ZERO) {
+		if (user.getDelFlag() == Constant.STRING_ZERO) {
 			throw new LockedAccountException("账号已被锁定,请联系管理员");
 		}
 		return new SimpleAuthenticationInfo(user, password, getName());

@@ -65,7 +65,7 @@ public class LoginController extends BaseController {
      */
     @GetMapping("/")
     String welcome(Model model) {
-        return "redirect:/toLogin";
+        return "redirect:/index";
     }
 
     /*** 网站引荐 */

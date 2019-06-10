@@ -1,10 +1,12 @@
 package com.root.cognition.system.controller;
 
+import com.root.cognition.common.config.Constant;
 import com.root.cognition.common.config.DataDic;
 import com.root.cognition.common.persistence.BaseController;
 import com.root.cognition.common.persistence.Tree;
 import com.root.cognition.common.until.Query;
 import com.root.cognition.common.until.ResultMap;
+import com.root.cognition.common.until.StringUtils;
 import com.root.cognition.system.entity.Menu;
 import com.root.cognition.system.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,12 +57,16 @@ public class MenuController extends BaseController {
 	//	@Log("添加菜单")
 //	@RequiresPermissions("sys:menu:add")
 	@GetMapping("/add/{pId}")
-	String add(Model model, Long pId) {
-		model.addAttribute("pId", pId);
-		if (pId == DataDic.INT_ZERO) {
+	String add(Model model, @PathVariable("pId")String pId) {
+	    long pid = 0;
+		if (!StringUtils.isEmpty(pId)){
+	    	pid = Long.parseLong(pId);
+        }
+		model.addAttribute("pId", pid);
+		if (pid == Constant.INT_ZERO) {
 			model.addAttribute("pName", "根目录");
 		} else {
-			model.addAttribute("pName", menuService.get(pId).getName());
+			model.addAttribute("pName", menuService.get(pid).getName());
 		}
 		return "system/menu/add";
 	}
@@ -72,7 +78,7 @@ public class MenuController extends BaseController {
 		Menu menu = menuService.get(id);
 		Long parentId = menu.getParentId();
 		model.addAttribute("pId", parentId);
-		if (parentId.equals(DataDic.STRING_ZERO)) {
+		if (parentId.equals(Constant.STRING_ZERO)) {
 			model.addAttribute("pName", "根目录");
 		} else {
 			model.addAttribute("pName", menuService.get(parentId).getName());
@@ -86,6 +92,8 @@ public class MenuController extends BaseController {
 	@PostMapping("/save")
 	@ResponseBody
 	ResultMap save(Menu menu) {
+//		存入id，并放入生成与更新人id
+		menu.preInsert(getUserId());
 		if (menuService.save(menu) > 0) {
 			return ResultMap.success();
 		} else {
@@ -125,7 +133,8 @@ public class MenuController extends BaseController {
 
 	@GetMapping("/tree/{roleId}")
 	@ResponseBody
-	Tree<Menu> tree(@RequestParam("roleId") Long roleId) {
-		return menuService.getTree(roleId);
+	Tree<Menu> tree(@PathVariable("roleId") Long roleId) {
+		Tree<Menu> tree = menuService.getTree(roleId);
+		return tree;
 	}
 }

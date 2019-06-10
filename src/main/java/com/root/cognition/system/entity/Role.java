@@ -54,6 +54,11 @@ public class Role extends BaseEntity<Role> {
      */
     private List<Long> menuIds;
 
+    /**
+     * 角色Id映射变量
+     */
+    private String roleId;
+
     public String getName() {
         return name;
     }
@@ -102,6 +107,15 @@ public class Role extends BaseEntity<Role> {
         this.menuIds = menuIds;
     }
 
+    public String getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
+    }
+
+
     @Override
     public String toString() {
         return "Role{" +
@@ -111,6 +125,7 @@ public class Role extends BaseEntity<Role> {
                 ", dataScope='" + dataScope + '\'' +
                 ", remark='" + remark + '\'' +
                 ", menuIds=" + menuIds +
+                ", roleId='" + roleId + '\'' +
                 ", id=" + id +
                 ", createBy='" + createBy + '\'' +
                 ", updateBy='" + updateBy + '\'' +

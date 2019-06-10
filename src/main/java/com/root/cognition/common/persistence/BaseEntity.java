@@ -3,6 +3,10 @@
  */
 package com.root.cognition.common.persistence;
 
+import com.root.cognition.common.config.Constant;
+import com.root.cognition.common.until.codegenerate.SnowFlake;
+import com.root.cognition.system.entity.User;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.Length;
 
 import java.io.Serializable;
@@ -156,6 +160,19 @@ public abstract class BaseEntity<T> implements Serializable {
 
     public void setSqlMap(Map<String, String> sqlMap) {
         this.sqlMap = sqlMap;
+    }
+
+
+    public void preInsert(Long userId) {
+        // 不限制ID为UUID，调用setIsNewRecord()使用自定义ID
+        setId(SnowFlake.createSFid());
+
+        this.updateBy = String.valueOf(userId);
+        this.createBy = String.valueOf(userId);
+
+        this.updateTime = new Date();
+        this.createTime = this.updateTime;
+        this.delFlag = Constant.DEL_FLAG_NORMAL;
     }
 
 }

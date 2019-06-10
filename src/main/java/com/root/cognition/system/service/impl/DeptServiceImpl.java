@@ -1,6 +1,7 @@
 package com.root.cognition.system.service.impl;
 
 
+import com.root.cognition.common.config.Constant;
 import com.root.cognition.common.config.DataDic;
 import com.root.cognition.common.persistence.Tree;
 import com.root.cognition.common.until.BuildTree;
@@ -105,7 +106,7 @@ public class DeptServiceImpl implements DeptService {
         Map<String, Object> query = new HashMap<>();
         query.put("id", deptId);
         int result = deptDao.count(query);
-        return result == DataDic.INT_ZERO;
+        return result == Constant.INT_ZERO;
     }
 
     @Override

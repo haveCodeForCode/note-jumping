@@ -44,6 +44,7 @@ public class Constant {
     public static String LOG_ERROR = "error";
 
 
+
     /**
      * 删除标记（0：正常；1：删除；2：审核；）
      *
@@ -53,5 +54,13 @@ public class Constant {
     public static final String DEL_FLAG_DELETE = "1";
     public static final String DEL_FLAG_AUDIT = "2";
 
+
+    /**
+     * 常用数字
+     */
+    public static final int INT_ZERO = 0;
+    public static final int INT_ONE = 1;
+    public static final String STRING_ZERO = "0";
+    public static final String STRING_ONE = "1";
 
 }

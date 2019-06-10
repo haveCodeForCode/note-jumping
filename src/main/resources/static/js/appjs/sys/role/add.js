@@ -52,19 +52,16 @@ function save() {
 		type : "POST",
 		url : "/sys/role/save",
 		data : role, // 你的formid
-
 		async : false,
 		error : function(request) {
-			alert("Connection error");
+			layer.alert("系统异常，请稍后再试！")
 		},
 		success : function(data) {
-			if (data.code == 0) {
+			if (data.state == 0) {
 				parent.layer.msg("操作成功");
-				parent.reLoad();
 				var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
-
 				parent.layer.close(index);
-
+				parent.reLoad();
 			} else {
 				parent.layer.msg(data.msg);
 			}

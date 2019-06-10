@@ -9,20 +9,6 @@ package com.root.cognition.common.config;
 public class DataDic {
 
 
-    /**
-     * 缓存方式
-     * redis
-     */
-    public static final String CAHE_TYPE_REDIS = "redis";
-
-
-    /**
-     * 常用数字
-     */
-    public static final int INT_ZERO = 0;
-    public static final int INT_ONE = 1;
-    public static final String STRING_ZERO = "0";
-    public static final String STRING_ONE = "1";
 
     /**
      * 成功

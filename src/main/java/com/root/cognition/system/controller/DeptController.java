@@ -1,6 +1,7 @@
 package com.root.cognition.system.controller;
 
 
+import com.root.cognition.common.config.Constant;
 import com.root.cognition.common.config.DataDic;
 import com.root.cognition.common.persistence.BaseController;
 import com.root.cognition.common.persistence.Tree;
@@ -70,7 +71,7 @@ public class DeptController extends BaseController {
 	@RequiresPermissions("system:sysDept:add")
 	String add(@Param("pId") Long pId, Model model) {
 		model.addAttribute("pId", pId);
-		if (pId.equals(DataDic.STRING_ZERO)) {
+		if (pId.equals(Constant.STRING_ZERO)) {
 			model.addAttribute("pName", "总部门");
 		} else {
 			model.addAttribute("pName", deptService.get(pId).getName());

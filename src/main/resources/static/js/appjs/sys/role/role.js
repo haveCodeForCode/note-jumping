@@ -63,20 +63,22 @@ function load() {
 									field : 'roleId',
 									align : 'center',
 									formatter : function(value, row, index) {
-										var e = '<a class="btn btn-primary btn-sm '+s_edit_h+'" href="#" mce_href="#" title="编辑" onclick="edit(\''
-												+ row.roleId
+										var e = '<a class="btn btn-primary btn-sm '+s_edit_h+'" href="#"  title="编辑" onclick="edit(\''
+											+ row.id
 												+ '\')"><i class="fa fa-edit"></i></a> ';
-										var d = '<a class="btn btn-warning btn-sm '+s_remove_h+'" href="#" title="删除"  mce_href="#" onclick="remove(\''
-												+ row.roleId
+										var d = '<a class="btn btn-warning btn-sm '+s_remove_h+'" href="#" title="删除" onclick="remove(\''
+											+ row.id
 												+ '\')"><i class="fa fa-remove"></i></a> ';
 										return e + d;
 									}
 								} ]
 					});
 }
+
 function reLoad() {
 	$('#exampleTable').bootstrapTable('refresh');
 }
+
 function add() {
 	// iframe层
 	layer.open({
@@ -88,6 +90,7 @@ function add() {
 		content : prefix + '/add' // iframe的url
 	});
 }
+
 function remove(id) {
 	layer.confirm('确定要删除选中的记录？', {
 		btn : [ '确定', '取消' ]
@@ -99,7 +102,8 @@ function remove(id) {
 				'id' : id
 			},
 			success : function(r) {
-				if (r.code === 0) {
+				console.log(r);
+				if (r.state === 0) {
 					layer.msg("删除成功");
 					reLoad();
 				} else {
@@ -108,8 +112,8 @@ function remove(id) {
 			}
 		});
 	})
-
 }
+
 function edit(id) {
 	layer.open({
 		type : 2,
@@ -120,6 +124,7 @@ function edit(id) {
 		content : prefix + '/edit/' + id // iframe的url
 	});
 }
+
 function batchRemove() {
 	
 	var rows = $('#exampleTable').bootstrapTable('getSelections'); // 返回所有选择的行，当没有选择的记录时，返回一个空数组
@@ -132,9 +137,9 @@ function batchRemove() {
 	}, function() {
 		var ids = new Array();
 		$.each(rows, function(i, row) {
-			ids[i] = row['roleId'];
+			ids[i] = row['id'];
 		});
-		console.log(ids);
+
 		$.ajax({
 			type : 'POST',
 			data : {
@@ -142,7 +147,7 @@ function batchRemove() {
 			},
 			url : prefix + '/batchRemove',
 			success : function(r) {
-				if (r.code == 0) {
+				if (r.state === 0) {
 					layer.msg(r.msg);
 					reLoad();
 				} else {

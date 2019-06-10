@@ -1,6 +1,7 @@
 package com.root.cognition.system.config;
 
 
+import com.root.cognition.common.config.Constant;
 import com.root.cognition.common.config.DataDic;
 import com.root.cognition.common.redis.RedisCacheManager;
 import com.root.cognition.common.redis.RedisManager;
@@ -63,7 +64,7 @@ public class SystemConfig {
         //设置realm
         securityManager.setRealm(userReal);
         //设置缓存实现方法，使用redis或者使用ehCache
-        if (DataDic.CAHE_TYPE_REDIS.equals(cacheType)) {
+        if (Constant.CACHE_TYPE_REDIS.equals(cacheType)) {
             securityManager.setCacheManager(rediscacheManager());
         } else {
             securityManager.setCacheManager(ehCacheManager);
@@ -106,7 +107,7 @@ public class SystemConfig {
      */
     @Bean
     public SessionDAO sessionDAO() {
-        if (DataDic.CAHE_TYPE_REDIS.equals(cacheType)) {
+        if (Constant.CACHE_TYPE_REDIS.equals(cacheType)) {
             return redisSessionDAO();
         } else {
             return new MemorySessionDAO();

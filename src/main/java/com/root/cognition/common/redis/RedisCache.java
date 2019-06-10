@@ -1,7 +1,7 @@
 package com.root.cognition.common.redis;
 
 
-import com.root.cognition.common.until.SerializeUtils;
+import com.root.cognition.common.until.SerializeUtil;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 import org.apache.shiro.util.CollectionUtils;
@@ -71,7 +71,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
                 byte[] rawValue = cache.redisGet(getByteKey(key));
                 //反序列化
                 @SuppressWarnings("unchecked")
-                V value = (V) SerializeUtils.deserialize(rawValue);
+                V value = (V) SerializeUtil.deserialize(rawValue);
                 return value;
             }
         } catch (Throwable t) {
@@ -91,7 +91,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
     public V put(K key, V value) throws CacheException {
         logger.debug("根据key从存储 key [" + key + "]");
         try {
-            cache.redisSet(getByteKey(key), SerializeUtils.serialize(value));
+            cache.redisSet(getByteKey(key), SerializeUtil.serialize(value));
             return value;
         } catch (Throwable t) {
             throw new CacheException(t);
@@ -179,7 +179,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
             String preKey = this.keyPrefix + key;
             return preKey.getBytes();
         } else {
-            return SerializeUtils.serialize(key);
+            return SerializeUtil.serialize(key);
         }
     }
 

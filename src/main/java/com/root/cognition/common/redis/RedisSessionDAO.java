@@ -1,6 +1,6 @@
 package com.root.cognition.common.redis;
 
-import com.root.cognition.common.until.SerializeUtils;
+import com.root.cognition.common.until.SerializeUtil;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.session.mgt.eis.AbstractSessionDAO;
@@ -60,7 +60,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
         }
 
         byte[] key = getByteKey(session.getId());
-        byte[] value = SerializeUtils.serialize(session);
+        byte[] value = SerializeUtil.serialize(session);
         session.setTimeout(redisManager.getExpire() * 1000);
         this.redisManager.redisSet(key, value, redisManager.getExpire());
     }
@@ -90,7 +90,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
         Set<byte[]> keys = redisManager.redisKeys(this.keyPrefix + "*");
         if (keys != null && keys.size() > 0) {
             for (byte[] key : keys) {
-                Session s = (Session) SerializeUtils.deserialize(redisManager.redisGet(key));
+                Session s = (Session) SerializeUtil.deserialize(redisManager.redisGet(key));
                 sessions.add(s);
             }
         }
@@ -122,7 +122,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
             logger.error("session id is null");
             return null;
         }
-        Session s = (Session) SerializeUtils.deserialize(redisManager.redisGet(this.getByteKey(sessionId)));
+        Session s = (Session) SerializeUtil.deserialize(redisManager.redisGet(this.getByteKey(sessionId)));
         return s;
     }
 
