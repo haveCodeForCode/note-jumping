@@ -1,11 +1,13 @@
 package com.root.cognition.system.entity;
 
+import java.io.Serializable;
+
 /**
  * 角色菜单关联表
  * @author Worry
  * @version 2019/3/18
  */
-public class RoleMenu {
+public class RoleMenu implements Serializable {
 
     /**
      * 关联主键

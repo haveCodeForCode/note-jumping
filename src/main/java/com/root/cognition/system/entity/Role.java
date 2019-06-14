@@ -2,13 +2,14 @@ package com.root.cognition.system.entity;
 
 import com.root.cognition.common.persistence.BaseEntity;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * @author 王睿
  * @version 2018/12/28
  */
-public class Role extends BaseEntity<Role> {
+public class Role extends BaseEntity<Role> implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
@@ -59,6 +60,7 @@ public class Role extends BaseEntity<Role> {
      */
     private String roleId;
 
+
     public String getName() {
         return name;
     }
@@ -108,13 +110,12 @@ public class Role extends BaseEntity<Role> {
     }
 
     public String getRoleId() {
-        return roleId;
+        return roleId = String.valueOf(this.id);
     }
 
     public void setRoleId(String roleId) {
-        this.roleId = roleId;
+        this.id = Long.parseLong(roleId);
     }
-
 
     @Override
     public String toString() {

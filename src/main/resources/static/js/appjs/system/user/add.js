@@ -1,40 +1,12 @@
-// 以下为官方示例
 $().ready(function() {
 	validateRule();
-	// $("#signupForm").validate();
 });
 
 $.validator.setDefaults({
 	submitHandler : function() {
-		update();
+		save();
 	}
 });
-function update() {
-	$("#roleIds").val(getCheckedRoles());
-	$.ajax({
-		cache : true,
-		type : "POST",
-		url : "/sys/user/update",
-		data : $('#signupForm').serialize(),// 你的formid
-		async : false,
-		error : function(request) {
-			alert("Connection error");
-		},
-		success : function(data) {
-			if (data.code == 0) {
-				parent.layer.msg(data.msg);
-				parent.reLoad();
-				var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
-				parent.layer.close(index);
-
-			} else {
-				parent.layer.msg(data.msg);
-			}
-
-		}
-	});
-
-}
 function getCheckedRoles() {
 	var adIds = "";
 	$("input:checkbox[name=role]:checked").each(function(i) {
@@ -46,18 +18,31 @@ function getCheckedRoles() {
 	});
 	return adIds;
 }
-function setCheckedRoles() {
-	var roleIds = $("#roleIds").val();
-	alert(roleIds);
-	var adIds = "";
-	$("input:checkbox[name=role]:checked").each(function(i) {
-		if (0 == i) {
-			adIds = $(this).val();
-		} else {
-			adIds += ("," + $(this).val());
+function save() {
+	$("#roleIds").val(getCheckedRoles());
+	$.ajax({
+		cache : true,
+		type : "POST",
+		url : "/system/user/save",
+		data : $('#signupForm').serialize(),// 你的formid
+		async : false,
+		error : function(request) {
+			parent.layer.alert("Connection error");
+		},
+		success : function(data) {
+			if (data.code == 0) {
+				parent.layer.msg("操作成功");
+				parent.reLoad();
+				var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+				parent.layer.close(index);
+
+			} else {
+				parent.layer.alert(data.msg)
+			}
+
 		}
 	});
-	return adIds;
+
 }
 function validateRule() {
 	var icon = "<i class='fa fa-times-circle'></i> ";
@@ -68,7 +53,17 @@ function validateRule() {
 			},
 			username : {
 				required : true,
-				minlength : 2
+				minlength : 2,
+				remote : {
+					url : "/system/user/exit", // 后台处理程序
+					type : "post", // 数据发送方式
+					dataType : "json", // 接受数据格式
+					data : { // 要传递的数据
+						username : function() {
+							return $("#username").val();
+						}
+					}
+				}
 			},
 			password : {
 				required : true,
@@ -96,7 +91,8 @@ function validateRule() {
 			},
 			username : {
 				required : icon + "请输入您的用户名",
-				minlength : icon + "用户名必须两个字符以上"
+				minlength : icon + "用户名必须两个字符以上",
+				remote : icon + "用户名已经存在"
 			},
 			password : {
 				required : icon + "请输入您的密码",
@@ -111,6 +107,7 @@ function validateRule() {
 		}
 	})
 }
+
 var openDept = function(){
 	layer.open({
 		type:2,

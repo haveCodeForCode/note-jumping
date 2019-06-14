@@ -1,4 +1,4 @@
-var prefix = "/sys/role";
+var prefix = "/system/role";
 $(function() {
 	load();
 });

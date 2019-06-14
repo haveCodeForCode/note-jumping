@@ -2,12 +2,14 @@ package com.root.cognition.system.entity;
 
 import com.root.cognition.common.persistence.BaseEntity;
 
+import java.io.Serializable;
+
 /**
  * 菜单对象
  *
  * @author LineInkBook
  */
-public class Menu extends BaseEntity<Menu>{
+public class Menu extends BaseEntity<Menu> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

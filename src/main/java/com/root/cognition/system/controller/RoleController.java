@@ -5,9 +5,9 @@ import com.root.cognition.common.config.Constant;
 import com.root.cognition.common.persistence.BaseController;
 import com.root.cognition.common.until.Query;
 import com.root.cognition.common.until.ResultMap;
-import com.root.cognition.common.until.StringUtils;
 import com.root.cognition.system.entity.Role;
 import com.root.cognition.system.service.RoleService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +20,7 @@ import java.util.Map;
  * 角色控制层
  * @author taoya
  */
-@RequestMapping("/sys/role")
+@RequestMapping("/system/role")
 @Controller
 public class RoleController extends BaseController {
 
@@ -31,15 +31,15 @@ public class RoleController extends BaseController {
         this.roleService = roleService;
     }
 
-//    @RequiresPermissions("sys:role:role")
-    @GetMapping()
+    @RequiresPermissions("sys:role:role")
+    @GetMapping("")
     String role() {
         return "system/role/role";
     }
 
-//    @RequiresPermissions("sys:role:role")
     @GetMapping("/list")
-    @ResponseBody()
+    @ResponseBody
+    @RequiresPermissions("sys:role:role")
     List<Role> list() {
         Map<String, Object> map = Query.withDelFlag();
         List<Role> roleList = roleService.findList(map);
@@ -47,14 +47,14 @@ public class RoleController extends BaseController {
     }
 
     //	@Log("添加角色")
-//    @RequiresPermissions("sys:role:add")
+    @RequiresPermissions("sys:role:add")
     @GetMapping("/add")
     String add() {
         return "system/role/add";
     }
 
     //	@Log("编辑角色")
-//    @RequiresPermissions("sys:role:edit")
+    @RequiresPermissions("sys:role:edit")
     @GetMapping("/edit/{id}")
     String edit(@PathVariable("id") Long id, Model model) {
         Role role = roleService.get(id);
@@ -63,11 +63,11 @@ public class RoleController extends BaseController {
     }
 
     //	@Log("保存角色")
-//    @RequiresPermissions("sys:role:add")
+    @RequiresPermissions("sys:role:add")
     @PostMapping("/save")
-    @ResponseBody()
+    @ResponseBody
     ResultMap save(Role role) {
-//    存入id，并写入生成和更新人
+        // 存入id，并写入生成和更新人
         role.preInsert(getUserId());
         role.setPermissions(Constant.STRING_ZERO);
         role.setDataScope(Constant.STRING_ZERO);
@@ -79,14 +79,11 @@ public class RoleController extends BaseController {
     }
 
     //	@Log("更新角色")
-//    @RequiresPermissions("sys:role:edit")
+    @RequiresPermissions("sys:role:edit")
     @PostMapping("/update")
-    @ResponseBody()
+    @ResponseBody
     ResultMap update(Role role) {
         //roleId转值id
-        if (!StringUtils.isEmpty(role.getRoleId())){
-            role.setId(Long.parseLong(role.getRoleId()));
-        }
         int state = roleService.update(role);
         if (state > 0) {
             return ResultMap.success();
@@ -96,9 +93,9 @@ public class RoleController extends BaseController {
     }
 
     //	@Log("删除角色")
-//    @RequiresPermissions("sys:role:remove")
+    @RequiresPermissions("sys:role:remove")
     @PostMapping("/remove")
-    @ResponseBody()
+    @ResponseBody
     ResultMap delete(Long id) {
         if (roleService.delete(id) > 0) {
             return ResultMap.success();
@@ -108,7 +105,7 @@ public class RoleController extends BaseController {
     }
 
     //	@Log("批量删除角色")
-//    @RequiresPermissions("sys:role:batchRemove")
+    @RequiresPermissions("sys:role:batchRemove")
     @PostMapping("/batchRemove")
     @ResponseBody
     ResultMap batchRemove(@RequestParam("ids[]") Long[] ids) {

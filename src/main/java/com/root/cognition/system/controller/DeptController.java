@@ -2,7 +2,6 @@ package com.root.cognition.system.controller;
 
 
 import com.root.cognition.common.config.Constant;
-import com.root.cognition.common.config.DataDic;
 import com.root.cognition.common.persistence.BaseController;
 import com.root.cognition.common.persistence.Tree;
 import com.root.cognition.common.until.Query;

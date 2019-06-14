@@ -160,9 +160,6 @@
 	<update id="update" parameterType="com.root.cognition.system.entity.Dept">
 		UPDATE sys_dept
 		<set>
-			<if test="">
-
-			</if>
 			<if test="parentId != null and parentId !=''">
 				`parent_id` = #{parentId},
 			</if>

@@ -22,4 +22,14 @@ xxx.update_time AS "updateTime"
 //将"offset" “limit”两个数据进行转换
 Query query = new Query(params);
 
+Dept get(Long deptId);
+Dept get(Map<String, Object> map);
+List<Dept> findList(Map<String, Object> map);
+int count(Map<String, Object> map);
+int save(Dept dept);
+int update(Dept dept);
+int delete(Long deptId);
+int batchDelete(Long[] deptIds);
 
+//maybatis自动生成键并返还
+useGeneratedKeys="true" keyProperty="id"

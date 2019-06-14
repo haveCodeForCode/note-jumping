@@ -9,6 +9,7 @@ import com.root.cognition.common.until.ResultMap;
 import com.root.cognition.common.until.StringUtils;
 import com.root.cognition.system.entity.Menu;
 import com.root.cognition.system.service.MenuService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,8 +22,8 @@ import java.util.Map;
  * 菜单控制
  * @author taoya
  */
-@RequestMapping("/sys/menu")
 @Controller
+@RequestMapping("/system/menu")
 public class MenuController extends BaseController {
 
 
@@ -34,7 +35,7 @@ public class MenuController extends BaseController {
 	}
 
 
-	//	@RequiresPermissions("sys:menu:menu")
+	@RequiresPermissions("sys:menu:menu")
 	@GetMapping()
 	String menu(Model model) {
 		return "system/menu/menu";
@@ -44,7 +45,7 @@ public class MenuController extends BaseController {
 	 * @param params
 	 * @return
 	 */
-//	@RequiresPermissions("sys:menu:menu")
+	@RequiresPermissions("sys:menu:menu")
 	@RequestMapping("/list")
 	@ResponseBody
 	List<Menu> list(@RequestParam Map<String, Object> params) {
@@ -55,7 +56,7 @@ public class MenuController extends BaseController {
 	}
 
 	//	@Log("添加菜单")
-//	@RequiresPermissions("sys:menu:add")
+	@RequiresPermissions("sys:menu:add")
 	@GetMapping("/add/{pId}")
 	String add(Model model, @PathVariable("pId")String pId) {
 	    long pid = 0;
@@ -72,7 +73,7 @@ public class MenuController extends BaseController {
 	}
 
 	//	@Log("编辑菜单")
-//	@RequiresPermissions("sys:menu:edit")
+	@RequiresPermissions("sys:menu:edit")
 	@GetMapping("/edit/{id}")
 	String edit(Model model, Long id) {
 		Menu menu = menuService.get(id);
@@ -88,7 +89,7 @@ public class MenuController extends BaseController {
 	}
 
 	//	@Log("保存菜单")
-//	@RequiresPermissions("sys:menu:add")
+	@RequiresPermissions("sys:menu:add")
 	@PostMapping("/save")
 	@ResponseBody
 	ResultMap save(Menu menu) {
@@ -102,7 +103,7 @@ public class MenuController extends BaseController {
 	}
 
 	//	@Log("更新菜单")
-//	@RequiresPermissions("sys:menu:edit")
+	@RequiresPermissions("sys:menu:edit")
 	@PostMapping("/update")
 	@ResponseBody
 	ResultMap update(Menu menu) {
@@ -114,7 +115,7 @@ public class MenuController extends BaseController {
 	}
 
 	//	@Log("删除菜单")
-//	@RequiresPermissions("sys:menu:remove")
+	@RequiresPermissions("sys:menu:remove")
 	@PostMapping("/remove")
 	@ResponseBody
 	ResultMap remove(Long id) {

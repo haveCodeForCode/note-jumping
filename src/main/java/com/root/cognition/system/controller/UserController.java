@@ -6,6 +6,7 @@ import com.root.cognition.common.persistence.Tree;
 import com.root.cognition.common.until.PageUtils;
 import com.root.cognition.common.until.Query;
 import com.root.cognition.common.until.ResultMap;
+import com.root.cognition.modules.service.DictService;
 import com.root.cognition.system.entity.Dept;
 import com.root.cognition.system.entity.Role;
 import com.root.cognition.system.entity.User;
@@ -25,26 +26,30 @@ import java.util.Map;
  *
  * @author taoya
  */
-@RequestMapping("/sys/user")
+@RequestMapping("/system/user")
 @Controller
 public class UserController extends BaseController {
-	private String prefix="system/user"  ;
+
 
 	private UserService userService;
-	@Autowired
 	private RoleService roleService;
-//	@Autowired
-//	DictService dictService;
+	private DictService dictService;
 
 	@Autowired
 	public void setUserService(UserService userService){this.userService = userService;}
 
+	@Autowired
 	public void setRoleService(RoleService roleService){this.roleService = roleService;}
+
+	@Autowired
+	public void setDictService(DictService dictService) {
+		this.dictService = dictService;
+	}
 
 	@RequiresPermissions("sys:user:user")
 	@GetMapping("")
 	String user(Model model) {
-		return prefix + "/user";
+		return "system/user/user";
 	}
 
 	@GetMapping("/list")
@@ -64,7 +69,7 @@ public class UserController extends BaseController {
 	String add(Model model) {
 		List<Role> roles = roleService.list(getUser().getId());
 		model.addAttribute("roles", roles);
-		return prefix + "/add";
+		return "system/user/add";
 	}
 
 	@RequiresPermissions("sys:user:edit")
@@ -73,7 +78,6 @@ public class UserController extends BaseController {
 	String edit(Model model, @Param("id") Long id) {
 		User user = userService.get(id);
 		model.addAttribute("user", user);
-//		model.addAttribute("")
 		List<Role> roles = roleService.list(id);
 		model.addAttribute("roles", roles);
 		return "system/user/edit";
@@ -131,7 +135,6 @@ public class UserController extends BaseController {
 	@PostMapping("/batchRemove")
 	@ResponseBody
 	ResultMap batchRemove(@RequestParam("ids[]") Long[] userIds) {
-
 		int r = userService.batchDelete(userIds);
 		if (r > 0) {
 			return ResultMap.success();
@@ -160,9 +163,6 @@ public class UserController extends BaseController {
 //	@PostMapping("/resetPwd")
 //	@ResponseBody
 //	R resetPwd(UserVO userVO) {
-//		if (Constant.DEMO_ACCOUNT.equals(getUsername())) {
-//			return R.error(1, "演示系统不允许修改,完整体验请部署程序");
-//		}
 //		try{
 //			userService.resetPwd(userVO,getUser());
 //			return R.ok();
@@ -176,9 +176,6 @@ public class UserController extends BaseController {
 //	@PostMapping("/adminResetPwd")
 //	@ResponseBody
 //	R adminResetPwd(UserVO userVO) {
-//		if (Constant.DEMO_ACCOUNT.equals(getUsername())) {
-//			return R.error(1, "演示系统不允许修改,完整体验请部署程序");
-//		}
 //		try{
 //			userService.adminResetPwd(userVO);
 //			return R.ok();
@@ -203,9 +200,6 @@ public class UserController extends BaseController {
 //	@ResponseBody
 //	@PostMapping("/uploadImg")
 //	R uploadImg(@RequestParam("avatar_file") MultipartFile file, String avatar_data, HttpServletRequest request) {
-//		if ("test".equals(getUsername())) {
-//			return R.error(1, "演示系统不允许修改,完整体验请部署程序");
-//		}
 //		Map<String, Object> result = new HashMap<>();
 //		try {
 //			result = userService.updatePersonalImg(file, avatar_data, getUserId());
