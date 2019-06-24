@@ -1,24 +1,5 @@
 var prefix = "/modules/dict";
 $(function() {
-	
-	//	var config = {
-	//		'.chosen-select' : {},
-	//		'.chosen-select-deselect' : {
-	//			allow_single_deselect : true
-	//		},
-	//		'.chosen-select-no-single' : {
-	//			disable_search_threshold : 10
-	//		},
-	//		'.chosen-select-no-results' : {
-	//			no_results_text : '没有数据'
-	//		},
-	//		'.chosen-select-width' : {
-	//			width : "95%"
-	//		}
-	//	}
-	//	for (var selector in config) {
-	//		$(selector).chosen(config[selector]);
-	//	}
 	load();
 });
 function selectLoad() {
@@ -143,7 +124,6 @@ function load() {
 						title : '更新时间'
 					},
 					{
-						visible : false,
 						field : 'remarks',
 						title : '备注信息'
 					},
@@ -171,6 +151,7 @@ function load() {
 					} ]
 			});
 }
+
 function reLoad() {
 	var opt = {
 		query : {
@@ -179,6 +160,7 @@ function reLoad() {
 	};
 	$('#exampleTable').bootstrapTable('refresh', opt);
 }
+
 function add() {
 	layer.open({
 		type : 2,
@@ -189,6 +171,7 @@ function add() {
 		content : prefix + '/add' // iframe的url
 	});
 }
+
 function edit(id) {
 	layer.open({
 		type : 2,
@@ -199,6 +182,7 @@ function edit(id) {
 		content : prefix + '/edit/' + id // iframe的url
 	});
 }
+
 function remove(id) {
 	layer.confirm('确定要删除选中的记录？', {
 		btn : [ '确定', '取消' ]
@@ -210,7 +194,7 @@ function remove(id) {
 				'id' : id
 			},
 			success : function(r) {
-				if (r.code == 0) {
+				if (r.state === 0) {
 					layer.msg(r.msg);
 					reLoad();
 				} else {
@@ -231,9 +215,10 @@ function addD(type,description) {
 		content : prefix + '/add/'+type+'/'+description // iframe的url
 	});
 }
+
 function batchRemove() {
 	var rows = $('#exampleTable').bootstrapTable('getSelections'); // 返回所有选择的行，当没有选择的记录时，返回一个空数组
-	if (rows.length == 0) {
+	if (rows.length === 0) {
 		layer.msg("请选择要删除的数据");
 		return;
 	}
@@ -253,7 +238,10 @@ function batchRemove() {
 			},
 			url : prefix + '/batchRemove',
 			success : function(r) {
-				if (r.code == 0) {
+				alert("1");
+				console.log(r);
+				if (r.state === 0) {
+					alert("2");
 					layer.msg(r.msg);
 					reLoad();
 				} else {

@@ -34,11 +34,17 @@ public class Query extends LinkedHashMap<String, Object> {
 		this.put("delFlag", Constant.DEL_FLAG_NORMAL);
 	}
 
+	public static Map<String, Object> withDelFlag(Map<String, Object> params) {
+		params.put("delFlag", Constant.DEL_FLAG_NORMAL);
+		return params;
+	}
+
 	public static Map<String, Object> withDelFlag() {
 		Map<String,Object> params = new HashMap<>();
 		params.put("delFlag", Constant.DEL_FLAG_NORMAL);
 		return params;
 	}
+
 
 	public int getOffset() {
 		return offset;

@@ -1,7 +1,5 @@
 package com.root.cognition.system.controller;
 
-
-import com.root.cognition.common.config.Constant;
 import com.root.cognition.common.persistence.BaseController;
 import com.root.cognition.common.until.Query;
 import com.root.cognition.common.until.ResultMap;
@@ -67,10 +65,8 @@ public class RoleController extends BaseController {
     @PostMapping("/save")
     @ResponseBody
     ResultMap save(Role role) {
-        // 存入id，并写入生成和更新人
-        role.preInsert(getUserId());
-        role.setPermissions(Constant.STRING_ZERO);
-        role.setDataScope(Constant.STRING_ZERO);
+        // 根据权限存入id，更新人
+        role.setCreateBy(getUserId());
         if (roleService.save(role) > 0) {
             return ResultMap.success();
         } else {

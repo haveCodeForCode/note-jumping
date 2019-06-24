@@ -3,10 +3,10 @@
  */
 package com.root.cognition.common.persistence;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.root.cognition.common.config.Constant;
 import com.root.cognition.common.until.codegenerate.SnowFlake;
-import com.root.cognition.system.entity.User;
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.Length;
 
 import java.io.Serializable;
@@ -35,14 +35,14 @@ public abstract class BaseEntity<T> implements Serializable {
      * <p>
      * createBy
      */
-    protected String createBy;
+    protected Long createBy;
 
     /**
      * 更新者
      * <p>
      * updateBy
      */
-    protected String updateBy;
+    protected Long updateBy;
 
     /**
      * 创建日期
@@ -85,27 +85,35 @@ public abstract class BaseEntity<T> implements Serializable {
     public BaseEntity() {
     }
 
+    @JsonSerialize(using = ToStringSerializer.class)
     public Long getId() {
         return id;
     }
 
+    /**
+     * long从后台传到前台会精度不准确，
+     * 续将其转换成String向前台赋值
+     *
+     * @param id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
     public void setId(Long id) {
         this.id = id;
     }
 
-    public String getCreateBy() {
+    public Long getCreateBy() {
         return createBy;
     }
 
-    public void setCreateBy(String createBy) {
+    public void setCreateBy(Long createBy) {
         this.createBy = createBy;
     }
 
-    public String getUpdateBy() {
+    public Long getUpdateBy() {
         return updateBy;
     }
 
-    public void setUpdateBy(String updateBy) {
+    public void setUpdateBy(Long updateBy) {
         this.updateBy = updateBy;
     }
 
@@ -162,16 +170,13 @@ public abstract class BaseEntity<T> implements Serializable {
         this.sqlMap = sqlMap;
     }
 
-
-    public void preInsert(Long userId) {
+    /**
+     * 预插入数据补充
+     */
+    public void preInsert() {
         // 不限制ID为UUID，调用setIsNewRecord()使用自定义ID
         setId(SnowFlake.createSFid());
-
-        this.updateBy = String.valueOf(userId);
-        this.createBy = String.valueOf(userId);
-
-        this.updateTime = new Date();
-        this.createTime = this.updateTime;
+        this.createTime = new Date();
         this.delFlag = Constant.DEL_FLAG_NORMAL;
     }
 

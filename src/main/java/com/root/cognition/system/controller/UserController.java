@@ -153,9 +153,9 @@ public class UserController extends BaseController {
 //	@Log("请求更改用户密码")
 	@GetMapping("/resetPwd/{id}")
 	String resetPwd(@RequestParam("id") Long userId, Model model) {
-		User userDO = new User();
-		userDO.setId(userId);
-		model.addAttribute("user", userDO);
+		User user = new User();
+		user.setId(userId);
+		model.addAttribute("user", user);
 		return "system/user/reset_pwd";
 	}
 

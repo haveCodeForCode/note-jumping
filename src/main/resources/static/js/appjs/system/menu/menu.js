@@ -21,7 +21,6 @@ var load = function () {
                     {
                         title: '编号',
                         field: 'id',
-                        visible: false,
                         align: 'center',
                         valign: 'center',
                         width: '5%'
@@ -66,19 +65,20 @@ var load = function () {
                     {
                         title: '地址',
                         valign: 'center',
-                        width : '20%',
+                        width : '15%',
                         field: 'url'
                     },
                     {
                         title: '权限标识',
                         valign: 'center',
-                        width : '20%',
+                        width : '10%',
                         field: 'perms'
                     },
                     {
                         title: '操作',
                         field: 'id',
                         align: 'center',
+                        widt: '20%',
                         valign: 'center',
                         formatter: function (item, index) {
                             var e = '<a class="btn btn-primary btn-sm '
@@ -139,14 +139,14 @@ function remove(id) {
     })
 }
 
-function edit(roleId) {
+function edit(id) {
     layer.open({
         type: 2,
         title: '菜单修改',
         maxmin: true,
         shadeClose: false, // 点击遮罩关闭层
         area: ['800px', '520px'],
-        content: prefix + '/edit/' + roleId // iframe的url
+        content: prefix + '/edit/' + id // iframe的url
     });
 }
 

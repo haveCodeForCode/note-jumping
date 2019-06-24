@@ -100,10 +100,10 @@ public class User extends BaseEntity<User> {
                 ", userPassword='" + userPassword + '\'' +
                 ", userEmail='" + userEmail + '\'' +
                 ", userMobile='" + userMobile + '\'' +
-                ", deptId='" + deptId + '\'' +
-                ", id='" + id + '\'' +
-                ", createBy='" + createBy + '\'' +
-                ", updateBy='" + updateBy + '\'' +
+                ", deptId=" + deptId +
+                ", id=" + id +
+                ", createBy=" + createBy +
+                ", updateBy=" + updateBy +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 ", delFlag='" + delFlag + '\'' +

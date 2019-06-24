@@ -4,13 +4,11 @@ import com.root.cognition.common.persistence.Tree;
 import com.root.cognition.system.entity.Dept;
 import com.root.cognition.system.entity.User;
 import com.root.cognition.system.vo.UserVo;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@Service
 public interface UserService {
 
 	/**

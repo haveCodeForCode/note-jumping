@@ -42,7 +42,7 @@ public class DeptController extends BaseController {
 
 
 	@GetMapping()
-	@RequiresPermissions("system:sysDept:sysDept")
+	@RequiresPermissions("system:dept:sysDept")
 	String dept() {
 		return "system/dept/dept";
 	}
@@ -50,7 +50,7 @@ public class DeptController extends BaseController {
 //	@ApiOperation(value="获取部门列表", notes="")
 	@ResponseBody
 	@GetMapping("/list")
-	@RequiresPermissions("system:sysDept:sysDept")
+	@RequiresPermissions("system:dept:sysDept")
 	public List<Dept> list() {
 		Map<String, Object> query = Query.withDelFlag();
 		List<Dept> deptList = deptService.findList(query);
@@ -67,10 +67,10 @@ public class DeptController extends BaseController {
 	}
 
 	@GetMapping("/add/{pId}")
-	@RequiresPermissions("system:sysDept:add")
-	String add(@Param("pId") Long pId, Model model) {
+	@RequiresPermissions("system:dept:add")
+	String add(@PathVariable("pId")Long pId, Model model) {
 		model.addAttribute("pId", pId);
-		if (pId.equals(Constant.STRING_ZERO)) {
+		if (pId == Constant.INT_ZERO) {
 			model.addAttribute("pName", "总部门");
 		} else {
 			model.addAttribute("pName", deptService.get(pId).getName());
@@ -79,7 +79,7 @@ public class DeptController extends BaseController {
 	}
 
 	@GetMapping("/edit/{deptId}")
-	@RequiresPermissions("system:sysDept:edit")
+	@RequiresPermissions("system:dept:edit")
 	String edit(@Param("deptId") Long deptId, Model model) {
 		Dept dept = deptService.get(deptId);
 		model.addAttribute("sysDept", dept);
@@ -95,6 +95,8 @@ public class DeptController extends BaseController {
 	@PostMapping("/save")
 	@RequiresPermissions("system:dept:add")
 	public ResultMap save(Dept dept) {
+		//根据权限存放的
+		dept.setCreateBy(getUserId());
 		if (deptService.save(dept) > 0) {
 			return ResultMap.success();
 		}
@@ -119,7 +121,7 @@ public class DeptController extends BaseController {
 	 */
 	@PostMapping("/remove")
 	@ResponseBody
-	@RequiresPermissions("system:sysDept:remove")
+	@RequiresPermissions("system:dept:remove")
 	public ResultMap remove(Long deptId) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("parentId", deptId);
@@ -141,7 +143,7 @@ public class DeptController extends BaseController {
 	 */
 	@PostMapping("/batchRemove")
 	@ResponseBody
-	@RequiresPermissions("system:sysDept:batchRemove")
+	@RequiresPermissions("system:dept:batchRemove")
 	public ResultMap remove(@RequestParam("ids[]") Long[] deptIds) {
 		deptService.batchDelete(deptIds);
 		return ResultMap.success();

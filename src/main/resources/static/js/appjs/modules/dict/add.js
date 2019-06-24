@@ -18,8 +18,8 @@ function save() {
 			parent.layer.alert("网络超时");
 		},
 		success : function(data) {
-			if (data.code == 0) {
-				parent.layer.msg("操作成功");
+			if (data.state === 0) {
+				parent.layer.msg(data.msg);
 				parent.reLoad();
 				var index = parent.layer.getFrameIndex(window.name);
 				parent.layer.close(index);

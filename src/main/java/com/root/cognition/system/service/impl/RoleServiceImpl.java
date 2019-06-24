@@ -1,7 +1,7 @@
 package com.root.cognition.system.service.impl;
 
 
-import com.root.cognition.common.config.DataDic;
+import com.root.cognition.common.config.Constant;
 import com.root.cognition.common.until.codegenerate.SnowFlake;
 import com.root.cognition.system.dao.RoleDao;
 import com.root.cognition.system.dao.RoleMenuDao;
@@ -97,7 +97,12 @@ public class RoleServiceImpl implements RoleService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public int save(Role role) {
+        role.preInsert();
+        role.setPermissions(Constant.STRING_ZERO);
+        role.setDataScope(Constant.STRING_ZERO);
+        //插入
         int count = roleDao.insert(role);
+        //根据插入的角色批量修改角色菜单
         if (count>0) {
             List<Long> menuIds = role.getMenuIds();
             List<RoleMenu> rms = new ArrayList<>();
@@ -134,7 +139,7 @@ public class RoleServiceImpl implements RoleService {
         //获取角色id
         Long roleId = role.getId();
         if (roleId == null) {
-            return DataDic.RETURN_STATUS_INFOBUG;
+            return Constant.RETURN_STATUS_INFOBUG;
         }
         //移除所有角色id相关的菜单
         roleMenuDao.removeByRoleId(roleId);

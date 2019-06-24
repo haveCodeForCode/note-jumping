@@ -1,7 +1,6 @@
 package com.root.cognition.system.service;
 
 import com.root.cognition.system.entity.Role;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
@@ -11,7 +10,6 @@ import java.util.Map;
  *
  * @author taoya
  */
-@Service
 public interface RoleService {
 
 	/**

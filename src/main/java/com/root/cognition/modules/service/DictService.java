@@ -3,6 +3,7 @@ package com.root.cognition.modules.service;
 
 import com.root.cognition.modules.entity.Dict;
 import com.root.cognition.system.entity.User;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;

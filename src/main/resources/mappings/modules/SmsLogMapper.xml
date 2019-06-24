@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.root.cognition.modules.dao.SmsLogDao">
+
+    <select id="get" resultType="com.root.cognition.modules.entity.SmsLog">
+        select
+        <include refid="smsLogColumns"/>
+        from
+        mod_sms_log
+        where smslog_id = #{value}
+    </select>
+
+    <select id="findList" resultType="com.root.cognition.modules.entity.SmsLog">
+        select
+        <include refid="smsLogColumns"/>
+        from mod_sms_log
+        <where>
+            <if test="id != null and id != ''">
+                and smslog_id = #{id}
+            </if>
+            <if test="module != null and module != ''">
+                and module = #{module}
+            </if>
+            <if test="mobile != null and mobile != ''">
+                and mobile = #{mobile}
+            </if>
+            <if test="content != null and content != ''">
+                and content = #{content}
+            </if>
+            <if test="ispush != null and ispush != ''">
+                and ispush = #{ispush}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="remake != null and remake != ''">
+                and remake = #{remake}
+            </if>
+            <if test="templatecode != null and templatecode != ''">
+                and templateCode = #{templatecode}
+            </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by create_time desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from mod_sms_log
+        <where>
+            <if test="id != null and id != ''">
+                and smslog_id = #{id}
+            </if>
+            <if test="module != null and module != ''">
+                and module = #{module}
+            </if>
+            <if test="mobile != null and mobile != ''">
+                and mobile = #{mobile}
+            </if>
+            <if test="content != null and content != ''">
+                and content = #{content}
+            </if>
+            <if test="ispush != null and ispush != ''">
+                and ispush = #{ispush}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="remake != null and remake != ''">
+                and remake = #{remake}
+            </if>
+            <if test="templatecode != null and templatecode != ''">
+                and templateCode = #{templatecode}
+            </if>
+        </where>
+    </select>
+
+    <insert id="save" parameterType="com.root.cognition.modules.entity.SmsLog">
+		insert into mod_sms_log
+		(
+			`smslog_id`,
+			`module`, 
+			`mobile`, 
+			`content`, 
+			`ispush`, 
+			`create_time`,
+			`remake`, 
+			`templateCode`, 
+			`platform`
+		)
+		values
+		(
+			#{id}, 
+			#{module}, 
+			#{mobile}, 
+			#{content}, 
+			#{ispush}, 
+			#{createTime},
+			#{remake}, 
+			#{templatecode}, 
+			#{platform}
+		)
+	</insert>
+
+    <update id="update" parameterType="com.root.cognition.modules.entity.SmsLog">
+        update mod_sms_log
+        <set>
+            <if test="module != null">
+                `module` = #{module},
+            </if>
+            <if test="mobile != null">
+                `mobile` = #{mobile},
+            </if>
+            <if test="content != null">
+                `content` = #{content},
+            </if>
+            <if test="ispush != null">
+                `ispush` = #{ispush},
+            </if>
+            <if test="createTime != null">
+                `create_time` = #{createTime},
+            </if>
+            <if test="remake != null">
+                `remake` = #{remake},
+            </if>
+            <if test="templatecode != null">
+                `templateCode` = #{templatecode},
+            </if>
+        </set>
+        where smslog_id = #{id}
+    </update>
+
+    <delete id="remove">
+		delete from mod_sms_log where smslog_id = #{value}
+	</delete>
+
+    <delete id="batchRemove">
+        delete from mod_sms_log where smslog_id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <sql id="smsLogColumns">
+		smslog_id as `id`,
+		`module`,
+		`mobile`,
+		`content`,
+		`ispush`,
+		create_time as `createTime`,
+		`remake`
+	</sql>
+
+</mapper>

@@ -130,6 +130,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public int save(User user) {
+        user.preInsert();
         int insert = userDao.insert(user);
         batchModifyRoles(user);
         return insert;

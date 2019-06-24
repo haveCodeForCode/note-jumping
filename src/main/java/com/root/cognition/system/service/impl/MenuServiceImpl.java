@@ -70,7 +70,8 @@ public class MenuServiceImpl implements MenuService {
      */
     @Override
     public List<Menu> findList(Map<String, Object> params) {
-        return menuDao.findList(params);
+        List<Menu> menuList = menuDao.findList(params);
+        return menuList;
     }
 
     @Transactional(readOnly = false, rollbackFor = Exception.class)
@@ -82,6 +83,7 @@ public class MenuServiceImpl implements MenuService {
     @Transactional(readOnly = false, rollbackFor = Exception.class)
     @Override
     public int save(Menu menu) {
+        menu.preInsert();
         return menuDao.insert(menu);
     }
 
@@ -111,18 +113,26 @@ public class MenuServiceImpl implements MenuService {
         return BuildTree.build(trees);
     }
 
+    /**
+     * 获取一用户已选数
+     * 逻辑：先取出除了父级的所有菜单的状态，
+     *      在将所有菜单取出循环对比，赋值子菜单状态，回传树
+     * @param id
+     * @return
+     */
     @Override
-    public Tree<Menu> getTree(Long id) {
-
-        List<Tree<Menu>> trees = new ArrayList<Tree<Menu>>();
-
-        // 根据角色ID查询菜单列
-        List<Long> menuIds = roleMenuDao.listMenuIdByRoleId(id);
-
+    public Tree<Menu> getTree(String id) {
+        // 根据roleId查询权限
+        //去除父级菜单
         Map<String,Object> query = Query.withDelFlag();
-        List<Menu> menuDOS = menuDao.findList(query);
+        List<Menu> menus = menuDao.findList(query);
 
-        for (Menu sysMenuDO : menuDOS) {
+        List<Long> menuIds = roleMenuDao.listMenuIdByRoleId(Long.parseLong(id));
+        for (Menu menu : menus) {
+            menuIds.remove(menu.getParentId());
+        }
+        List<Tree<Menu>> trees = new ArrayList<Tree<Menu>>();
+        for (Menu sysMenuDO : menus) {
             Tree<Menu> tree = new Tree<Menu>();
             tree.setId(sysMenuDO.getId().toString());
             tree.setParentId(sysMenuDO.getParentId().toString());
@@ -138,7 +148,8 @@ public class MenuServiceImpl implements MenuService {
             trees.add(tree);
         }
         // 默认顶级菜单为０，根据数据库实际情况调整
-        return BuildTree.build(trees);
+        Tree<Menu> t = BuildTree.build(trees);
+        return t;
     }
 
     @Override

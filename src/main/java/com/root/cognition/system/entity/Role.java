@@ -55,11 +55,6 @@ public class Role extends BaseEntity<Role> implements Serializable{
      */
     private List<Long> menuIds;
 
-    /**
-     * 角色Id映射变量
-     */
-    private String roleId;
-
 
     public String getName() {
         return name;
@@ -109,13 +104,13 @@ public class Role extends BaseEntity<Role> implements Serializable{
         this.menuIds = menuIds;
     }
 
-    public String getRoleId() {
-        return roleId = String.valueOf(this.id);
-    }
-
-    public void setRoleId(String roleId) {
-        this.id = Long.parseLong(roleId);
-    }
+//    public String getRoleId() {
+//        return roleId = String.valueOf(this.id);
+//    }
+//
+//    public void setRoleId(String roleId) {
+//        this.id = Long.parseLong(roleId);
+//    }
 
     @Override
     public String toString() {
@@ -126,7 +121,6 @@ public class Role extends BaseEntity<Role> implements Serializable{
                 ", dataScope='" + dataScope + '\'' +
                 ", remark='" + remark + '\'' +
                 ", menuIds=" + menuIds +
-                ", roleId='" + roleId + '\'' +
                 ", id=" + id +
                 ", createBy='" + createBy + '\'' +
                 ", updateBy='" + updateBy + '\'' +

@@ -36,7 +36,7 @@ function loadMenuTree(menuTree) {
 			'data' : menuTree
 		},
 		"checkbox" : {
-			"three_state" : true,
+			"three_state" : true
 		},
 		"plugins" : [ "wholerow", "checkbox" ]
 	});

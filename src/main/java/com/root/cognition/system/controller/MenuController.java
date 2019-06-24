@@ -1,7 +1,6 @@
 package com.root.cognition.system.controller;
 
 import com.root.cognition.common.config.Constant;
-import com.root.cognition.common.config.DataDic;
 import com.root.cognition.common.persistence.BaseController;
 import com.root.cognition.common.persistence.Tree;
 import com.root.cognition.common.until.Query;
@@ -75,7 +74,7 @@ public class MenuController extends BaseController {
 	//	@Log("编辑菜单")
 	@RequiresPermissions("sys:menu:edit")
 	@GetMapping("/edit/{id}")
-	String edit(Model model, Long id) {
+	String edit(Model model, @PathVariable("id")Long id) {
 		Menu menu = menuService.get(id);
 		Long parentId = menu.getParentId();
 		model.addAttribute("pId", parentId);
@@ -93,8 +92,8 @@ public class MenuController extends BaseController {
 	@PostMapping("/save")
 	@ResponseBody
 	ResultMap save(Menu menu) {
-//		存入id，并放入生成与更新人id
-		menu.preInsert(getUserId());
+		//根据权限存入创建者
+		menu.setCreateBy(getUserId());
 		if (menuService.save(menu) > 0) {
 			return ResultMap.success();
 		} else {
@@ -134,7 +133,7 @@ public class MenuController extends BaseController {
 
 	@GetMapping("/tree/{roleId}")
 	@ResponseBody
-	Tree<Menu> tree(@PathVariable("roleId") Long roleId) {
+	Tree<Menu> tree(@PathVariable("roleId") String roleId) {
 		Tree<Menu> tree = menuService.getTree(roleId);
 		return tree;
 	}

@@ -33,14 +33,13 @@ function update() {
 			layer.alert("Connection error");
 		},
 		success : function(data) {
-			if (data.state === 0) {
+			if (data.state == 0) {
 				parent.layer.msg("保存成功");
 				parent.reLoad();
 				var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
 				parent.layer.close(index);
-
 			} else {
-				layer.alert(data.msg)
+				parent.layer.msg(data.msg)
 			}
 
 		}

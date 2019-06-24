@@ -2,7 +2,6 @@ package com.root.cognition.common.shiro;
 
 
 import com.root.cognition.common.config.Constant;
-import com.root.cognition.common.config.DataDic;
 import com.root.cognition.common.until.Query;
 import com.root.cognition.system.config.ApplicationContextRegister;
 import com.root.cognition.system.dao.UserDao;
@@ -13,9 +12,7 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,19 +21,6 @@ import java.util.Set;
  */
 
 public class UserRealm extends AuthorizingRealm {
-
-	private UserDao userDao;
-	private MenuService menuService;
-
-	@Autowired
-	public void setUserDao(UserDao userDao) {
-		this.userDao = userDao;
-	}
-
-	@Autowired
-	public void setMenuService(MenuService menuService) {
-		this.menuService = menuService;
-	}
 
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection arg0) {

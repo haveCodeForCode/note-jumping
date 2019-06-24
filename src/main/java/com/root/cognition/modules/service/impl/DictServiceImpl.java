@@ -9,6 +9,7 @@ import com.root.cognition.system.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +51,7 @@ public class DictServiceImpl implements DictService {
 
     @Override
     public int save(Dict dict) {
+        dict.preInsert();
         return dictDao.insert(dict);
     }
 
@@ -88,20 +90,6 @@ public class DictServiceImpl implements DictService {
         Map<String, Object> param = Query.withDelFlag();
         param.put("type", "hobby");
         List<Dict> hobbyList = dictDao.findList(param);
-
-//        if (StringUtils.isNotEmpty(user.getHobby())) {
-//            String userHobbys[] = user.getHobby().split(";");
-//            for (String userHobby : userHobbys) {
-//                for (Dict hobby : hobbyList) {
-//                    if (!Objects.equals(userHobby, hobby.getId().toString())) {
-//                        continue;
-//                    }
-//                    hobby.setRemarks("true");
-//                    break;
-//                }
-//            }
-//        }
-
         return hobbyList;
     }
 

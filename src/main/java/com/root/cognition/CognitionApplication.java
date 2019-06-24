@@ -1,10 +1,10 @@
 package com.root.cognition;
 
-import com.root.cognition.common.until.ThreadsTools;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @MapperScan("com.root.cognition.*.dao")
 @SpringBootApplication
 @EnableCaching
-
+@EnableScheduling
 public class CognitionApplication {
     public static void main(String[] args) {
         SpringApplication.run(CognitionApplication.class, args);

@@ -9,11 +9,11 @@
 				<div class="ibox-body">
 					<div class="fixed-table-toolbar">
 						<div class="columns pull-left">
-							<button shiro:hasPermission="common:dict:add" type="button"
+							<button shiro:hasPermission="modules:dict:add" type="button"
 								class="btn  btn-primary" onclick="add()">
 								<i class="fa fa-plus" aria-hidden="true"></i>添加
 							</button>
-							<button shiro:hasPermission="common:dict:batchRemove"
+							<button shiro:hasPermission="modules:dict:batchRemove"
 								type="button" class="btn  btn-danger" onclick="batchRemove()">
 								<i class="fa fa-trash" aria-hidden="true"></i>删除
 							</button>
@@ -42,17 +42,17 @@
 			var s_resetPwd_h = 'hidden';
 		</script>
 	</div>
-	<div shiro:hasPermission="common:dict:edit">
+	<div shiro:hasPermission="modules:dict:edit">
 		<script type="text/javascript">
 			s_edit_h = '';
 		</script>
 	</div>
-	<div shiro:hasPermission="common:dict:remove">
+	<div shiro:hasPermission="modules:dict:remove">
 		<script type="text/javascript">
 			var s_remove_h = '';
 		</script>
 	</div>
-	<div shiro:hasPermission="common:dict:add">
+	<div shiro:hasPermission="modules:dict:add">
 		<script type="text/javascript">
 			var s_add_h = '';
 		</script>

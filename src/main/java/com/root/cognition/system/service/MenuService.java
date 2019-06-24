@@ -2,7 +2,6 @@ package com.root.cognition.system.service;
 
 import com.root.cognition.common.persistence.Tree;
 import com.root.cognition.system.entity.Menu;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
@@ -12,7 +11,6 @@ import java.util.Set;
  * 菜单业务层
  * @author taoya
  */
-@Service
 public interface MenuService {
 
 	/**
@@ -28,7 +26,7 @@ public interface MenuService {
 	 * @param id
 	 * @return
 	 */
-	Tree<Menu> getTree(Long id);
+	Tree<Menu> getTree(String id);
 
 	/**
 	 * 根据userid查询对应user菜单形成树

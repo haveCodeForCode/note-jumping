@@ -9,8 +9,8 @@
 				<div class="ibox float-e-margins">
 					<div class="ibox-content">
 						<form class="form-horizontal m-t" id="signupForm">
-							<input id="deptId" name="deptId" th:value="${sysDept.deptId}"
-								class="hidden">
+							<input id="id" name="id" th:value="${sysDept.deptId}" class="hidden">
+
 							<div class="form-group">
 								<label class="col-sm-3 control-label ">上级部门：</label>
 								<div class="col-sm-8">
@@ -52,7 +52,7 @@
 		</div>
 	</div>
 	<div th:include="include::footer"></div>
-	<script type="text/javascript" src="/js/appjs/system/sysDept/edit.js">
+	<script type="text/javascript" src="/js/appjs/system/dept/edit.js">
 	</script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 package com.root.cognition.common.until.encrypt;
 
 
-import com.root.cognition.common.config.DataDic;
+import com.root.cognition.common.config.Constant;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;
@@ -16,6 +16,7 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 
 /**
@@ -280,7 +281,7 @@ public class Md5Utils {
      * DECRY返回解密后的字符串
      */
     public static Map<String, Object> encryAndDecryption(String key, String keyState) {
-        String state = DataDic.FAIL;
+        String state = Constant.FAIL;
         Map<String, String> keyMap = Md5Utils.createKeys(512);
 
         String publicKey = keyMap.get("publicKey");
@@ -288,15 +289,15 @@ public class Md5Utils {
 
         Map<String, Object> codeData = new HashMap<>();
         try {
-            if (DataDic.ENCRY.equals(keyState)) {
+            if (Constant.ENCRY.equals(keyState)) {
                 String data = Md5Utils.publicEncrypt(key, Md5Utils.getPublicKey(publicKey));
-                state = DataDic.SUCCESS;
+                state = Constant.SUCCESS;
                 codeData.put("data", data);
                 codeData.put("state", state);
             }
-            if (DataDic.DECRY.equals(keyState)) {
+            if (Constant.DECRY.equals(keyState)) {
                 String data = Md5Utils.privateDecrypt(key, Md5Utils.getPrivateKey(privateKey));
-                state = DataDic.SUCCESS;
+                state = Constant.SUCCESS;
                 codeData.put("data", data);
                 codeData.put("state", state);
             }

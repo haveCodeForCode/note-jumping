@@ -62,10 +62,10 @@ public class Menu extends BaseEntity<Menu> implements Serializable {
      */
     private Integer orderNum;
 
+
     public Menu(){
         super();
     }
-
     public Menu(long id) {
         super(id);
     }
@@ -125,8 +125,6 @@ public class Menu extends BaseEntity<Menu> implements Serializable {
     public void setOrderNum(Integer orderNum) {
         this.orderNum = orderNum;
     }
-
-
 
     @Override
     public String toString() {

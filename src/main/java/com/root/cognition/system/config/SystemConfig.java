@@ -2,7 +2,6 @@ package com.root.cognition.system.config;
 
 
 import com.root.cognition.common.config.Constant;
-import com.root.cognition.common.config.DataDic;
 import com.root.cognition.common.redis.RedisCacheManager;
 import com.root.cognition.common.redis.RedisManager;
 import com.root.cognition.common.redis.RedisSessionDAO;

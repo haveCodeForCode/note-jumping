@@ -2,14 +2,12 @@ package com.root.cognition.system.service.impl;
 
 
 import com.root.cognition.common.config.Constant;
-import com.root.cognition.common.config.DataDic;
 import com.root.cognition.common.persistence.Tree;
 import com.root.cognition.common.until.BuildTree;
 import com.root.cognition.common.until.Query;
 import com.root.cognition.system.dao.DeptDao;
 import com.root.cognition.system.entity.Dept;
 import com.root.cognition.system.service.DeptService;
-import javafx.beans.binding.ObjectExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +54,7 @@ public class DeptServiceImpl implements DeptService {
 
     @Override
     public int save(Dept dept) {
+        dept.preInsert();
         return deptDao.insert(dept);
     }
 

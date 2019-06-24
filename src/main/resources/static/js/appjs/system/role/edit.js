@@ -38,7 +38,8 @@ function getAllSelectNodes() {
 }
 
 function getMenuTreeData() {
-	var id = $('#roleId').val();
+	var id = $('#id').val();
+	console.log(id);
 	$.ajax({
 		type : "GET",
 		url : "/system/menu/tree/" + id,
@@ -50,7 +51,7 @@ function getMenuTreeData() {
 
 function update() {
 	$('#menuIds').val(menuIds);
-	role = $('#signupForm').serialize();
+	var role = $('#signupForm').serialize();
 	$.ajax({
 		cache : true,
 		type : "POST",
