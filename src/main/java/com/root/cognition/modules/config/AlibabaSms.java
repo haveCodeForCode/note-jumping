@@ -4,21 +4,24 @@ import com.aliyuncs.CommonRequest;
 import com.aliyuncs.CommonResponse;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
+import com.aliyuncs.dysmsapi.model.v20170525.QuerySendDetailsRequest;
+import com.aliyuncs.dysmsapi.model.v20170525.QuerySendDetailsResponse;
 import com.aliyuncs.exceptions.ClientException;
-import com.aliyuncs.exceptions.ServerException;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
+import com.aliyuncs.profile.IClientProfile;
+import com.root.cognition.common.until.JsonUntil;
 import com.root.cognition.common.until.Query;
+import com.root.cognition.common.until.StringUtils;
 import com.root.cognition.modules.entity.Dict;
 import com.root.cognition.modules.entity.SmsLog;
 import com.root.cognition.modules.service.DictService;
 import com.root.cognition.system.config.ApplicationContextRegister;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +34,9 @@ import java.util.Map;
  */
 @Service
 public class AlibabaSms {
-
+    /**
+     * 云通信产品-短信API服务产品域名（接口地址固定，无需修改）
+     */
     private static final String DOMAIN = "dysmsapi.aliyuncs.com";
 
     private static final String REGIONID = "cn-hangzhou";
@@ -40,8 +45,17 @@ public class AlibabaSms {
 
     private static String ACCESS_KEYID = null;
 
+    /**
+     * 云通信产品-短信API服务产品名称（短信产品名固定，无需修改）
+     */
+    private static final String PRODUCT = "Dysmsapi";
 
-    private static void setUpalibaba() {
+
+    /**
+     * 获取短信相关设定值
+     */
+    @Cacheable(value = "zero")
+    public void setConfigureAlibaba() {
         Map<String, Object> query = Query.withDelFlag();
         query.put("type", "alibaba_sms_data");
         DictService dictService = ApplicationContextRegister.getBean(DictService.class);
@@ -55,162 +69,200 @@ public class AlibabaSms {
             if ("accessKeyId".equals(dict.getName())) {
                 ACCESS_KEYID = dict.getValue();
             }
+
         }
     }
 
-//    public static void main(String[] args) {
-//        List<String> mobiles = new ArrayList<>();
-//        mobiles.add("17631012827");
-//        mobiles.add("15531853734");
-//        mobiles.add("13293039481");
-//        mobiles.add("17610353986");
-//        for (String mobile:mobiles) {
-//            String re=  AlibabaSms.sendMesage(mobile, null, "SMS_167971389", null, null);
-//            System.err.println(re);
-//        }
-//    }
-
-    public static void main(String[] args) {
-        DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "LTAImACndFVWhD0r", "JqngT3hwiOB16gQbfxIBdnZPGgokrB");
-        IAcsClient client = new DefaultAcsClient(profile);
-
-        CommonRequest request = new CommonRequest();
-        request.setMethod(MethodType.POST);
-        request.setDomain("dysmsapi.aliyuncs.com");
-        request.setVersion("2017-05-25");
-        request.setAction("SendSms");
-        request.putQueryParameter("RegionId", "cn-hangzhou");
-        request.putQueryParameter("PhoneNumbers", "17631012827");
-        request.putQueryParameter("SignName", "知域服务");
-        request.putQueryParameter("TemplateCode", "SMS_167974939");
-        request.putQueryParameter("TemplateParam", "{\"code\":\"Its0a0werewolf\"}");
-        try {
-            CommonResponse response = client.getCommonResponse(request);
-            System.out.println(response.getData());
-        } catch (ServerException e) {
-            e.printStackTrace();
-        } catch (ClientException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-
-    public static String sendMesage(String mobile, String SignName, String templateCode, String[] keyword, String outId) {
+    /**
+     * 短信发送接口
+     *
+     * @param moudle       模块：哪个模块发送的短信
+     * @param mobile       手机号
+     * @param signName     签名
+     * @param templateCode 模板编号
+     * @param keyword      发送信息串
+     * @param outId
+     * @return
+     */
+    public static SmsLog sendMesage(String moudle, String mobile, String signName, String templateCode, String[] keyword, String outId) throws InterruptedException {
 
         //可自助调整超时时间
         System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
         System.setProperty("sun.net.client.defaultReadTimeout", "10000");
 
-        DefaultProfile profile = DefaultProfile.getProfile(REGIONID, "LTAImACndFVWhD0r", "JqngT3hwiOB16gQbfxIBdnZPGgokrB");
-        IAcsClient client = new DefaultAcsClient(profile);
         //组装发送对象
-        CommonRequest request = new CommonRequest();
-        request.setMethod(MethodType.POST);
-        request.setDomain(DOMAIN);
-        request.setVersion("2017-05-25");
-        request.setAction("SendSms");
+        CommonRequest commonRequest = new CommonRequest();
+        commonRequest.setMethod(MethodType.POST);
+        commonRequest.setDomain(DOMAIN);
+        commonRequest.setVersion("2017-05-25");
+        commonRequest.setAction("SendSms");
 
-        request.putQueryParameter("SignName", SignName);
-        request.putQueryParameter("PhoneNumbers", mobile);
-        request.putQueryParameter("TemplateCode", templateCode);
+        commonRequest.putQueryParameter("SignName", signName);
+        commonRequest.putQueryParameter("PhoneNumbers", mobile);
+        commonRequest.putQueryParameter("TemplateCode", templateCode);
 
         //组装信息
         StringBuilder sendSmsContent = new StringBuilder("{");
-        for (int i = 0; i < keyword.length; i++) {
-            if (i == 0) {
-                sendSmsContent.append("\"first\":\""+keyword[i]+"\"");
-            }
+        for (int i = 0; i < keyword.length; i = i + 2) {
+            sendSmsContent.append("\"").append(keyword[i]).append("\":\"").append(keyword[i + 1]).append("\"").append(",");
         }
+        //删除最后一个逗号
+        sendSmsContent.deleteCharAt(sendSmsContent.length()-1);
         sendSmsContent.append("}");
-
-        request.putQueryParameter("TemplateParam", "{\"name\":\"各位，杰神，老毒莲，老彪，陈聪\"}");
+        commonRequest.putQueryParameter("TemplateParam",sendSmsContent.toString());
         try {
-            CommonResponse response = client.getCommonResponse(request);
-            return  response.getData();
-        } catch (ServerException e) {
-            e.printStackTrace();
-            return  "false";
+            //请求短信阿里巴巴服务
+            DefaultProfile profile = DefaultProfile.getProfile(signName, ACCESS_KEYID, ACCESS_SERCRET);
+            IAcsClient client = new DefaultAcsClient(profile);
+            CommonResponse response = client.getCommonResponse(commonRequest);
+            //获取返回数值
+            String responseData = response.getData();
+            //判断返回值是否是空
+            if (StringUtils.isNotEmpty(responseData)) {
+
+                //将返回回来的字符串转换成bean
+                ResponseValue responseValue = JsonUntil.getJsonToBean(responseData, ResponseValue.class);
+                //创建短信日志
+                SmsLog smsLog = new SmsLog();
+                smsLog.setSmsReturnCode(responseValue.code);
+                smsLog.setSmsReturnMessage(responseValue.getMessage());
+                smsLog.setTemplateCode(templateCode);
+                smsLog.setMobile(mobile);
+                smsLog.setModule(moudle);
+                smsLog.setCreateTime(new Date());
+                //成功则回调短信查询记录，回调成功则记录短信
+                if (responseValue.getCode() != null && "OK".equals(responseValue.getCode())) {
+                    Thread.sleep(3000L);
+                    return formSmslogs(responseValue,mobile,smsLog);
+                }else {
+                    return smsLog;
+                }
+            }
+            return null;
         } catch (ClientException e) {
             e.printStackTrace();
-            return  "false";
+            return null;
+        }
+
+    }
+
+    /**
+     * 接受回传对象
+     * @param mobile
+     * @param responseValue
+     * @param moudle
+     * @param templateCode
+     * @return
+     * @throws ClientException
+     */
+    private static SmsLog formSmslogs(ResponseValue responseValue,String mobile,SmsLog smsLog) throws ClientException {
+        System.out.println("短信接口返回数据----------------");
+
+        //初始化ascClient
+        IClientProfile iClientProfile = DefaultProfile.getProfile(REGIONID, ACCESS_KEYID, ACCESS_SERCRET);
+        DefaultProfile.addEndpoint(REGIONID, REGIONID, PRODUCT, DOMAIN);
+        IAcsClient acsClient = new DefaultAcsClient(iClientProfile);
+        //组装请求对象
+        QuerySendDetailsRequest request = new QuerySendDetailsRequest();
+        //必填-号码
+        request.setPhoneNumber(mobile);
+        //可选-调用发送短信接口时返回的BizId
+        request.setBizId(responseValue.getBizId());
+        //必填-短信发送的日期 支持30天内记录查询（可查其中一天的发送数据），格式yyyyMMdd
+        SimpleDateFormat ft = new SimpleDateFormat("yyyyMMdd");
+        request.setSendDate(ft.format(new Date()));
+        //必填-页大小
+        request.setPageSize(10L);
+        //必填-当前页码从1开始计数
+        request.setCurrentPage(1L);
+        //hint 此处可能会抛出异常，注意catch
+        QuerySendDetailsResponse querySendDetailsResponse = acsClient.getAcsResponse(request);
+        System.out.println("Code=" + querySendDetailsResponse.getCode());
+        System.out.println("Message=" + querySendDetailsResponse.getMessage());
+        if (querySendDetailsResponse.getCode() != null && "OK".equals(querySendDetailsResponse.getCode())) {
+            String sendStatus = "";
+            //获取返回结果
+            for (QuerySendDetailsResponse.SmsSendDetailDTO smsSendDetailDTO : querySendDetailsResponse.getSmsSendDetailDTOs()) {
+                smsLog.setContent(smsSendDetailDTO.getContent());
+                sendStatus = Long.toString(smsSendDetailDTO.getSendStatus());
+                System.out.println("SendStatus=" + smsSendDetailDTO.getSendStatus());
+            }
+            smsLog.setIspush(sendStatus);
+
+            System.out.println("TotalCount=" + querySendDetailsResponse.getTotalCount());
+            System.out.println("RequestId=" + querySendDetailsResponse.getRequestId());
+            return smsLog;
+        }
+        return null;
+    }
+
+    /**
+     * 短信相应对象（局部对象）
+     */
+    private static class ResponseValue {
+        private String message;
+        private String requestId;
+        private String bizId;
+        private String code;
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+
+        public String getRequestId() {
+            return requestId;
+        }
+
+        public void setRequestId(String requestId) {
+            this.requestId = requestId;
+        }
+
+        public String getBizId() {
+            return bizId;
+        }
+
+        public void setBizId(String bizId) {
+            this.bizId = bizId;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
         }
     }
 
 
+    //        public static void main(String[] args) {
+//        DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "LTAImACndFVWhD0r", "JqngT3hwiOB16gQbfxIBdnZPGgokrB");
+//        IAcsClient client = new DefaultAcsClient(profile);
 //
-//    public static Smslog sendSms(String mobile,String module,String templateCode,String [] keyword,String outId) throws ClientException,InterruptedException {
-//
-//        //可自助调整超时时间
-//        System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
-//        System.setProperty("sun.net.client.defaultReadTimeout", "10000");
-//
-//        //初始化acsClient,暂不支持region化
-//        IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", accessKeyId, accessKeySecret);
-//        DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", product, domain);
-//        IAcsClient acsClient = new DefaultAcsClient(profile);
-//
-//        //组装请求对象-具体描述见控制台-文档部分内容
-//        SendSmsRequest request = new SendSmsRequest();
-//        //必填:待发送手机号
-//        request.setPhoneNumbers(mobile);
-//        //必填:短信签名-可在短信控制台中找到
-//        request.setSignName(signName);
-//        //必填:短信模板-可在短信控制台中找到
-//        request.setTemplateCode(templateCode);
-//        StringBuffer sendSmsContent = new StringBuffer("{");//阿里大于短信
-//        Map<String, String> mapData = new HashMap<String, String>();
-//        for (int i = 0; i < keyword.length; i++) {
-//            // /i==0是为first
-//            if (i == 0) {
-//                sendSmsContent.append("\"first\":\""+keyword[i]+"\"");// 阿里大于短信
-//                mapData.put("first", keyword[i]);
-//                continue;
-//            } else {
-//                mapData.put("keyword" + i, keyword[i]);
-//                sendSmsContent.append(",\"keyword"+i+"\":\""+keyword[i]+"\"");// 阿里大于短信
-//            }
-//            //}
+//        CommonRequest request = new CommonRequest();
+//        request.setMethod(MethodType.POST);
+//        request.setDomain("dysmsapi.aliyuncs.com");
+//        request.setVersion("2017-05-25");
+//        request.setAction("SendSms");
+//        request.putQueryParameter("RegionId", "cn-hangzhou");
+//        request.putQueryParameter("PhoneNumbers", "17631012827");
+//        request.putQueryParameter("SignName", "知域服务");
+//        request.putQueryParameter("TemplateCode", "SMS_167974939");
+//        request.putQueryParameter("TemplateParam", "{\"code\":\"Its0a0werewolf\"}");
+//        try {
+//            CommonResponse response = client.getCommonResponse(request);
+//            System.out.println(response.toString());
+//            System.out.println(response.getData());
+//        } catch (ServerException e) {
+//            e.printStackTrace();
+//        } catch (ClientException e) {
+//            e.printStackTrace();
 //        }
-//        sendSmsContent.append("}");
-//        //可选:模板中的变量替换JSON串,如模板内容为"亲爱的${name},您的验证码为${code}"时,此处的值为
-//        request.setTemplateParam(sendSmsContent.toString());
-//
-//        //可选:outId为提供给业务方扩展字段,最终在短信回执消息中将此值带回给调用者
-//        request.setOutId(outId);
-//
-//        //hint 此处可能会抛出异常，注意catch
-//        SendSmsResponse sendSmsResponse = acsClient.getAcsResponse(request);
-//        //查明细
-//        Thread.sleep(3000L);
-//        if(sendSmsResponse.getCode() != null && sendSmsResponse.getCode().equals("OK")) {
-//            QuerySendDetailsResponse querySendDetailsResponse = querySendDetails(sendSmsResponse.getBizId(),mobile);
-//            System.out.println("短信明细查询接口返回数据----------------");
-//            System.out.println("Code=" + querySendDetailsResponse.getCode());
-//            System.out.println("Message=" + querySendDetailsResponse.getMessage());
-//            int i = 0;
-//            String sendStatus="";
-//            SmslogDO smslogDO=new SmslogDO();
-//            for(QuerySendDetailsResponse.SmsSendDetailDTO smsSendDetailDTO : querySendDetailsResponse.getSmsSendDetailDTOs())
-//            {
-//                smslogDO.setContent(smsSendDetailDTO.getContent());
-//                sendStatus=Long.toString(smsSendDetailDTO.getSendStatus());
-//                System.out.println("SendStatus=" + smsSendDetailDTO.getSendStatus());
-//            }
-//
-//
-//            smslogDO.setMobile(mobile);
-//            smslogDO.setCreatedate(new Date());
-//            smslogDO.setIspush(sendStatus);
-//            smslogDO.setModule(module);
-//            System.out.println("TotalCount=" + querySendDetailsResponse.getTotalCount());
-//            System.out.println("RequestId=" + querySendDetailsResponse.getRequestId());
-//            // SmslogService smslogService= ServiceHelper.getSmslogService();
-//            return smslogDO;
-//        }
-//        return null;
 //    }
-//
 
 
 }

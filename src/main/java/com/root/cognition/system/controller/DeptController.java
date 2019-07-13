@@ -31,8 +31,6 @@ import java.util.Map;
 @RequestMapping("/system/sysDept")
 public class DeptController extends BaseController {
 
-	private String prefix = "system/dept";
-
 	private DeptService deptService;
 
 	@Autowired
@@ -126,14 +124,14 @@ public class DeptController extends BaseController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("parentId", deptId);
 		if(deptService.count(map)>0) {
-			return ResultMap.returnMap(1, "包含下级部门,不允许修改",null);
+			return ResultMap.customMap(1, "包含下级部门,不允许修改",null);
 		}
 		if(deptService.checkDeptHasUser(deptId)) {
 			if (deptService.delete(deptId) > 0) {
 				return ResultMap.error();
 			}
 		}else {
-			return ResultMap.returnMap(1, "部门包含用户,不允许修改",null);
+			return ResultMap.customMap(1, "部门包含用户,不允许修改",null);
 		}
 		return ResultMap.error();
 	}

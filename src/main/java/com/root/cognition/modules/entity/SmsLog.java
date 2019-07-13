@@ -42,7 +42,13 @@ public class SmsLog extends BaseEntity<SmsLog> implements Serializable {
 	/**
 	 * 模版ID
 	 */
-	private String templatecode;
+	private String templateCode;
+
+	/*** 短信回传状态值*/
+	private String smsReturnCode;
+
+	/*** 短信回传状态信息*/
+	private String smsReturnMessage;
 
 
 	public String getModule() {
@@ -85,12 +91,28 @@ public class SmsLog extends BaseEntity<SmsLog> implements Serializable {
 		this.remake = remake;
 	}
 
-	public String getTemplatecode() {
-		return templatecode;
+	public String getSmsReturnCode() {
+		return smsReturnCode;
 	}
 
-	public void setTemplatecode(String templatecode) {
-		this.templatecode = templatecode;
+	public void setSmsReturnCode(String smsReturnCode) {
+		this.smsReturnCode = smsReturnCode;
+	}
+
+	public String getSmsReturnMessage() {
+		return smsReturnMessage;
+	}
+
+	public void setSmsReturnMessage(String smsReturnMessage) {
+		this.smsReturnMessage = smsReturnMessage;
+	}
+
+	public String getTemplateCode() {
+		return templateCode;
+	}
+
+	public void setTemplateCode(String templateCode) {
+		this.templateCode = templateCode;
 	}
 
 	@Override
@@ -101,7 +123,9 @@ public class SmsLog extends BaseEntity<SmsLog> implements Serializable {
 				", content='" + content + '\'' +
 				", ispush='" + ispush + '\'' +
 				", remake='" + remake + '\'' +
-				", templatecode='" + templatecode + '\'' +
+				", templateCode='" + templateCode + '\'' +
+				", smsReturnCode='" + smsReturnCode + '\'' +
+				", smsReturnMessage='" + smsReturnMessage + '\'' +
 				", id=" + id +
 				", createBy=" + createBy +
 				", updateBy=" + updateBy +

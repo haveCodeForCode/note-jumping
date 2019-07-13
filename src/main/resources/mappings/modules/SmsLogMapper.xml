@@ -20,7 +20,7 @@
                 and smslog_id = #{id}
             </if>
             <if test="module != null and module != ''">
-                and module = #{module}
+                and `module` = #{module}
             </if>
             <if test="mobile != null and mobile != ''">
                 and mobile = #{mobile}
@@ -37,8 +37,14 @@
             <if test="remake != null and remake != ''">
                 and remake = #{remake}
             </if>
-            <if test="templatecode != null and templatecode != ''">
-                and templateCode = #{templatecode}
+            <if test="templateCode != null and templateCode != ''">
+                and template_code = #{templateCode}
+            </if>
+            <if test="smsReturnCode !=null and smsReturnCode !=''">
+                and sms_return_code = #{smsReturnCode}
+            </if>
+            <if test="smsReturnMessage !=null and smsReturnMessage !=''">
+                and sms_return_message =#{smsReturnMessage}
             </if>
         </where>
         <choose>
@@ -78,13 +84,19 @@
             <if test="remake != null and remake != ''">
                 and remake = #{remake}
             </if>
-            <if test="templatecode != null and templatecode != ''">
-                and templateCode = #{templatecode}
+            <if test="templateCode != null and templateCode != ''">
+                and template_code = #{templateCode}
+            </if>
+            <if test="smsReturnCode !=null and smsReturnCode !=''">
+                and sms_return_code = #{smsReturnCode}
+            </if>
+            <if test="smsReturnMessage !=null and smsReturnMessage !=''">
+                and sms_return_message =#{smsReturnMessage}
             </if>
         </where>
     </select>
 
-    <insert id="save" parameterType="com.root.cognition.modules.entity.SmsLog">
+    <insert id="insert" parameterType="com.root.cognition.modules.entity.SmsLog">
 		insert into mod_sms_log
 		(
 			`smslog_id`,
@@ -94,20 +106,22 @@
 			`ispush`, 
 			`create_time`,
 			`remake`, 
-			`templateCode`, 
-			`platform`
+			`template_code`,
+			`sms_return_code`,
+			`sms_return_message`
 		)
 		values
 		(
-			#{id}, 
+		    #{id},
 			#{module}, 
 			#{mobile}, 
 			#{content}, 
 			#{ispush}, 
 			#{createTime},
 			#{remake}, 
-			#{templatecode}, 
-			#{platform}
+			#{templateCode},
+			#{smsReturnCode},
+			#{smsReturnMessage}
 		)
 	</insert>
 
@@ -132,8 +146,14 @@
             <if test="remake != null">
                 `remake` = #{remake},
             </if>
-            <if test="templatecode != null">
-                `templateCode` = #{templatecode},
+            <if test="templateCode != null">
+                `template_code` = #{templateCode},
+            </if>
+            <if test="smsReturnCode !=null and smsReturnCode !=''">
+                and sms_return_code = #{smsReturnCode}
+            </if>
+            <if test="smsReturnMessage !=null and smsReturnMessage !=''">
+                and sms_return_message =#{smsReturnMessage}
             </if>
         </set>
         where smslog_id = #{id}
@@ -151,13 +171,16 @@
     </delete>
 
     <sql id="smsLogColumns">
-		smslog_id as `id`,
+		`smslog_id` as `id`,
 		`module`,
 		`mobile`,
 		`content`,
 		`ispush`,
-		create_time as `createTime`,
-		`remake`
+		`template_code` as `templateCode`,
+		`create_time` as `createTime`,
+		`remake`,
+		`sms_return_code` as `smsReturnCode`,
+		`sms_return_message` as `smsReturnMessage`
 	</sql>
 
 </mapper>

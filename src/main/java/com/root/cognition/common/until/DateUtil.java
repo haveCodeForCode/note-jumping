@@ -34,7 +34,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
      * @return
      */
     private static Date fomatDate(String date, String type) {
-        if (Tools.isNullOrWhiteSpace(date)) {
+        if (StringUtils.isNotBlank(date)) {
             return null;
         }
         DateFormat fmt = new SimpleDateFormat(type);

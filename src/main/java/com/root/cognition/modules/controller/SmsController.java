@@ -1,24 +1,24 @@
 package com.root.cognition.modules.controller;
 
-import java.util.List;
-import java.util.Map;
-
+import com.root.cognition.common.config.Constant;
 import com.root.cognition.common.until.PageUtils;
 import com.root.cognition.common.until.Query;
 import com.root.cognition.common.until.ResultMap;
-import com.root.cognition.modules.entity.SmsLog;
-import com.root.cognition.modules.service.SmsLogService;
 import com.root.cognition.modules.config.AlibabaSms;
+import com.root.cognition.modules.entity.Dict;
+import com.root.cognition.modules.entity.SmsLog;
+import com.root.cognition.modules.service.DictService;
+import com.root.cognition.modules.service.SmsLogService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 短息日志表
@@ -36,12 +36,63 @@ public class SmsController {
 
     private AlibabaSms alibabaSms;
 
+    private DictService dictService;
 
     @Autowired
     public void setSmsLogService(SmsLogService smsLogService){
         this.smsLogService = smsLogService;
     }
 
+    @Autowired
+    public void setAlibabaSms(AlibabaSms alibabaSms) {
+        this.alibabaSms = alibabaSms;
+    }
+
+    @Autowired
+    public void setDictService(DictService dictService) {
+        this.dictService = dictService;
+    }
+
+    /**
+     * 前往短信发送页面
+     *
+     * @param model
+     * @return
+     */
+    @GetMapping("/toSendMessage")
+    public String sendMessage(Model model) {
+        Map<String, Object> alibabaSms = new HashMap<>();
+        //查询组
+        Map<String, Object> param = Query.withDelFlag();
+        //查询变量赋值
+        param.put("type", "alibaba_sms_signName");
+        //列表条件查询签名模板
+        List<Dict> alibabaSmsSignName = dictService.list(param);
+        param.put("type", "alibaba_sms_template");
+        //查询短信模板
+        List<Dict> alibabaSmsTemplate = dictService.list(param);
+        alibabaSms.put("alibabaSmsSignName", alibabaSmsSignName);
+        alibabaSms.put("alibabaSmsTemplate", alibabaSmsTemplate);
+        //赋值前端页面
+        model.addAttribute("alibabaSms", alibabaSms);
+        return "modules/smsLog/sendSms";
+    }
+
+
+
+
+    @PostMapping("/sendMessage")
+    @ResponseBody
+    public ResultMap sendAlibabaSms(String mobile, String signName, String templateCode, String[] keyword, String outId) throws InterruptedException {
+        alibabaSms.setConfigureAlibaba();
+        String moudle = Constant.FREE_SMS;
+        SmsLog smsLog = AlibabaSms.sendMesage(moudle, mobile, signName, templateCode, keyword, outId);
+        if (smsLog != null) {
+            smsLogService.save(smsLog);
+            return ResultMap.success();
+        }
+        return ResultMap.error("系统错误");
+    }
 
 /**************************************************************************/
     @GetMapping("")

@@ -43,6 +43,7 @@ public class SmsLogServiceImpl implements SmsLogService {
 	
 	@Override
 	public int save(SmsLog smsLog){
+		smsLog.preInsert();
 		return smsLogDao.insert(smsLog);
 	}
 	

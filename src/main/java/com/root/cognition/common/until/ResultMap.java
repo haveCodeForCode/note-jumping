@@ -56,13 +56,13 @@ public class ResultMap extends HashMap<String, Object>{
     }
 
     /**
-     * 公共的返回方法
+     * 自定义公共的返回方法
      * @param state  状态信息
      * @param message  提示信息
      * @param entity 对象信息
      * @return
      */
-    public static ResultMap returnMap(int state, String message, Object entity) {
+    public static ResultMap customMap(int state, String message, Object entity) {
         ResultMap returnMap = new ResultMap();
         returnMap.put("state", state);
         returnMap.put("message", message);

@@ -44,9 +44,9 @@ function load() {
 						// sortOrder.
 						// 返回false将会终止请求
 						columns : [
-								{
-									checkbox : true
-								},
+                            // {
+                            // 	checkbox : true
+                            // },
 																{
 									visible : false,
 									field : 'id',
@@ -57,34 +57,34 @@ function load() {
 									title : '模块' 
 								},
 																{
-									field : 'mobile', 
-									title : '手机号码' 
-								},
+									field: 'mobile',
+									title: '手机号码'
+                                                                }, {
+                                field: 'templateCode',
+                                title: '模版ID'
+                            },
 																{
 									field : 'content', 
 									title : '短信内容' 
 								},
 																{
-									field : 'ispush', 
-									title : '是否推送（0草稿；1：发送成功' 
+									field: 'ispush',
+									title: '是否成功'
 								},
 																{
-									field : 'createdate', 
+									field: 'createTime',
 									title : '发送时间'
-								},
+                                                                }, {
+                                field: 'smsReturnCode',
+                                title: '发送回传值'
+                            }, {
+                                field: 'smsReturnMessage',
+                                title: '发送回传信息'
+                            },
 																{
 									visible : false,
 									field : 'remake', 
 									title : '备注' 
-								},
-																{
-									field : 'templatecode', 
-									title : '模版ID' 
-								},
-																{
-									visible : false,
-									field : 'platform', 
-									title : '来自那个平台' 
 								},
 																{
 									visible : false,
@@ -104,12 +104,14 @@ function load() {
 										// return e + d ;
 										return null ;
 									}
-								} ]
+								}]
 					});
 }
+
 function reLoad() {
 	$('#exampleTable').bootstrapTable('refresh');
 }
+
 function add() {
 	layer.open({
 		type : 2,
@@ -130,6 +132,18 @@ function edit(id) {
 		content : prefix + '/edit/' + id // iframe的url
 	});
 }
+
+function sendMessage() {
+    layer.open({
+        type: 2,
+        title: '发送短信',
+        maxmin: true,
+        shadeClose: false, // 点击遮罩关闭层
+        area: ['500px', '700px'],
+        content: prefix + "/toSendMessage/" // iframe的url
+    });
+}
+
 function remove(id) {
 	layer.confirm('确定要删除选中的记录？', {
 		btn : [ '确定', '取消' ]
@@ -141,7 +155,8 @@ function remove(id) {
 				'id' : id
 			},
 			success : function(r) {
-				if (r.code==0) {
+                console.log(r);
+                if (r.state == 0) {
 					layer.msg(r.msg);
 					reLoad();
 				}else{
@@ -152,9 +167,9 @@ function remove(id) {
 	})
 }
 
-function resetPwd(id) {
-}
+
 function batchRemove() {
+
 	var rows = $('#exampleTable').bootstrapTable('getSelections'); // 返回所有选择的行，当没有选择的记录时，返回一个空数组
 	if (rows.length == 0) {
 		layer.msg("请选择要删除的数据");

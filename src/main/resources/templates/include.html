@@ -55,8 +55,20 @@
 	<script src="/js/plugins/summernote/summernote.js"></script>
 	<script src="/js/plugins/summernote/summernote-zh-CN.min.js"></script>
 	<script src="/js/ajax-util.js"></script>
-</div>
-
-<div th:fragment="navigation">
-
+	<script type="text/javascript">
+		var layloading;
+		function loadinglayer() {
+			 layloading= layer.load(2, {
+				shade: [0.6,'#393D49'], //0.1透明度的白色背景
+				content:'加载中',
+				success: function (layero) {
+					layero.find('.layui-layer-content').css({
+						'padding-top': '40px',
+						'width': '70px',
+						'color':'#fff'
+					});
+				}
+			});
+		}
+	</script>
 </div>

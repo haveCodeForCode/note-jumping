@@ -97,7 +97,7 @@ public class MenuController extends BaseController {
 		if (menuService.save(menu) > 0) {
 			return ResultMap.success();
 		} else {
-			return ResultMap.returnMap(1, "保存失败", null);
+			return ResultMap.customMap(1, "保存失败", null);
 		}
 	}
 
@@ -109,7 +109,7 @@ public class MenuController extends BaseController {
 		if (menuService.update(menu) > 0) {
 			return ResultMap.success();
 		} else {
-			return ResultMap.returnMap(1, "更新失败", null);
+			return ResultMap.customMap(1, "更新失败", null);
 		}
 	}
 
@@ -121,7 +121,7 @@ public class MenuController extends BaseController {
 		if (menuService.delete(id) > 0) {
 			return ResultMap.success();
 		} else {
-			return ResultMap.returnMap(1, "删除失败", null);
+			return ResultMap.customMap(1, "删除失败", null);
 		}
 	}
 

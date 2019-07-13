@@ -95,4 +95,9 @@ public class Constant {
     public static final int RETURN_STATUS_AUTHBUG = 0;
     public static final int RETURN_STATUS_INFOBUG = 2;
     public static final int RETURN_STATUS_OVERCONTROLBUG = 3;
+
+    /**
+     * 发送短信类型
+     */
+    public static final String FREE_SMS = "free_send_sms";
 }

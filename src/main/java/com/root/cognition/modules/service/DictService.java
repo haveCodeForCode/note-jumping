@@ -1,9 +1,11 @@
 package com.root.cognition.modules.service;
 
 
+
+import com.root.cognition.common.persistence.Tree;
 import com.root.cognition.modules.entity.Dict;
 import com.root.cognition.system.entity.User;
-import org.springframework.stereotype.Service;
+
 
 import java.util.List;
 import java.util.Map;
@@ -16,26 +18,15 @@ import java.util.Map;
  */
 public interface DictService {
 
+    Tree<Dict> getDictTree();
 
-    List<Dict> listType();
-
-
+    /**
+     * 根据名称
+     * @param type
+     * @param value
+     * @return
+     */
     String getName(String type, String value);
-
-    /**
-     * 获取爱好列表
-     *
-     * @param user
-     * @return
-     */
-    List<Dict> getHobbyList(User user);
-
-    /**
-     * 获取性别列表
-     *
-     * @return
-     */
-    List<Dict> getSexList();
 
     /**
      * 根据type获取数据
@@ -44,60 +35,60 @@ public interface DictService {
      * @return
      */
     List<Dict> listByType(String type);
+
     //*****************************************
 
     /**
-     *
+     * 根据id获取
      * @param id
      * @return
      */
     Dict get(Long id);
 
     /**
-     *
+     * 根据条件获取
      * @param map
      * @return
      */
     Dict get(Map<String, Object> map);
 
     /**
-     *
+     * 根据条件查询
      * @param map
      * @return
      */
     List<Dict> list(Map<String, Object> map);
 
     /**
-     *
-     *
+     * 分页，统计数量
      * @param map
      * @return
      */
     int count(Map<String, Object> map);
 
     /**
-     *
+     * 插入
      * @param dict
      * @return
      */
     int save(Dict dict);
 
     /**
-     *
+     * 更新
      * @param dict
      * @return
      */
     int update(Dict dict);
 
     /**
-     *
+     * 移除
      * @param id
      * @return
      */
     int remove(Long id);
 
     /**
-     *
+     * 批量移除
      * @param ids
      * @return
      */

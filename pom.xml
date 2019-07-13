@@ -176,12 +176,12 @@
             <artifactId>aliyun-java-sdk-core</artifactId>
             <version>3.7.0</version>
         </dependency>
+        <!--阿里云短信接口-->
         <dependency>
             <groupId>com.aliyun</groupId>
-            <artifactId>aliyun-java-sdk-ecs</artifactId>
-            <version>4.11.0</version>
+            <artifactId>aliyun-java-sdk-dysmsapi</artifactId>
+            <version>1.1.0</version>
         </dependency>
-
         <!--文件读写相关-->
         <dependency>
             <groupId>commons-io</groupId>

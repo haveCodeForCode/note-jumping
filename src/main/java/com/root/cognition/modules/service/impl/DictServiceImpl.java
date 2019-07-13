@@ -1,6 +1,7 @@
 package com.root.cognition.modules.service.impl;
 
 
+import com.root.cognition.common.persistence.Tree;
 import com.root.cognition.common.until.Query;
 import com.root.cognition.modules.dao.DictDao;
 import com.root.cognition.modules.entity.Dict;
@@ -71,9 +72,11 @@ public class DictServiceImpl implements DictService {
     }
 
     @Override
-
-    public List<Dict> listType() {
-        return dictDao.listType();
+    public Tree<Dict> getDictTree() {
+        //去除父级菜单
+        Map<String,Object> query = Query.withDelFlag();
+        List<Dict> dictList = dictDao.findList(query);
+        return null;
     }
 
     @Override
@@ -86,23 +89,8 @@ public class DictServiceImpl implements DictService {
     }
 
     @Override
-    public List<Dict> getHobbyList(User user) {
-        Map<String, Object> param = Query.withDelFlag();
-        param.put("type", "hobby");
-        List<Dict> hobbyList = dictDao.findList(param);
-        return hobbyList;
-    }
-
-    @Override
-    public List<Dict> getSexList() {
-        Map<String, Object> param = new HashMap<>(16);
-        param.put("type", "sex");
-        return dictDao.findList(param);
-    }
-
-    @Override
     public List<Dict> listByType(String type) {
-        Map<String, Object> param = new HashMap<>(16);
+        Map<String, Object> param = Query.withDelFlag();
         param.put("type", type);
         return dictDao.findList(param);
     }

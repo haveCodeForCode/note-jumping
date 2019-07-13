@@ -18,9 +18,5 @@ import java.util.List;
 @Mapper
 @Repository("DictDao")
 public interface DictDao extends BaseDao<Dict> {
-	/**
-	 *
-	 * @return
-	 */
-	List<Dict> listType();
+
 }

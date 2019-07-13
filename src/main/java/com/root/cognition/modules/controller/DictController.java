@@ -1,9 +1,11 @@
 package com.root.cognition.modules.controller;
 
+import com.root.cognition.common.config.Constant;
 import com.root.cognition.common.persistence.BaseController;
 import com.root.cognition.common.until.PageUtils;
 import com.root.cognition.common.until.Query;
 import com.root.cognition.common.until.ResultMap;
+import com.root.cognition.common.until.StringUtils;
 import com.root.cognition.modules.entity.Dict;
 import com.root.cognition.modules.service.DictService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -49,9 +51,25 @@ public class DictController extends BaseController {
         return pageUtils;
     }
 
-    @GetMapping("/add")
+    @ResponseBody
+    @GetMapping("/treelist")
+    @RequiresPermissions("modules:dict:dict")
+    public List<Dict> Treelist(@RequestParam Map<String, Object> params) {
+        // 查询列表数据
+        Map<String,Object> query = Query.withDelFlag(params);
+        List<Dict> dictList = dictService.list(query);
+        return  dictList;
+    }
+
+
+
+    @GetMapping("/add/{parentId}")
     @RequiresPermissions("modules:dict:add")
-    String add() {
+    String add(Model model,@PathVariable("parentId")String parentId) {
+        if (StringUtils.isEmpty(parentId)){
+            parentId = Constant.STRING_ZERO;
+        }
+        model.addAttribute("parentId",parentId);
         return "modules/dict/add";
     }
 
@@ -119,16 +137,16 @@ public class DictController extends BaseController {
     @GetMapping("/type")
     @ResponseBody
     public List<Dict> listType() {
-        return dictService.listType();
+        return dictService.listByType(null);
     }
-
 
     /**
      * 类别已经指定增加
      */
-    @GetMapping("/add/{type}/{description}")
+    @GetMapping("/add/{id}/{type}/{description}")
     @RequiresPermissions("modules:dict:add")
-    String addD(Model model, @PathVariable("type") String type, @PathVariable("description") String description) {
+    String addD(Model model,@PathVariable("id") String id, @PathVariable("type") String type, @PathVariable("description") String description) {
+        model.addAttribute("parentId",id);
         model.addAttribute("type", type);
         model.addAttribute("description", description);
         return "modules/dict/add";

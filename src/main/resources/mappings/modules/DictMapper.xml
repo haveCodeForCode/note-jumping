@@ -4,11 +4,6 @@
 <mapper namespace="com.root.cognition.modules.dao.DictDao">
 
 
-	<select id="listType" resultType="com.root.cognition.modules.entity.Dict">
-		select distinct
-			`type` , description
-		from mod_dict
-	</select>
 
 	<!--***********************************************************************-->
 	<select id="get" resultType="com.root.cognition.modules.entity.Dict">
