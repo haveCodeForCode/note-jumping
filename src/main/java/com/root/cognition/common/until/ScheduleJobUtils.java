@@ -4,6 +4,7 @@ import com.root.cognition.modules.entity.ScheduleJob;
 import com.root.cognition.modules.entity.Task;
 
 /**
+ * 定时任务工具类
  * @author taoya
  */
 public class ScheduleJobUtils {

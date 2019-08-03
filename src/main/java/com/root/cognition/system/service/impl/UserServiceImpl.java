@@ -74,6 +74,16 @@ public class UserServiceImpl implements UserService {
         this.userInfoDao = userInfoDao;
     }
 
+    /**
+     * 根据传入信息查询用户
+     *
+     * @param loginInfo
+     * @return
+     */
+    @Override
+    public User getWihtLogininfo(String loginInfo) {
+        return userDao.getWihtLogininfo(loginInfo);
+    }
 
     /***
      * 声明用户相关所有对象
@@ -94,8 +104,8 @@ public class UserServiceImpl implements UserService {
         //用户角色
         List<Role> roles = roleDao.findWithUserId(userId);
         userVo.setRoles(roles);
-        //部门ID
-        userVo.setDept(deptService.get(user.getId()));
+//        //部门ID
+//        userVo.setDept(deptService.get(user.getId()));
         return userVo;
     }
 
@@ -184,37 +194,6 @@ public class UserServiceImpl implements UserService {
         return exit;
     }
 
-    @Override
-    public Set<String> listRoles(Long userId) {
-        return null;
-    }
-
-//    @Override
-//    public int resetPwd(UserVO userVO, UserDO userDO) throws Exception {
-//        if (Objects.equals(userVO.getUserDO().getUserId(), userDO.getUserId())) {
-//            if (Objects.equals(Md5Utils.encrypt(userDO.getUsername(), userVO.getPwdOld()), userDO.getPassword())) {
-//                userDO.setPassword(Md5Utils.encrypt(userDO.getUsername(), userVO.getPwdNew()));
-//                return userMapper.update(userDO);
-//            } else {
-//                throw new Exception("输入的旧密码有误！");
-//            }
-//        } else {
-//            throw new Exception("你修改的不是你登录的账号！");
-//        }
-//    }
-
-//    @Override
-//    public int adminResetPwd(UserVO userVO) throws Exception {
-//        UserDO userDO = get(userVO.getUserDO().getUserId());
-//        if ("admin".equals(userDO.getUsername())) {
-//            throw new Exception("超级管理员的账号不允许直接重置！");
-//        }
-//        userDO.setPassword(Md5Utils.encrypt(userDO.getUsername(), userVO.getPwdNew()));
-//        return userMapper.update(userDO);
-//
-//
-//    }
-
     @Transactional(rollbackFor = Exception.class)
     @Override
     public int batchDelete(Long[] userIds) {
@@ -263,9 +242,36 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int updatePersonal(User userDO) {
-        return userDao.update(userDO);
+    public int updatePersonal(User user) {
+        return userDao.update(user);
     }
+
+
+    //    @Override
+//    public int resetPwd(UserVO userVO, UserDO userDO) throws Exception {
+//        if (Objects.equals(userVO.getUserDO().getUserId(), userDO.getUserId())) {
+//            if (Objects.equals(Md5Utils.encrypt(userDO.getUsername(), userVO.getPwdOld()), userDO.getPassword())) {
+//                userDO.setPassword(Md5Utils.encrypt(userDO.getUsername(), userVO.getPwdNew()));
+//                return userMapper.update(userDO);
+//            } else {
+//                throw new Exception("输入的旧密码有误！");
+//            }
+//        } else {
+//            throw new Exception("你修改的不是你登录的账号！");
+//        }
+//    }
+
+//    @Override
+//    public int adminResetPwd(UserVO userVO) throws Exception {
+//        UserDO userDO = get(userVO.getUserDO().getUserId());
+//        if ("admin".equals(userDO.getUsername())) {
+//            throw new Exception("超级管理员的账号不允许直接重置！");
+//        }
+//        userDO.setPassword(Md5Utils.encrypt(userDO.getUsername(), userVO.getPwdNew()));
+//        return userMapper.update(userDO);
+//
+//
+//    }
 
 //    @Override
 //    public Map<String, Object> updatePersonalImg(MultipartFile file, String avatar_data, Long userId) throws Exception {

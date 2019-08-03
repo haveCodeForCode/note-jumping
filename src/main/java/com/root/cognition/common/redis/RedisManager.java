@@ -1,8 +1,8 @@
 package com.root.cognition.common.redis;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
 
 import java.util.Set;
 
@@ -12,21 +12,25 @@ import java.util.Set;
  * @author worry
  */
 public class RedisManager {
-    /**
-     * reids基础配置
-     *
-     * redisHost        --redis地址
-     * redisPassword    --redis密码
-     * redisPort        --redis端口号
-     * redidTimeout     --redis重连时间
-     */
-    private String redisHost;
-    private String redisPassword;
-    private int redisPort;
-    private int redisTimeout;
+
+    private JedisPool jedisPool;
+
+    private Jedis jedis;
 
 
-    private static JedisPool jedisPool = null;
+    @Autowired
+    public void setJedisPool(JedisPool jedisPool) {
+        this.jedisPool = jedisPool;
+    }
+
+    @Autowired
+    public void setJedis() throws InterruptedException {
+        while (jedis == null) {
+            if (jedisPool != null) {
+                this.jedis = jedisPool.getResource();
+            }
+        }
+    }
 
     /**
      * 初始化截止redis终端时间
@@ -34,39 +38,14 @@ public class RedisManager {
     private int expire = 1;
 
     /**
-     * 初始化方法
-     * 通过地址（redisHost）端口号（redisPort）和密码（redisPassword）连接时间（redisTimeout）设置
-     */
-    public void init() {
-        if (jedisPool == null) {
-            if (redisPassword != null && !"".equals(redisPassword)) {
-                jedisPool = new JedisPool(new JedisPoolConfig(), redisHost, redisPort, redisTimeout, redisPassword);
-            } else if (redisTimeout != 0) {
-                jedisPool = new JedisPool(new JedisPoolConfig(), redisHost, redisPort, redisTimeout);
-            } else {
-                jedisPool = new JedisPool(new JedisPoolConfig(), redisHost, redisPort);
-            }
-
-        }
-    }
-
-
-    /**
      * 利用key从redis中获得value
      *
      * @param key
      * @return
      */
-    public byte[] redisGet(byte[] key) {
+    byte[] redisGet(byte[] key) {
         byte[] value = null;
-        Jedis jedis = jedisPool.getResource();
-        try {
-            value = jedis.get(key);
-        } finally {
-            if (jedis != null) {
-                jedis.close();
-            }
-        }
+        value = jedis.get(key);
         return value;
     }
 
@@ -77,16 +56,10 @@ public class RedisManager {
      * @param value
      * @return
      */
-    public byte[] redisSet(byte[] key, byte[] value) {
-        Jedis jedis = jedisPool.getResource();
-        try {
-            jedis.set(key, value);
-        } finally {
-            if (jedis != null) {
-                jedis.close();
-            }
-        }
-        return value;
+    String redisSet(byte[] key, byte[] value) {
+        String backValue;
+        backValue = jedis.set(key, value);
+        return backValue;
     }
 
     /**
@@ -97,19 +70,14 @@ public class RedisManager {
      * @param expire
      * @return
      */
-    public byte[] redisSet(byte[] key, byte[] value, int expire) {
-        Jedis jedis = jedisPool.getResource();
-        try {
-            jedis.set(key, value);
-            if (expire != 0) {
-                jedis.expire(key, expire);
-            }
-        } finally {
-            if (jedis != null) {
-                jedis.close();
-            }
+    String redisSet(byte[] key, byte[] value, int expire) {
+        String backValue;
+        backValue = jedis.set(key, value);
+        if (expire != 0) {
+            Long tiems = jedis.expire(key, expire);
+            backValue = backValue + tiems.toString();
         }
-        return value;
+        return backValue;
     }
 
     /**
@@ -117,44 +85,24 @@ public class RedisManager {
      *
      * @param key
      */
-    public void redisDel(byte[] key) {
-        Jedis jedis = jedisPool.getResource();
-        try {
-            jedis.del(key);
-        } finally {
-            if (jedis != null) {
-                jedis.close();
-            }
-        }
+    void redisDel(byte[] key) {
+        jedis.del(key);
     }
 
     /**
      * 清空reids
      */
-    public void redisFlushDB() {
-        Jedis jedis = jedisPool.getResource();
-        try {
-            jedis.flushDB();
-        } finally {
-            if (jedis != null) {
-                jedis.close();
-            }
-        }
+    void redisFlushDB() {
+        jedis.flushDB();
+
     }
 
     /**
      * 获取缓存池中数量
      */
-    public Long redisDbSize() {
+    Long redisDbSize() {
         Long dbSize = 0L;
-        Jedis jedis = jedisPool.getResource();
-        try {
-            dbSize = jedis.dbSize();
-        } finally {
-            if (jedis != null) {
-                jedis.close();
-            }
-        }
+        dbSize = jedis.dbSize();
         return dbSize;
     }
 
@@ -164,53 +112,13 @@ public class RedisManager {
      * @param pattern
      * @return
      */
-    public Set<byte[]> redisKeys(String pattern) {
+    Set<byte[]> redisKeys(String pattern) {
         Set<byte[]> keys = null;
-        Jedis jedis = jedisPool.getResource();
-        try {
-            keys = jedis.keys(pattern.getBytes());
-        } finally {
-            if (jedis != null) {
-                jedis.close();
-            }
-        }
+        keys = jedis.keys(pattern.getBytes());
         return keys;
     }
 
-
-    public int getRedisTimeout() {
-        return redisTimeout;
-    }
-
-    public void setRedisTimeout(int redisTimeout) {
-        this.redisTimeout = redisTimeout;
-    }
-
-    public String getRedisHost() {
-        return redisHost;
-    }
-
-    public void setRedisHost(String redisHost) {
-        this.redisHost = redisHost;
-    }
-
-    public String getRedisPassword() {
-        return redisPassword;
-    }
-
-    public void setRedisPassword(String redisPassword) {
-        this.redisPassword = redisPassword;
-    }
-
-    public int getRedisPort() {
-        return redisPort;
-    }
-
-    public void setRedisPort(int redisPort) {
-        this.redisPort = redisPort;
-    }
-
-    public int getExpire() {
+    int getExpire() {
         return expire;
     }
 
@@ -218,11 +126,4 @@ public class RedisManager {
         this.expire = expire;
     }
 
-    public static JedisPool getJedisPool() {
-        return jedisPool;
-    }
-
-    public static void setJedisPool(JedisPool jedisPool) {
-        RedisManager.jedisPool = jedisPool;
-    }
 }

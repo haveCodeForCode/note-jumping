@@ -60,7 +60,6 @@ public class AlibabaSms {
         query.put("type", "alibaba_sms_data");
         DictService dictService = ApplicationContextRegister.getBean(DictService.class);
         List<Dict> dictList = dictService.list(query);
-
         for (Dict dict : dictList) {
             if ("accessSecret".equals(dict.getName())) {
                 ACCESS_SERCRET = dict.getValue();
@@ -84,7 +83,7 @@ public class AlibabaSms {
      * @param outId
      * @return
      */
-    public static SmsLog sendMesage(String moudle, String mobile, String signName, String templateCode, String[] keyword, String outId) throws InterruptedException {
+    public SmsLog sendMesage(String moudle, String mobile, String signName, String templateCode, String[] keyword, String outId) throws InterruptedException {
 
         //可自助调整超时时间
         System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
@@ -150,12 +149,10 @@ public class AlibabaSms {
      * 接受回传对象
      * @param mobile
      * @param responseValue
-     * @param moudle
-     * @param templateCode
      * @return
      * @throws ClientException
      */
-    private static SmsLog formSmslogs(ResponseValue responseValue,String mobile,SmsLog smsLog) throws ClientException {
+    private  SmsLog formSmslogs(ResponseValue responseValue,String mobile,SmsLog smsLog) throws ClientException {
         System.out.println("短信接口返回数据----------------");
 
         //初始化ascClient

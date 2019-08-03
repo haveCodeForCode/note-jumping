@@ -33,3 +33,85 @@ int batchDelete(Long[] deptIds);
 
 //maybatis自动生成键并返还
 useGeneratedKeys="true" keyProperty="id"
+
+
+
+
+//****************************备份******************************
+//    /**
+//     * 注册shiro的Filter，拦截请求
+//     */
+//    @Bean
+//    public FilterRegistrationBean<Filter> filterRegistrationBean(SecurityManager securityManager, UserService userService) throws Exception{
+//        FilterRegistrationBean<Filter> filterRegistration = new FilterRegistrationBean<Filter>();
+//        filterRegistration.setFilter((Filter) shiroFilterFactoryBean(securityManager, userService));
+//        filterRegistration.addInitParameter("targetFilterLifecycle", "true");
+//        filterRegistration.setAsyncSupported(true);
+//        filterRegistration.setEnabled(true);
+//        filterRegistration.setDispatcherTypes(DispatcherType.REQUEST);
+//
+//        return filterRegistration;
+//    }
+
+
+//    /**
+//     * 禁用session, 不保存用户登录状态。保证每次请求都重新认证。
+//     * 需要注意的是，如果用户代码里调用Subject.getSession()还是可以用session，如果要完全禁用，要配合下面的noSessionCreation的Filter来实现
+//     */
+//    @Bean
+//    protected SessionStorageEvaluator sessionStorageEvaluator(){
+//        DefaultWebSessionStorageEvaluator sessionStorageEvaluator = new DefaultWebSessionStorageEvaluator();
+//        sessionStorageEvaluator.setSessionStorageEnabled(false);
+//        return sessionStorageEvaluator;
+//    }
+
+//    /**
+//     * 初始化Authenticator
+//     */
+//    @Bean
+//    public Authenticator authenticator(UserService userService) {
+//        ModularRealmAuthenticator authenticator = new ModularRealmAuthenticator();
+//        //设置两个Realm，一个用于用户登录验证和访问权限获取；一个用于jwt token的认证
+//        authenticator.setRealms(Arrays.asList(jwtShiroRealm(userService), dbShiroRealm(userService)));
+//        //设置多个realm认证策略，一个成功即跳过其它的
+//        authenticator.setAuthenticationStrategy(new FirstSuccessfulStrategy());
+//        return authenticator;
+//    }
+
+
+//    /**
+//     * 用于用户名密码登录时认证的realm
+//     */
+//    @Bean("dbRealm")
+//    public Realm dbShiroRealm(UserService userService) {
+//        DbUserShiroRealm myShiroRealm = new DbUserShiroRealm(userService);
+//        return myShiroRealm;
+//    }
+
+<!--按钮模块-->
+    <!--<div class="outside-login">-->
+        <!--<div class="outside-login-tit">-->
+        <!--<span>其他方式登录</span>-->
+        <!--</div>-->
+        <!--<div class="outside-login-cot">-->
+        <!--<a class="outside-login-btn wxoa actived oschina J-btnSwitchLoginType" target="_Blank"-->
+        <!--href="https://www.oschina.net/p/bootdo">-->
+        <!--<em><i class="fa fa-home"></i></em>-->
+        <!--<span>微信</span>-->
+        <!--</a>-->
+        <!--<a class="outside-login-btn wxoa actived my J-btnSwitchLoginType" target="_Blank"-->
+        <!--href="https://gitee.com/lcg0124/bootdo">-->
+        <!--<em><i class="fa fa-git-square"></i></em>-->
+        <!--<span>账号</span>-->
+        <!--</a>-->
+        <!--<a class="outside-login-btn wxoa actived git J-btnSwitchLoginType" target="_Blank"-->
+        <!--href="https://github.com/lcg0124/bootdo">-->
+        <!--<em><i class="fa fa-github"></i></em>-->
+        <!--<span>GitHub仓库</span>-->
+        <!--</a>-->
+        <!--</div>-->
+<!--</div>-->
+
+
+
+

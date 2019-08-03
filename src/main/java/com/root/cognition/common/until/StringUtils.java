@@ -3,6 +3,7 @@ package com.root.cognition.common.until;
 import java.io.UnsupportedEncodingException;
 
 /**
+ * 字符串工具
  * @author Worry
  * @version 2019/2/26
  */

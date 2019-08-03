@@ -34,14 +34,12 @@ public class UserRealm extends AuthorizingRealm {
 
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-		String loginName = (String) token.getPrincipal();
+		String loginInfo = (String) token.getPrincipal();
 		String password = new String((char[]) token.getCredentials());
 
 		UserDao userDao = ApplicationContextRegister.getBean(UserDao.class);
 		// 查询用户信息
-		Map<String, Object> map = Query.withDelFlag();
-		map.put("loginName", loginName);
-		User user = userDao.getByEntity(map);
+		User user = userDao.get(Long.valueOf(loginInfo));
 
 		// 账号不存在
 		if (user == null) {

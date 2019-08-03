@@ -14,4 +14,10 @@ import org.springframework.stereotype.Repository;
 @Repository("UserDao")
 public interface UserDao extends BaseDao<User> {
 
+    /**
+     * 根据登陆传入信息擦护心用户（手机、邮箱）
+     * @param loginInfo
+     * @return
+     */
+    User getWihtLogininfo(String loginInfo);
 }

@@ -1,5 +1,5 @@
-package com.root.cognition.common.shiro;//package com.root.cognition.common.shiro;
-//
+package com.root.cognition.common.shiro;
+
 //import com.root.cognition.system.config.ApplicationContextRegister;
 //import com.root.cognition.system.dao.UserDao;
 //import com.root.cognition.system.entity.User;

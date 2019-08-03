@@ -3,11 +3,11 @@ package com.root.cognition.common.until;
 import java.util.HashMap;
 
 /**
+ * 返回功能函数
  * @author Worry
  * @version 2019/3/10
  */
 public class ResultMap extends HashMap<String, Object>{
-
 
     /**
      * 返回成功状态与信息
@@ -70,6 +70,12 @@ public class ResultMap extends HashMap<String, Object>{
         return returnMap;
     }
 
+    /**
+     *
+     * @param key
+     * @param value
+     * @return
+     */
     @Override
     public ResultMap put(String key, Object value) {
         super.put(key, value);

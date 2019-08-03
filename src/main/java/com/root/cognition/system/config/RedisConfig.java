@@ -1,9 +1,11 @@
 package com.root.cognition.system.config;
 
-import com.root.cognition.common.redis.RedisManager;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 /**
  * @author LineInkBook
@@ -22,26 +24,29 @@ public class RedisConfig {
      */
     @Value("${spring.redis.timeout}")
     private int redisTimeout;
+    /**
+     * jedispool数据库变量
+     */
+    private static JedisPool jedisPool = null;
 
     /**
-     * redisManager初始化设置
-     *
-     * @return
+     * 初始化方法
+     * 通过地址（redisHost）端口号（redisPort）和密码（redisPassword）连接时间（redisTimeout）设置
      */
-    @Bean
-    public RedisManager redisManager() {
-        RedisManager redisManager = new RedisManager();
-        //配置redisManager
-        redisManager.setRedisHost(redisHost);
-        redisManager.setRedisPort(redisPort);
-        // 配置缓存过期时间
-        redisManager.setExpire(1800);
-        redisManager.setRedisTimeout(redisTimeout);
-        redisManager.setRedisPassword(redisPassword);
-        // 初始化缓存池
-        redisManager.init();
-        return redisManager;
+    @Bean("redisPoolFactory")
+    public JedisPool redisPoolFactory() {
+        if (jedisPool == null) {
+            if (redisPassword != null && !"".equals(redisPassword)) {
+                jedisPool = new JedisPool(new JedisPoolConfig(), redisHost, redisPort, redisTimeout, redisPassword);
+            } else if (redisTimeout != 0) {
+                jedisPool = new JedisPool(new JedisPoolConfig(), redisHost, redisPort, redisTimeout);
+            } else {
+                jedisPool = new JedisPool(new JedisPoolConfig(), redisHost, redisPort);
+            }
+        }
+        return jedisPool;
     }
+
 
 
 }

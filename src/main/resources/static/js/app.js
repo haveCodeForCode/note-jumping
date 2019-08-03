@@ -20,17 +20,17 @@ $(document).ready(function () {
         wheelStep: 10
     });
 
-    // 打开聊天窗口
-    $('.open-small-chat').click(function () {
-        $(this).children().toggleClass('fa-comments').toggleClass('fa-remove');
-        $('.small-chat-box').toggleClass('active');
-    });
-
-    // 聊天窗口使用slimscroll
-    $('.small-chat-box .content').slimScroll({
-        height: '234px',
-        railOpacity: 0.4
-    });
+    // // 打开聊天窗口
+    // $('.open-small-chat').click(function () {
+    //     $(this).children().toggleClass('fa-comments').toggleClass('fa-remove');
+    //     $('.small-chat-box').toggleClass('active');
+    // });
+    //
+    // // 聊天窗口使用slimscroll
+    // $('.small-chat-box .content').slimScroll({
+    //     height: '234px',
+    //     railOpacity: 0.4
+    // });
 
     // Small todo handler
     $('.check-link').click(function () {
@@ -205,30 +205,6 @@ $(function () {
                 localStorage.setItem("boxedlayout", 'off');
             }
         }
-    });
-
-    // 默认主题
-    $('.s-skin-0').click(function () {
-        $("body").removeClass("skin-1");
-        $("body").removeClass("skin-2");
-        $("body").removeClass("skin-3");
-        return false;
-    });
-
-    // 蓝色主题
-    $('.s-skin-1').click(function () {
-        $("body").removeClass("skin-2");
-        $("body").removeClass("skin-3");
-        $("body").addClass("skin-1");
-        return false;
-    });
-
-    // 黄色主题
-    $('.s-skin-3').click(function () {
-        $("body").removeClass("skin-1");
-        $("body").removeClass("skin-2");
-        $("body").addClass("skin-3");
-        return false;
     });
 
     if (localStorageSupport) {

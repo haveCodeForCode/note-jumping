@@ -5,16 +5,22 @@ import com.root.cognition.common.config.Constant;
 import com.root.cognition.common.redis.RedisCacheManager;
 import com.root.cognition.common.redis.RedisManager;
 import com.root.cognition.common.redis.RedisSessionDAO;
+import com.root.cognition.common.shiro.BDSessionListener;
 import com.root.cognition.common.shiro.UserRealm;
+import net.sf.ehcache.CacheManager;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.session.SessionListener;
 import org.apache.shiro.session.mgt.eis.MemorySessionDAO;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * 系统基本设置
@@ -29,48 +35,64 @@ public class SystemConfig {
      */
     @Value("${spring.cache.type}")
     private String cacheType;
+    @Value("${server.servlet.session.timeout}")
+    private int tomcatTimeout;
 
     /**
-     * EhCache 构造注入
-     */
-    private final EhCacheManager ehCacheManager;
-    /**
-     * Redis 构造注入
-     */
-    private final RedisManager redisManager;
-
-    /**
-     * @param ehCacheManager  EhCacheConfig(ehcache配置，启动)
-     * @param redisManager    Re
-     */
-    @Autowired
-    public SystemConfig(EhCacheManager ehCacheManager, RedisManager redisManager) {
-        this.ehCacheManager = ehCacheManager;
-        this.redisManager = redisManager;
-    }
-
-    /**
-     * 设置安全管理器放入缓存
-     *
+     * 认证控制器
      * @return
      */
-    @Bean
+    @Bean("securityManager")
     public SecurityManager securityManager() {
-        //声明用户权限
-        UserRealm userReal = new UserRealm();
-        //会话权限
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        //设置realm
-        securityManager.setRealm(userReal);
-        //设置缓存实现方法，使用redis或者使用ehCache
+        //设置realm.
+        securityManager.setRealm(new UserRealm());
+        // 自定义缓存实现 使用redis
+        // 放入缓存控制器
         if (Constant.CACHE_TYPE_REDIS.equals(cacheType)) {
             securityManager.setCacheManager(rediscacheManager());
         } else {
-            securityManager.setCacheManager(ehCacheManager);
+            securityManager.setCacheManager(ehCacheManager());
         }
+        //放入session控制器
+        securityManager.setSessionManager(sessionManager());
         return securityManager;
     }
 
+//*************************cacheManager缓存******************************
+
+    /**
+     * ehcache缓存初始化设置
+     *
+     * @return
+     */
+    @Bean("ehCacheManager")
+    public EhCacheManager ehCacheManager() {
+        EhCacheManager ehCacheManager = new EhCacheManager();
+        ehCacheManager.setCacheManager(cacheManager());
+        return ehCacheManager;
+    }
+
+    /**
+     * 创建EhCache，创建驱动
+     *
+     * @return
+     */
+    @Bean("cacheManagerSet")
+    public CacheManager cacheManager() {
+        return CacheManager.create();
+    }
+
+
+    /**
+     * redis管理器预设
+     *
+     * @return
+     */
+    @Bean("redisManager")
+    RedisManager redisManager() {
+        return new RedisManager();
+    }
 
     /**
      * cacheManager 缓存 （redis实现）
@@ -78,20 +100,21 @@ public class SystemConfig {
      *
      * @return
      */
-    private RedisCacheManager rediscacheManager() {
+    @Bean("rediscacheManager")
+    RedisCacheManager rediscacheManager() {
         //初始化redis缓存对象
         RedisCacheManager redisCacheManager = new RedisCacheManager();
         //将redis对象放入操作对象返回，完成redis初始化
-        redisCacheManager.setRedisManager(redisManager);
+        redisCacheManager.setRedisManager(redisManager());
         return redisCacheManager;
     }
 
-
+//*************************session********************************
     /**
      * RedisSessionDAO shiro sessionDao层的实现 通过redis
      * 使用的是shiro-redis开源插件
      */
-    @Bean
+    @Bean("redisSessionDAO")
     public RedisSessionDAO redisSessionDAO() {
         RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
         RedisManager redisManager = new RedisManager();
@@ -104,7 +127,7 @@ public class SystemConfig {
      *
      * @return
      */
-    @Bean
+    @Bean("sessionDAO")
     public SessionDAO sessionDAO() {
         if (Constant.CACHE_TYPE_REDIS.equals(cacheType)) {
             return redisSessionDAO();
@@ -112,5 +135,27 @@ public class SystemConfig {
             return new MemorySessionDAO();
         }
     }
+
+
+    /**
+     * session的管理
+     */
+    @Bean("sessionManager")
+    public DefaultWebSessionManager sessionManager() {
+        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+        // 去掉shiro登录时url里的JSESSIONID
+        sessionManager.setSessionIdUrlRewritingEnabled(false);
+        // session时间
+        sessionManager.setGlobalSessionTimeout(tomcatTimeout * 1000);
+        // session调用方法
+        sessionManager.setSessionDAO(sessionDAO());
+        // sessionListener监听接口组
+        Collection<SessionListener> listeners = new ArrayList<SessionListener>();
+        listeners.add(new BDSessionListener());
+        // session操作器放入session监控
+        sessionManager.setSessionListeners(listeners);
+        return sessionManager;
+    }
+
 
 }

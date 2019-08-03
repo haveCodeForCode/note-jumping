@@ -10,7 +10,7 @@ import java.util.Map;
 
 /**
  *
- * 树形菜单架构创建
+ * 树形菜单组装
  * @author taoya
  */
 public class BuildTree {

@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 
 /**
+ * 序列化与反序列工具
  * @author bootdo 1992lcg@163.com
  * @version V1.bootstrap
  */
@@ -20,13 +21,10 @@ public class SerializeUtil {
      * @return
      */
     public static Object deserialize(byte[] bytes) {
-
         Object result = null;
-
         if (isEmpty(bytes)) {
             return null;
         }
-
         try {
             ByteArrayInputStream byteStream = new ByteArrayInputStream(bytes);
             try {
@@ -56,9 +54,7 @@ public class SerializeUtil {
      * @return
      */
     public static byte[] serialize(Object object) {
-
         byte[] result = null;
-
         if (object == null) {
             return new byte[0];
         }

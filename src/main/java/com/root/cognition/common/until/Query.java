@@ -7,7 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * 分页查询参数
+ * 对传入条件封装
  * @author taoya
  */
 public class Query extends LinkedHashMap<String, Object> {

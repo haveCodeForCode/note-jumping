@@ -154,6 +154,7 @@ function load() {
 						field : 'id',
 						align : 'center',
 						formatter : function(item, index) {
+							console.log(item);
 							var e = '<a class="btn btn-primary btn-sm ' + s_edit_h + '" href="#" mce_href="#" title="编辑" onclick="edit(\''
 								+ item.id
 								+ '\')"><i class="fa fa-edit"></i></a> ';
@@ -166,7 +167,7 @@ function load() {
 								return e + d +f;
 							}else{
 								var f = '<a class="btn btn-success btn-sm ' + s_add_h + '" href="#" title="增加"  mce_href="#" onclick="addD(\''
-									+item.id +'\',\''+ item.type +'\',\''+item.description
+									+item.parentId +'\',\''+ item.type +'\',\''+item.description
 									+'\')"><i class="fa fa-plus"></i></a> ';
 								return e + d +f;
 							}

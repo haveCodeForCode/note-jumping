@@ -1,0 +1,184 @@
+body {
+    background:#ffffff url(../img/backg02.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.fl{
+    float: left;
+}
+.fr{
+    float: right;
+}
+.clear{
+    clear: both;
+}
+a{
+    text-decoration: none;
+    color: #333;
+    transition: ease all 0.5s;
+}
+a{
+    color: #1c65ff
+}
+.login_header{
+    margin-bottom: 20px;
+}
+.login_header span{
+    margin-right: 15px;
+    cursor: pointer;
+}
+.loginbox{
+    background-color: #ffffff;
+    width: auto;
+    overflow: hidden;
+    padding: 20px 30% 20px;
+}
+
+/*.Cbody_item{*/
+    /*border: 0px solid #999;*/
+    /*overflow: hidden;*/
+/*}*/
+
+.form_item{
+    font-size: 13px;
+}
+
+.form_item input[type="text"],.form_item input[type="password"]{
+    display: block;
+    width: calc(100% - 18px);
+    height: 36px;
+    padding-left: 16px;
+    outline: none;
+    border: 1px solid #999;
+    transition: ease all 0.5s;
+    margin: 0 auto 20px;
+}
+
+.form_item input[type="text"]:focus,.form_item input[type="password"]:focus{
+    border: 1px solid #1c65ff
+}
+
+.form_item input[type="submit"]{
+    display: block;
+    width: calc(100% - 0px);
+    height: 40px;
+    padding-left: 16px;
+    outline: none;
+    border: 1px solid #1c65ff;
+    transition: ease all 0.5s;
+    margin: 20px auto;
+    background-color: #1c65ff;
+    color: #fff;
+    cursor: pointer;
+}
+
+.form_item input[type="submit"]:hover{
+    background-color: #3f7dff;
+    border: 1px solid #3f7dff;
+}
+
+.active{
+    color: #3f7dff;
+    padding-bottom: 10px;
+    border-bottom: 3px solid #3f7dff;
+}
+
+.loginrslider{
+    width: 160px;
+    height: 322px;
+    background-color: #1c65ff;
+}
+
+.login_warp{
+    width: 500px;
+    border-radius: 10px;
+    box-shadow: 0 0px 0px #ccc;
+    overflow: hidden;
+    /*border:1px solid #3f7dff;*/
+    margin: 10% auto 50px;
+    /*transition: ease all 0.5s;*/
+    /*position: relative;*/
+    top: 0px;
+    cursor: pointer;
+}
+
+.login_warp:hover{
+    top: -30px;
+    box-shadow: 0 15px 21px #ccc;
+}
+
+.loginrslider{
+    color: #fff;
+
+}
+
+.qcode{
+    width: 160px;
+    height: 160px;
+    background-color: #ccc;
+    margin: 2px auto 0;
+}
+
+.beizhu{
+    text-align: center;
+    font-size: 13px;
+    margin-top: 10px;
+    color: #999
+}
+
+
+
+
+/*!*密码输入框 *!*/
+/*input{*/
+/*width: 70%;*/
+/*height: 50px;*/
+/*border: 1px solid rgba(96, 96, 96, .4);*/
+/*!* border-radius: 10px; *!*/
+/*display:block;*/
+/*background: rgba(96, 96, 96, .4);*/
+/*}*/
+/*input.mobile{*/
+/*width: 60%;*/
+/*!* -webkit-border-top-left-radius:0px;*/
+/*-webkit-border-bottom-left-radius:0px; *!*/
+/*}*/
+/*.content select{*/
+/*height: 50px;*/
+/*border: 0;*/
+/*background: rgba(96, 96, 96, .4);*/
+/*!* -webkit-border-top-left-radius:10px;*/
+/*-webkit-border-bottom-left-radius:10px; *!*/
+/*}*/
+/*!* 页面居中 *!*/
+/*.login-Module{*/
+/*!* 与父元素 *!*/
+/*left: 30%;*/
+/*top: 50%;*/
+/*background: rgba(255, 255, 255, 0.5);*/
+/*!* 本身元素 *!*/
+/*width: 500px;*/
+/*height: 500px;*/
+/*position: absolute;*/
+/*transform: translate(-50%,-50%);*/
+/*border-radius: 30px;*/
+/*}*/
+/*.login-Module from {*/
+/*position: relative;*/
+/*left: 15%;*/
+/*top: 150px;*/
+/*}*/
+/*!* 间隔 *!*/
+/*.interval {*/
+/*margin-bottom: 20px;*/
+/*}*/
+
+/*.btn-login{*/
+/*border: 1px solid #00a3ff;*/
+/*background-color: #00A3FF;*/
+/*color: #fff;*/
+/*border-radius: 2px;*/
+/*}*/

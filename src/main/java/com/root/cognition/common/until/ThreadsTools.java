@@ -16,18 +16,28 @@ import java.util.concurrent.*;
  */
 public class ThreadsTools {
 
-
-    public static ThreadFactory buildThreadFactory(String FactoryName) {
+    /**
+     * 线程工厂
+     * @param factoryName
+     * @return
+     */
+    public static ThreadFactory buildThreadFactory(String factoryName) {
         ThreadFactory newNameThreadFactory;
-        if (!FactoryName.isEmpty() && "".equals(FactoryName)) {
-            newNameThreadFactory = new ThreadFactoryBuilder().setNameFormat(FactoryName).build();
+        if (StringUtils.isNotEmpty(factoryName)) {
+            newNameThreadFactory = new ThreadFactoryBuilder().setNameFormat(factoryName).build();
         } else {
             newNameThreadFactory = new ThreadFactoryBuilder().setNameFormat(IdGen.uuid()).build();
         }
         return newNameThreadFactory;
     }
 
-
+    /**
+     * 开始线程池
+     * @param corePoolSize
+     * @param maximumPoolSize
+     * @param namedThreadFactory
+     * @return
+     */
     public static ExecutorService startThreadPool(int corePoolSize, int maximumPoolSize, ThreadFactory namedThreadFactory) {
         ExecutorService singleThreadPool = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, 0L, TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<Runnable>(1024),
@@ -43,7 +53,7 @@ public class ThreadsTools {
             Thread.sleep(millis);
         } catch (InterruptedException e) {
             // Ignore.
-            return;
+            consoleOut(e.getMessage());
         }
     }
 
@@ -55,7 +65,15 @@ public class ThreadsTools {
             Thread.sleep(unit.toMillis(duration));
         } catch (InterruptedException e) {
             // Ignore.
-            return;
+            consoleOut(e.getMessage());
         }
+    }
+
+    private static void consoleOut(String e){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("=============================\n");
+        stringBuilder.append(e).append("\n");
+        stringBuilder.append("=============================");
+        System.err.println(stringBuilder);
     }
 }

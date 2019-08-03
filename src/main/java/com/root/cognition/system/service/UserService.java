@@ -12,6 +12,14 @@ import java.util.Set;
 public interface UserService {
 
 	/**
+	 * 根据邮箱、手机号模糊查询
+	 * @param loginInfo
+	 * @return
+	 */
+	User getWihtLogininfo(String loginInfo);
+
+
+	/**
 	 * 根据id查询用户
 	 * @param userid
 	 * @return
@@ -26,11 +34,7 @@ public interface UserService {
 	 */
 	boolean exit(Map<String, Object> params);
 
-	/**
-	 * @param userId
-	 * @return
-	 */
-	Set<String> listRoles(Long userId);
+
 
 	/**
 	 * 根据部门获取用户树

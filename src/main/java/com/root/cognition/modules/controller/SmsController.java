@@ -86,21 +86,28 @@ public class SmsController {
     public ResultMap sendAlibabaSms(String mobile, String signName, String templateCode, String[] keyword, String outId) throws InterruptedException {
         alibabaSms.setConfigureAlibaba();
         String moudle = Constant.FREE_SMS;
-        SmsLog smsLog = AlibabaSms.sendMesage(moudle, mobile, signName, templateCode, keyword, outId);
-        if (smsLog != null) {
-            smsLogService.save(smsLog);
+        int times=smsLogService.snedSmsMessage(moudle,mobile,signName,templateCode,keyword,outId);
+        if (times>0) {
             return ResultMap.success();
         }
         return ResultMap.error("系统错误");
     }
 
 /**************************************************************************/
+
+    /**
+     * 前往短信记录页面
+     * @return
+     */
     @GetMapping("")
     @RequiresPermissions("modules:sms:smsLog")
     String smsLog(){
         return "modules/smsLog/smsLog";
     }
 
+    /**
+     * 分页列表
+     */
     @ResponseBody
     @GetMapping("/list")
     @RequiresPermissions("modules:sms:smsLog")
@@ -113,12 +120,22 @@ public class SmsController {
         return pageUtils;
     }
 
+    /**
+     * 前往添加页面
+     * @return
+     */
     @GetMapping("/add")
     @RequiresPermissions("modules:sms:add")
     String add(){
         return "modules/smsLog/add";
     }
 
+    /**
+     * 修改短信记录（启用
+     * @param id
+     * @param model
+     * @return
+     */
     @GetMapping("/edit/{id}")
     @RequiresPermissions("modules:sms:edit")
     String edit(@PathVariable("id") Long id,Model model){

@@ -38,11 +38,22 @@ public class Md5Utils {
     private static final int HASH_ITERATIONS = 2;
 
 
+    /**
+     * md5加密密码
+     * @param pswd
+     * @return
+     */
     public static String encrypt(String pswd) {
         String newPassword = new SimpleHash(ALGORITH_NAME, pswd, ByteSource.Util.bytes(SALT), HASH_ITERATIONS).toHex();
         return newPassword;
     }
 
+    /**
+     * md5加密组合密码
+     * @param username
+     * @param pswd
+     * @return
+     */
     public static String encrypt(String username, String pswd) {
         String newPassword = new SimpleHash(ALGORITH_NAME, pswd, ByteSource.Util.bytes(username + SALT),
                 HASH_ITERATIONS).toHex();
@@ -320,23 +331,27 @@ public class Md5Utils {
      * @param args
      */
     public static void main(String[] args) {
-        Map<String, String> keys = new HashMap<>();
-        Map<String, String> keyMap = Md5Utils.createKeys(512);
-        String publicKey = keyMap.get("publicKey");
-        String privateKey = keyMap.get("privateKey");
-        String str = "abcdef123456=-";
-        String encodedData = "";
-        String decodedData = "";
-        try {
-            encodedData = Md5Utils.publicEncrypt(str, Md5Utils.getPublicKey(publicKey));
-            decodedData = Md5Utils.privateDecrypt(encodedData, Md5Utils.getPrivateKey(privateKey));
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (InvalidKeySpecException e) {
-            e.printStackTrace();
-        }
-        System.out.println(encodedData);
-        System.err.println(decodedData);
+
+
+      String encodeKey = Md5Utils.encrypt("H#$kmrC$MLxI9R6%", "123456");
+      System.out.println(encodeKey);
+//        Map<String, String> keys = new HashMap<>();
+//        Map<String, String> keyMap = Md5Utils.createKeys(64);
+//        String publicKey = keyMap.get("publicKey");
+//        String privateKey = keyMap.get("privateKey");
+//        String str = "123456H#$kmrC$MLxI9R6%";
+//        String encodedData = "";
+//        String decodedData = "";
+//        try {
+//            encodedData = Md5Utils.publicEncrypt(str, Md5Utils.getPublicKey(publicKey));
+//            decodedData = Md5Utils.privateDecrypt(encodedData, Md5Utils.getPrivateKey(privateKey));
+//        } catch (NoSuchAlgorithmException e) {
+//            e.printStackTrace();
+//        } catch (InvalidKeySpecException e) {
+//            e.printStackTrace();
+//        }
+//        System.out.println(encodedData);
+//        System.err.println(decodedData);
     }
 }
 

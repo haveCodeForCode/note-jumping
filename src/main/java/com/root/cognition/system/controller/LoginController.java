@@ -2,13 +2,12 @@ package com.root.cognition.system.controller;
 
 import com.root.cognition.common.persistence.BaseController;
 import com.root.cognition.common.persistence.Tree;
-import com.root.cognition.common.until.Query;
 import com.root.cognition.common.until.RandomValidateCodeUtil;
 import com.root.cognition.common.until.ResultMap;
 import com.root.cognition.common.until.StringUtils;
 import com.root.cognition.common.until.encrypt.Md5Utils;
 import com.root.cognition.system.entity.Menu;
-import com.root.cognition.system.entity.UserInfo;
+import com.root.cognition.system.entity.User;
 import com.root.cognition.system.service.MenuService;
 import com.root.cognition.system.service.UserService;
 import com.root.cognition.system.vo.UserVo;
@@ -29,7 +28,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 登陆控制器
@@ -57,6 +55,7 @@ public class LoginController extends BaseController {
     }
 
     /**
+     * 网站入口
      * 间接转发方式（redirect）实际是两次HTTP请求，服务器端在响应第一次请求的时候，
      * 让浏览器再向另外一个URL发出请求，从而达到转发的目的。
      *
@@ -65,7 +64,7 @@ public class LoginController extends BaseController {
      */
     @GetMapping("/")
     String welcome(Model model) {
-        return "redirect:/index";
+        return "redirect:/toInterface";
     }
 
     /*** 网站引荐 */
@@ -74,10 +73,37 @@ public class LoginController extends BaseController {
         return "guide";
     }
 
+    /**
+     * 首页
+     *
+     * @param model
+     * @return
+     */
+    @GetMapping("/toInterface")
+    String toInterface(Model model) {
+        if (getUser() != null) {
+            UserVo userVo = userService.getbyUserId(getUserId());
+            model.addAttribute("menus", userVo.getMenus());
+            model.addAttribute("userInfo", userVo.getUserInfo());
+        }
+        return "interface";
+    }
+
+
     /*** 前往登陆页面*/
     @RequestMapping(value = "/toLogin")
     String toLogin() {
         return "login_v1";
+    }
+
+    /**
+     * 前往注册页面
+     *
+     * @return
+     */
+    @RequestMapping(value = "/toRegister")
+    String toRegister() {
+        return "register";
     }
 
     /**
@@ -123,15 +149,15 @@ public class LoginController extends BaseController {
 
     @PostMapping(value = "/login")
     @ResponseBody
-    ResultMap login(String username, String password, String verify, HttpServletRequest request) {
+    ResultMap login(String loginInfo, String password, String verify, HttpServletRequest request) {
+
         try {
             //从session中获取随机数
             String random = (String) request.getSession().getAttribute(RandomValidateCodeUtil.RANDOMCODEKEY);
             if (StringUtils.isBlank(verify)) {
                 return ResultMap.error("请输入验证码");
             }
-            if (random.equals(verify)) {
-            } else {
+            if (!random.equals(verify)) {
                 return ResultMap.error("请输入正确的验证码");
             }
         } catch (Exception e) {
@@ -139,9 +165,17 @@ public class LoginController extends BaseController {
             return ResultMap.error("验证码校验失败");
         }
 
-        password = Md5Utils.encrypt(username, password);
-        UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+        User user = userService.getWihtLogininfo(loginInfo);
+        if (user != null) {
+            loginInfo = String.valueOf(user.getId());
+        } else {
+            return ResultMap.error("用户尚未注册~！");
+        }
 
+        String salt = "H#$kmrC$MLxI9R6%";
+        password = Md5Utils.encrypt(salt, password);
+        //创建令牌
+        UsernamePasswordToken token = new UsernamePasswordToken(loginInfo, password);
         Subject subject = SecurityUtils.getSubject();
 
         try {
@@ -149,7 +183,7 @@ public class LoginController extends BaseController {
             return ResultMap.success();
         } catch (AuthenticationException e) {
             System.err.println(e.getMessage());
-            return ResultMap.error("e.getMessage()");
+            return ResultMap.error(e.getMessage());
         }
     }
 

@@ -1,17 +1,51 @@
 package com.root.cognition.common.until;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * 通用工具方法
  * @author Worry
  * @version 2019/3/14
  */
 public class Tools {
+
+
+    /**
+     * 生成编码
+     *
+     * @param prefix 交易类型
+     * @param num    第几个
+     * @return 编码
+     */
+    public static String createNumCode(String prefix, int num) {
+        //设置数字长度
+        int numLength = 4;
+        //声明当前时间年月日
+        SimpleDateFormat day = new SimpleDateFormat("yyyyMMdd");
+        //创建字符串拼接放法
+        StringBuilder cString = new StringBuilder();
+        cString.append(prefix);
+        cString.append(day.format(new Date()));
+        cString.append(String.format("%0" + numLength + "d", num));
+        //字符串转换
+        return String.valueOf(cString);
+    }
+
+    /**
+     * 随机数
+     * @param bitCount 返回的位数
+     * @return 返回随机数
+     */
+    public static String getRandomNumber(int bitCount){
+        long startValue =(long) Math.pow(10,bitCount-1);
+        long endValue   =(long) Math.pow(10,bitCount);
+        int rValue = (int) (Math.random()*(endValue-startValue)+startValue);
+        return String.valueOf(rValue);
+    }
+
     /**
      * 从字符串内获取地址信息
      *

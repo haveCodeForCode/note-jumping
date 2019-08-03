@@ -12,19 +12,23 @@ import java.awt.image.BufferedImage;
 import java.util.Random;
 
 /**
- * @author bootdo
+ * 随机验证码生成（图片）
+ *
+ * @author taoya
  */
 public class RandomValidateCodeUtil {
 
-
-    public static final String RANDOMCODEKEY = "RANDOMVALIDATECODEKEY";//放到session中的key
-    private String randString = "0123456789";//随机产生只有数字的字符串 private String
+    /*** 放到session中的key*/
+    public static final String RANDOMCODEKEY = "RANDOMVALIDATECODEKEY";
+    /*** 随机产生只有数字的字符串 private String */
+    private String randString = "0123456789";
     //private String randString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";//随机产生只有字母的字符串
     //private String randString = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";//随机产生数字与字母组合的字符串
-    private int width = 95;// 图片宽
-    private int height = 25;// 图片高
-    private int lineSize = 40;// 干扰线数量
-    private int stringNum = 4;// 随机产生字符数量
+    /*** 图片宽  图片高 干扰线数量 随机产生字符数量*/
+    private int width = 95;
+    private int height = 25;
+    private int lineSize = 40;
+    private int stringNum = 4;
 
     private static final Logger logger = LoggerFactory.getLogger(RandomValidateCodeUtil.class);
 
@@ -120,7 +124,7 @@ public class RandomValidateCodeUtil {
     /**
      * 获取随机的字符
      */
-    public String getRandomString(int num) {
+    private String getRandomString(int num) {
         return String.valueOf(randString.charAt(num));
     }
 }

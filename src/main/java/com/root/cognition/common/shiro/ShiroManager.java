@@ -26,7 +26,7 @@ public class ShiroManager {
     /**
      * Shiro获取对象
      */
-    public static Subject getSecuritySubject() {
+    private static Subject getSecuritySubject() {
         return SecurityUtils.getSubject();
     }
 
@@ -45,7 +45,7 @@ public class ShiroManager {
      *
      * @return
      */
-    public static Object getSessionObject() {
+    private static Object getSessionObject() {
         Object object = getSecuritySubject().getPrincipal();
         return object;
     }

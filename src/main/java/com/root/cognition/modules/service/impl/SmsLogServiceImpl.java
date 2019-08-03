@@ -1,5 +1,7 @@
 package com.root.cognition.modules.service.impl;
 
+import com.root.cognition.common.config.Constant;
+import com.root.cognition.modules.config.AlibabaSms;
 import com.root.cognition.modules.dao.SmsLogDao;
 import com.root.cognition.modules.entity.SmsLog;
 import com.root.cognition.modules.service.SmsLogService;
@@ -21,10 +23,45 @@ public class SmsLogServiceImpl implements SmsLogService {
 
 	private SmsLogDao smsLogDao;
 
+	private AlibabaSms alibabaSms;
+
 	@Autowired
 	public void setSmsLogDao (SmsLogDao smsLogDao){
 		this.smsLogDao=smsLogDao;
 	}
+
+	@Autowired
+	public void setAlibabaSms(AlibabaSms alibabaSms) {
+		this.alibabaSms = alibabaSms;
+	}
+
+
+	@Override
+	public int snedSmsMessage(String moudle, String mobile, String signName, String templateCode, String[] keyword, String outId) {
+		try {
+			//通过接口发送短信回传短信记录
+			alibabaSms.setConfigureAlibaba();
+			SmsLog smsLog = alibabaSms.sendMesage(moudle, mobile, signName, templateCode, keyword, outId);
+			if (smsLog != null) {
+				smsLog.preInsert();
+				//插入短信日志
+				smsLogDao.insert(smsLog);
+				if (Constant.OK.equals(smsLog.getSmsReturnCode())){
+					return Constant.INT_ONE;
+				}else{
+					return Constant.INT_ZERO;
+				}
+			}
+			return Constant.INT_ZERO;
+		} catch (InterruptedException e) {
+			//报错抛出异常
+			e.printStackTrace();
+			System.err.println(e.getMessage());
+			//返回信息
+			return Constant.INT_ZERO;
+		}
+	}
+
 
 	@Override
 	public SmsLog get(Long id){

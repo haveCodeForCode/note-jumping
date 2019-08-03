@@ -4,6 +4,17 @@
 <mapper namespace="com.root.cognition.system.dao.UserDao">
 
 
+    <!--模糊查询手机与邮箱-->
+    <select id="getWihtLogininfo" resultType="com.root.cognition.system.entity.User">
+        SELECT
+          <include refid="userColumns"/>
+        FROM
+          sys_user a
+        WHERE
+          a.mobile = #{loginInfo} OR a.email = #{loginInfo}
+    </select>
+
+
     <!--*********************************************************************-->
     <select id="get" resultType="com.root.cognition.system.entity.User">
         SELECT

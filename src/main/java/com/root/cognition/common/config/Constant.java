@@ -69,6 +69,7 @@ public class Constant {
      * 成功
      * 失败
      */
+    public static final String OK ="OK";
     public static final String SUCCESS = "success";
     public static final String FAIL = "fail";
 
@@ -100,4 +101,6 @@ public class Constant {
      * 发送短信类型
      */
     public static final String FREE_SMS = "free_send_sms";
+    public static final String REGISTER_SMS = "register_send_sms";
+    public static final String VERIFICATION_SMS = "Verification_send_sms";
 }
