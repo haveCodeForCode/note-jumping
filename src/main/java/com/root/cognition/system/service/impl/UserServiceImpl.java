@@ -1,10 +1,12 @@
 package com.root.cognition.system.service.impl;
 
 
+import com.root.cognition.common.config.Constant;
 import com.root.cognition.common.persistence.Tree;
 import com.root.cognition.common.until.BuildTree;
 import com.root.cognition.common.until.Query;
 import com.root.cognition.common.until.StringUtils;
+import com.root.cognition.common.until.codegenerate.SnowFlake;
 import com.root.cognition.system.dao.RoleDao;
 import com.root.cognition.system.dao.UserDao;
 import com.root.cognition.system.dao.UserInfoDao;
@@ -21,7 +23,10 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -93,18 +98,21 @@ public class UserServiceImpl implements UserService {
     @Cacheable(value = "zero", key = "targetClass + methodName +#p0")
     @Override
     public UserVo getbyUserId(Long userId) {
+        //声明用户相关关系变量
         UserVo userVo = new UserVo();
+        //查找存放用户
         Map<String, Object> query = Query.withDelFlag();
-        query.put("userId", userId);
+        query.put("id", userId);
         User user = userDao.getByEntity(query);
         userVo.setUser(user);
         //用户信息
         UserInfo userInfo = userInfoDao.getByEntity(query);
         userVo.setUserInfo(userInfo);
+        userVo.setUserInfo(userInfo);
         //用户角色
-        List<Role> roles = roleDao.findWithUserId(userId);
+        List<Role> roles = roleDao.findWithUserId(query);
         userVo.setRoles(roles);
-//        //部门ID
+        //部门ID
 //        userVo.setDept(deptService.get(user.getId()));
         return userVo;
     }
@@ -140,7 +148,10 @@ public class UserServiceImpl implements UserService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public int save(User user) {
-        user.preInsert();
+        //判断是否传入ID为空，若为空则补全ID
+        if (user.getId() == null) {
+            user.preInsert();
+        }
         int insert = userDao.insert(user);
         batchModifyRoles(user);
         return insert;
@@ -160,19 +171,44 @@ public class UserServiceImpl implements UserService {
      */
     private void batchModifyRoles(User user) {
         try {
+            //获取用户ID
             Long userId = user.getId();
+            //根据ID获取角色相关信息
             UserVo userVo = getbyUserId(userId);
-            List<Role> roles = userVo.getRoles();
-            userRoleDao.removeByUserId(userId);
-            List<UserRole> list = new ArrayList<>();
+            //获取角色，若没有付初始
+            List<Role> roles;
+            if (userVo.getRoles().size() < Constant.INT_ONE) {
+                //为空则为新用户，放入默认角色
+                Map<String, Object> params = Query.withDelFlag();
+                params.put("id", "339780111572140032");
+                roles = roleDao.findList(params);
+            } else {
+                //获取需要存放角色列
+                roles = userVo.getRoles();
+                //根据用户ID删除中间表
+                userRoleDao.removeByUserId(userId);
+            }
+            //角色信息权限修改方法
+            List<UserRole> userRoleList = new ArrayList<>();
             for (Role role : roles) {
                 UserRole userRole = new UserRole();
+                userRole.setId(SnowFlake.createSFid());
                 userRole.setUserId(userId);
                 userRole.setRoleId(role.getId());
-                list.add(userRole);
+                userRoleList.add(userRole);
             }
-            if (list.size() > 0) {
-                userRoleDao.batchSave(list);
+            if (userRoleList.size() > 0) {
+                //批量插入角色
+                userRoleDao.batchSave(userRoleList);
+            }
+
+            //放入用户角色信息
+            if (userVo.getUserInfo() == null) {
+                UserInfo userInfo = new UserInfo();
+                userInfo.setUserId(userId);
+                userInfo.preInsert();
+                userInfo.setUserName(user.getLoginName());
+                userInfoDao.insert(userInfo);
             }
         } catch (Exception e) {
             e.fillInStackTrace();

@@ -51,7 +51,6 @@
                         </div>
                     </div>
                     <a href="javascript:void(0);" rel="external nofollow" class="layoutVerification" title="点击更换验证码">
-                        <!--style="margin-top: 12px;" height="36" width="100%" -->
                         <img id="imgVerify" src="" alt="更换验证码" onclick="getVerify(this);">
                     </a>
                 </div>
@@ -68,25 +67,25 @@
                        class="text-center btn btn-info layoutVerification">获取验证码</a>
                 </div>
 
-                <input type="password" id="password" name="password" class="form-control" placeholder="请输入密码">
+                <input type="password" id="phone_password" name="password" class="form-control" placeholder="请输入密码">
 
                 <div class="form_item">
-                    <input type="submit" name="" id="phoneSubmit" class="btn btn-primary btn-block" value="注册">
+                    <a type="submit" id="phoneSubmit" class="btn btn-login btn-block">注册</a>
                 </div>
             </from>
         </div>
 
-        <div v-show="cur==1">
-            <form id="emailRegister">
-                <input type="text" name="fname" class="form-control" placeholder="请输入邮箱">
+        <!--<div v-show="cur==1">-->
+            <!--<form id="emailRegister">-->
+                <!--<input type="text" name="name" class="form-control" placeholder="请输入邮箱">-->
 
-                <input type="password" name="fpassword" class="form-control" placeholder="密码">
+                <!--<input type="password" name="password" class="form-control" placeholder="密码">-->
 
-                <div class="form_item">
-                    <input type="submit" class="btn btn-primary btn-block" value="注册">
-                </div>
-            </form>
-        </div>
+                <!--<div class="form_item">-->
+                    <!--<input type="submit" class="btn btn-primary btn-block" value="注册">-->
+                <!--</div>-->
+            <!--</form>-->
+        <!--</div>-->
     </div>
 
 </div>
@@ -99,10 +98,6 @@
 
 <!-- jQuery Validation plugin javascript-->
 <script src="/js/ajax-util.js"></script>
-<script src="/js/plugins/validate/jquery.validate.min.js"
-        th:src="@{/js/plugins/validate/jquery.validate.min.js}"></script>
-<script src="/js/plugins/validate/messages_zh.min.js"
-        th:src="@{/js/plugins/validate/messages_zh.min.js}"></script>
 <script src="/js/plugins/layer/layer.min.js"
         th:src="@{/js/plugins/layer/layer.min.js}"></script>
 <script src="/js/vue.min.js"
@@ -127,8 +122,11 @@
     $(document).ready(function () {
 
         $("#phoneSubmit").on('click', function () {
-            $("#phoneRegister").submit();
+            $('#phoneRegister').submit();
+            // console.log(value);
+            register();
         });
+
 
         $("#sendMsg").click(function () {
             if (mobilePass && verifyPass) {
@@ -137,7 +135,7 @@
                 }
                 $.ajax({
                     type: "POST",
-                    url: "/register/sendCode",
+                    url: "/register/sendMobileCode",
                     data: {mobile: $("#mobile").val()},// 你的formid
                     error: function (request) {
                         parent.layer.alert("Connection error");
@@ -187,7 +185,7 @@
                                     $.ajax({
                                         type: "POST",
                                         url: "/register/checkExistence",
-                                        data: {mobile: value},// 你的formid
+                                        data: {userMobile: value},// 你的formid
                                         async: false,
                                         error: function (data) {
                                             gValue = false;
@@ -281,10 +279,15 @@
 
     function register() {
         if (mobilePass && codePass && codePass) {
+            // var value = document.getElementById("phoneRegister").serialize();
+            var variable = {
+                mobile:$('#mobile').val(),
+                password:$('#phone_password').val()
+            };
             $.ajax({
                 type: "POST",
-                url: "/registerUser",
-                data: $('#phoneRegister').serialize(),
+                url: "/register/registerUser",
+                data: variable,
                 success: function (response) {
                     if (response.state == 0) {
                         parent.layer.close(parent.index);

@@ -333,7 +333,7 @@ public class Md5Utils {
     public static void main(String[] args) {
 
 
-      String encodeKey = Md5Utils.encrypt("H#$kmrC$MLxI9R6%", "123456");
+      String encodeKey = Md5Utils.encrypt("566956334545633280", "123456");
       System.out.println(encodeKey);
 //        Map<String, String> keys = new HashMap<>();
 //        Map<String, String> keyMap = Md5Utils.createKeys(64);

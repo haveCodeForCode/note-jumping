@@ -31,7 +31,7 @@ public class RedisService {
     public String redisGet(String key) {
         byte[] keyByte = SerializeUtil.serialize(key);
         keyByte = redisManager.redisGet(keyByte);
-        if (keyByte.length > Constant.INT_ZERO) {
+        if (keyByte!=null && keyByte.length > Constant.INT_ZERO) {
             return Objects.requireNonNull(SerializeUtil.deserialize(keyByte)).toString();
         } else {
             return null;

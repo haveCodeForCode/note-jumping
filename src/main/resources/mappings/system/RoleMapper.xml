@@ -10,7 +10,10 @@
 		FROM
 		sys_role a
 		LEFT JOIN sys_user_role b ON a.role_id = b.role_id
-		WHERE b.user_id = #{UserId}
+		WHERE
+		a.del_flag = #{delFlag}
+		AND
+		b.user_id = #{UserId}
 	</select>
 
 	<!--*********************************************************************-->
@@ -29,8 +32,8 @@
 		from sys_role a
 		<where>
 				a.del_flag = #{delFlag}
-			<if test="Id != null and Id != ''">
-				AND a.role_id = #{Id}
+			<if test="id != null and id != ''">
+				AND a.role_id = #{id}
 			</if>
 			<if test="name != null and name != ''">
 				AND a.name = #{name}

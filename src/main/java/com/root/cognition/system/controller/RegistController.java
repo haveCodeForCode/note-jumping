@@ -13,8 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
@@ -60,53 +62,51 @@ public class RegistController extends BaseController {
     @PostMapping("/registerUser")
     @ResponseBody
     Map<String, Object> register(UserVo userVo) {
-
         try {
+            //新用户
+            User user = new User();
+            //验证用户是否已存在
             String loginInfo = null;
             if (StringUtils.isNotEmpty(userVo.getMobile())) {
                 loginInfo = userVo.getMobile();
+                //存入手机
+                user.setUserMobile(userVo.getMobile());
             } else if (StringUtils.isNotEmpty(userVo.getEmail())) {
                 loginInfo = userVo.getEmail();
+                user.setUserEmail(userVo.getEmail());
             }
+            //存在用户
             User userold = userService.getWihtLogininfo(loginInfo);
 
             if (userold != null) {
                 return ResultMap.error("用户已存在");
             } else {
-                User user = new User();
+                //插入很用户
                 user.preInsert();
-                //存入手机
-                user.setUserMobile(userVo.getMobile());
                 //按时间时分秒存入
                 SimpleDateFormat sim = new SimpleDateFormat("HHmmss");
                 int hoursSeconds = Integer.parseInt(sim.format(new Date()));
                 String defaultUser = Tools.createNumCode("UR", hoursSeconds);
                 user.setLoginName(defaultUser);
                 //密码加密
-                String password = Md5Utils.encrypt(user.getId().toString(), user.getUserPassword());
+                String password = Md5Utils.encrypt(user.getId().toString(), userVo.getPassword());
                 user.setUserPassword(password);
                 userService.save(user);
-                String randomkey = null;
+                //删除用户随机验证码
+                String randomKey = null;
                 if (StringUtils.isNotEmpty(userVo.getMobile())) {
-                    randomkey = userVo.getMobile() + "random";
+                    randomKey = userVo.getMobile() + "random";
                 } else if (StringUtils.isNotEmpty(userVo.getEmail())) {
-                    randomkey = userVo.getEmail() + "random";
+                    randomKey = userVo.getEmail() + "random";
                 }
-                redisService.redisDel(randomkey);
+                redisService.redisDel(randomKey);
                 return ResultMap.success("注册成功");
             }
         } catch (Exception e) {
+            System.err.println(e.getMessage());
             return ResultMap.error("注册失败");
         }
 
-    }
-
-
-    //@Log("访问注册")
-    @GetMapping("/to")
-    String to(Model model, String deptId) {
-        model.addAttribute("deptId", deptId);
-        return "regist";
     }
 
     /**
@@ -135,15 +135,21 @@ public class RegistController extends BaseController {
      */
     @PostMapping("/checkCode")
     @ResponseBody
-    boolean verifyCode(@RequestParam String mobile, @RequestParam String code) {
-        String randomkey = mobile + "random";
+    boolean verifyCode(@RequestParam String mobile, @RequestParam(defaultValue = "") String email, @RequestParam String code) {
+        String randomkey = null;
+        if (StringUtils.isNotEmpty(mobile)) {
+            randomkey = mobile + "random";
+        } else if (StringUtils.isNotEmpty(email)) {
+            randomkey = email + "random";
+        }
         String redisGet = redisService.redisGet(randomkey);
-        if (redisGet.equals(code)) {
+        if (redisGet != null && redisGet.equals(code)) {
             return true;
         } else {
             return false;
         }
     }
+
 
     /**
      * 验证随机数
@@ -174,9 +180,9 @@ public class RegistController extends BaseController {
      * @return
      */
 //	@Log("发送短信验证码")
-    @PostMapping("/sendCode")
+    @PostMapping("/sendMobileCode")
     @ResponseBody
-    ResultMap sendCode(@RequestParam String mobile) {
+    ResultMap sendMobileCode(@RequestParam String mobile) {
         if (StringUtils.isEmpty(mobile)) {
             return ResultMap.error("手机号码缺失");
         }
@@ -214,4 +220,7 @@ public class RegistController extends BaseController {
             return ResultMap.error("发送失败");
         }
     }
+
+
+//    public
 }

@@ -4,6 +4,8 @@ package com.root.cognition.system.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
+import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
@@ -47,6 +49,16 @@ public class RedisConfig {
         return jedisPool;
     }
 
+    /**
+     * 初始化jedis方法
+     *
+     * @return
+     */
+    @Bean("redisJedis")
+    @DependsOn("redisPoolFactory")
+    public Jedis redisJedis() {
+        return jedisPool.getResource();
+    }
 
 
 }

@@ -38,8 +38,8 @@
             <if test="loginName != null and loginName != ''">
                 AND a.login_name = #{loginName}
             </if>
-            <if test="password != null and password != ''">
-                AND a.password = #{password}
+            <if test="userPassword != null and userPassword != ''">
+                AND a.userPassword = #{userPassword}
             </if>
             <if test="deptIds != null and deptIds.size() > 0">
                 AND a.dept_id in
@@ -47,11 +47,11 @@
                     #{item}
                 </foreach>
             </if>
-            <if test="email != null and email != ''">
-                AND a.email = #{email}
+            <if test="userEmail != null and userEmail != ''">
+                AND a.email = #{userEmail}
             </if>
-            <if test="mobile != null and mobile != ''">
-                AND a.mobile = #{mobile}
+            <if test="userMobile != null and userMobile != ''">
+                AND a.mobile = #{userMobile}
             </if>
             <if test="createBy !=null and createBy !=''">
                 AND a.create_by = #{createBy},
@@ -80,8 +80,8 @@
             <if test="username != null and username != ''">
                 AND a.login_name = #{loginName}
             </if>
-            <if test="password != null and password != ''">
-                AND a.password = #{password}
+            <if test="userPassword != null and userPassword != ''">
+                AND a.password = #{userPassword}
             </if>
             <if test="deptIds != null and deptIds.size() > 0">
                 AND a.dept_id in
@@ -89,11 +89,11 @@
                     #{item}
                 </foreach>
             </if>
-            <if test="email != null and email != ''">
-                AND a.email = #{email}
+            <if test="userEmail != null and userEmail != ''">
+                AND a.email = #{userEmail}
             </if>
-            <if test="mobile != null and mobile != ''">
-                AND a.mobile = #{mobile}
+            <if test="userMobile != null and userMobile != ''">
+                AND a.mobile = #{userMobile}
             </if>
             <if test="createBy !=null and createBy !=''">
                 AND a.create_by = #{createBy},
@@ -137,17 +137,17 @@
             <if test="name != null and name != ''">
                 AND a.name = #{name}
             </if>
-            <if test="password != null and password != ''">
-                AND a.password = #{password}
+            <if test="userPassword != null and userPassword != ''">
+                AND a.password = #{userPassword}
             </if>
             <if test="deptId != null and deptId != ''">
                 AND a.dept_id = #{deptId}
             </if>
-            <if test="email != null and email != ''">
-                AND a.email = #{email}
+            <if test="userEmail != null and userEmail != ''">
+                AND a.email = #{userEmail}
             </if>
-            <if test="mobile != null and mobile != ''">
-                AND a.mobile = #{mobile}
+            <if test="userMobile != null and userMobile != ''">
+                AND a.mobile = #{userMobile}
             </if>
             <if test="createBy !=null and createBy !=''">
                 AND a.create_by = #{createBy},
@@ -164,15 +164,18 @@
         </where>
     </select>
 
-    <insert id="insert" parameterType="com.root.cognition.system.entity.User" useGeneratedKeys="true"
-            keyProperty="userId">
+    <insert id="insert" parameterType="com.root.cognition.system.entity.User">
         INSERT INTO sys_user
 		(
-            `id`,
+        `user_id`,
             `login_name`,
             `password`,
+        <if test="userEmail !=null and userEmail !=''">
             `email`,
+        </if>
+        <if test="userMobile !=null and userMobile !=''">
             `mobile`,
+        </if>
             `dept_id`,
             `create_by`,
             `create_time`,
@@ -184,9 +187,13 @@
 		(
 			#{id},
 			#{loginName},
-			#{password},
-			#{email},
-			#{mobile},
+        #{userPassword},
+        <if test="userEmail !=null and userEmail !=''">
+            #{userEmail},
+        </if>
+        <if test="userMobile !=null and userMobile !=''">
+            #{userMobile},
+        </if>
 			#{deptId},
             #{createBy},
             #{createTime},
@@ -202,17 +209,17 @@
             <if test="loginName != null and loginName !=''">
                 `login_name` = #{loginName},
             </if>
-            <if test="password != null and password !=''">
-                `password` = #{password},
+            <if test="userPassword != null and userPassword !=''">
+                `password` = #{userPassword},
             </if>
             <if test="deptId != null and deptId !=''">
                 `dept_id` = #{deptId},
             </if>
-            <if test="email != null and email !=''">
-                `email` = #{email},
+            <if test="userEmail != null and userEmail !=''">
+                `email` = #{userEmail},
             </if>
-            <if test="mobile != null and mobile !=''">
-                `mobile` = #{mobile},
+            <if test="userMobile != null and userMobile !=''">
+                `mobile` = #{userMobile},
             </if>
             <if test="createBy !=null and createBy !=''">
                 `create_by` = #{createBy},

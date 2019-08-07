@@ -46,15 +46,16 @@
 		</where>
 	</select>
 
-	<insert id="insert" parameterType="com.root.cognition.system.entity.UserRole"
-		useGeneratedKeys="true" keyProperty="id">
+	<insert id="insert" parameterType="com.root.cognition.system.entity.UserRole">
 		insert into sys_user_role
 		(
+		`id`,
 		`user_id`,
 		`role_id`
 		)
 		values
 		(
+		#{id},
 		#{userId},
 		#{roleId}
 		)
@@ -107,10 +108,10 @@
 	</delete>
 
 	<insert id="batchSave">
-		INSERT INTO sys_user_role(user_id, role_id) values
+		INSERT INTO sys_user_role(id,user_id, role_id) values
 		<foreach item="item" index="index" collection="list"
 			separator=",">
-			(#{item.userId},#{item.roleId})
+			(#{item.id},#{item.userId},#{item.roleId})
 		</foreach>
 	</insert>
 </mapper>

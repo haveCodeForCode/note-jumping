@@ -175,8 +175,12 @@ public abstract class BaseEntity<T> implements Serializable {
      */
     public void preInsert() {
         // 不限制ID为UUID，调用setIsNewRecord()使用自定义ID
-        setId(SnowFlake.createSFid());
+        Long sfUserID = SnowFlake.createSFid();
+        setId(sfUserID);
+        this.updateBy = sfUserID;
+        this.createBy = sfUserID;
         this.createTime = new Date();
+        this.updateTime = createTime;
         this.delFlag = Constant.DEL_FLAG_NORMAL;
     }
 

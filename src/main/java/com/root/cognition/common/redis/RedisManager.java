@@ -24,12 +24,8 @@ public class RedisManager {
     }
 
     @Autowired
-    public void setJedis() throws InterruptedException {
-        while (jedis == null) {
-            if (jedisPool != null) {
-                this.jedis = jedisPool.getResource();
-            }
-        }
+    public void setJedis(Jedis jedis) {
+        this.jedis = jedis;
     }
 
     /**
@@ -126,4 +122,7 @@ public class RedisManager {
         this.expire = expire;
     }
 
+    public JedisPool getJedisPool() {
+        return jedisPool;
+    }
 }

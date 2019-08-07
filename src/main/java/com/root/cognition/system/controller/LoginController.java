@@ -150,7 +150,6 @@ public class LoginController extends BaseController {
     @PostMapping(value = "/login")
     @ResponseBody
     ResultMap login(String loginInfo, String password, String verify, HttpServletRequest request) {
-
         try {
             //从session中获取随机数
             String random = (String) request.getSession().getAttribute(RandomValidateCodeUtil.RANDOMCODEKEY);
@@ -172,8 +171,7 @@ public class LoginController extends BaseController {
             return ResultMap.error("用户尚未注册~！");
         }
 
-        String salt = "H#$kmrC$MLxI9R6%";
-        password = Md5Utils.encrypt(salt, password);
+        password = Md5Utils.encrypt(user.getId().toString(), password);
         //创建令牌
         UsernamePasswordToken token = new UsernamePasswordToken(loginInfo, password);
         Subject subject = SecurityUtils.getSubject();

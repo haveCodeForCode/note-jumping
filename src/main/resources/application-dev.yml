@@ -1,6 +1,7 @@
 logging:
   level:
-    com.root.cognition: debug
+    #com.root.cognition: debug
+     com.root.cognition: info
 spring:
   #数据库编写（使用alibaba）
   datasource:
@@ -8,9 +9,10 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://39.108.237.210:3306/cognition?useUnicode=true&characterEncoding=utf-8
+#    url: jdbc:mysql://localhost:3306/cognition?useUnicode=true&characterEncoding=utf-8
     username: root
     password: T$jIdEL9bOyQ
-
+#    password: M$Fa!SN5
     #druid配置->DruidDBConfig
     initialSize: 1
     minIdle: 3
@@ -38,7 +40,16 @@ spring:
     host: 39.108.237.210
     port: 6379
     password: rDLXHJ2I7lXkvqej
-    timeout: 12000
+    timeout: 10000
+    #连接超时间(毫米）
     jedis:
       pool:
-        max-active: 8
+        #连接池中的最大连接数（使用负值表示没有限制）
+        max-active: -1
+        #连接池中的最小空闲连接
+        min-idle: 10
+        #连接池中的最大空闲连接
+        max-idle: 8
+        #连接池最大阻塞等待时间（使用负值表示没有 限制）
+        max-wait: -1
+#    host: 127.0.0.1

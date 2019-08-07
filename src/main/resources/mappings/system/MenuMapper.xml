@@ -45,8 +45,8 @@
 		<include refid="menuColumns"/>
 		from sys_menu a
 		<where>
-			<if test="menuId != null and menuId != ''">
-				AND a.menu_id = #{menuId}
+			<if test="id != null and id != ''">
+				AND a.menu_id = #{id}
 			</if>
 			<if test="parentId != null and parentId != ''">
 				AND a.parent_id = #{parentId}

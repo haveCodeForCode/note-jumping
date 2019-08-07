@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 角色
@@ -22,5 +23,5 @@ public interface RoleDao extends BaseDao<Role> {
      * @param userId
      * @return
      */
-    List<Role> findWithUserId(Long userId);
+    List<Role> findWithUserId(Map<String,Object> params);
 }
