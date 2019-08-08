@@ -1,6 +1,6 @@
 logging:
   level:
-    #com.root.cognition: debug
+#    com.root.cognition: debug
      com.root.cognition: info
 spring:
   #数据库编写（使用alibaba）

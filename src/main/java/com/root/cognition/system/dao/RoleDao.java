@@ -20,7 +20,7 @@ public interface RoleDao extends BaseDao<Role> {
 
     /**
      * 根据用户id查询角色表
-     * @param userId
+     * @param params
      * @return
      */
     List<Role> findWithUserId(Map<String,Object> params);

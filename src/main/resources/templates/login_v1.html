@@ -12,48 +12,42 @@
     <link rel="stylesheet" href="/css/animate.css">
     <link rel="stylesheet" href="/css/login_v1.css">
     <link rel="stylesheet" href="/css/layui.css">
-    <script>
-        // if (window.top !== window.self) {
-        //     window.top.location = window.location;
-        // }
-    </script>
 </head>
 
 <body>
 <!--登陆界面-->
-<div id="signins">
-    <div class="signinpanel">
-        <form id="signupForm">
-            <h3 class="text-center">用户登录</h3><br/>
-            <p class="m-t-md text-center">欢迎登录cognition</p>
-            <input type="text" name="loginInfo" class="form-control uname" placeholder="请输入手机号\邮箱"/>
+<div class="signinpanel">
+    <form>
+        <h3 class="text-center">用户登录</h3><br/>
+        <p class="m-t-md text-center">欢迎登录cognition</p>
 
-            <input type="password" name="password" class="form-control pword m-b" placeholder="请输入密码"/>
-            <div class="row">
-                <div class="col-xs-12 pull_left">
-                    <div class="form-group">
-                        <input class="form-control" type="tel" name="verify" id="verify"
-                               placeholder="请输入验证码" maxlength="4">
-                    </div>
-                    <a href="javascript:void(0);" rel="external nofollow" class="layoutVerification" title="点击更换验证码">
-                        <!--height="36" width="100%" style="margin-top: 12px;"-->
-                        <img id="imgVerify" src="" alt="更换验证码" onclick="getVerify(this);">
-                    </a>
+        <input type="text" name="loginInfo" class="form-control uname" placeholder="请输入手机号\邮箱"/>
+
+        <input type="password" name="password" class="form-control pword m-b" placeholder="请输入密码"/>
+
+        <div class="row">
+            <div class="col-xs-12 pull_left">
+                <div class="form-group">
+                    <input class="form-control" type="tel" name="verify" id="verify"
+                           placeholder="请输入验证码" maxlength="4">
                 </div>
+                <a href="javascript:void(0);" rel="external nofollow" class="layoutVerification" title="点击更换验证码">
+                    <!--height="36" width="100%" style="margin-top: 12px;"-->
+                    <img id="imgVerify" src="" alt="更换验证码" onclick="getVerify(this);">
+                </a>
             </div>
-            <a id="login" class="btn btn-login btn-block">登录</a>
-        </form>
-        <div>
-            <a href="/toRegister">立即注册</a>
         </div>
+        <a id="login" class="btn btn-login btn-block">登录</a>
+    </form>
+    <div style="padding:10px;text-align:right;">
+        <a href="/toRegister" style="color: #0d8ddb">立即注册>></a>
+    </div>
 
-        <div class="signup-footer">
-            <!--© 2019 xxx.com  京ICP备 12003892号-11 XXXXX有限公司-->
-            <div class="pull-left">&copy; 2019 cognition.com 冀ICP备19019505号-1 carManger车辆管理平台</div>
-        </div>
+    <div class="signup-footer">
+        <!--© 2019 xxx.com  京ICP备 12003892号-11 XXXXX有限公司-->
+        <div class="pull-left">&copy; 2019 cognition.com 冀ICP备19019505号-1 carManger车辆管理平台</div>
     </div>
 </div>
-
 
 <!-- 全局js -->
 <script type="text/javascript" src="/js/jquery.min.js?v=2.1.4"></script>

@@ -75,3 +75,8 @@ package com.root.cognition.common.shiro;
 //        return new SimpleAuthenticationInfo(sysUser, sysUser.getUserPassword(), ByteSource.Util.bytes(encryptSalt), "dbRealm");
 //    }
 //}
+
+
+ <!--<li class="layui-nav-item" style="float:right;">-->
+                <!--<a href="/index">平台管理<span class="layui-badge-dot"></span></a>-->
+            <!--</li>-->

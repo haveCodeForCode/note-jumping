@@ -101,13 +101,14 @@ public class UserServiceImpl implements UserService {
         //声明用户相关关系变量
         UserVo userVo = new UserVo();
         //查找存放用户
-        Map<String, Object> query = Query.withDelFlag();
-        query.put("id", userId);
-        User user = userDao.getByEntity(query);
+        Map<String, Object> userQuery = Query.withDelFlag();
+        userQuery.put("id", userId);
+        User user = userDao.getByEntity(userQuery);
         userVo.setUser(user);
         //用户信息
+        Map<String, Object> query = Query.withDelFlag();
+        query.put("userId", userId);
         UserInfo userInfo = userInfoDao.getByEntity(query);
-        userVo.setUserInfo(userInfo);
         userVo.setUserInfo(userInfo);
         //用户角色
         List<Role> roles = roleDao.findWithUserId(query);

@@ -13,7 +13,7 @@
 		WHERE
 		a.del_flag = #{delFlag}
 		AND
-		b.user_id = #{UserId}
+		b.user_id = #{userId}
 	</select>
 
 	<!--*********************************************************************-->

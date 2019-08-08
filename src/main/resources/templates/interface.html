@@ -13,10 +13,10 @@
     <!--导航栏-->
     <div class="row border-bottom">
         <ul class="layui-nav">
-            <li class="layui-nav-item" style="float:right;">
+            <li th:if="${userInfo} != null" class="layui-nav-item" style="float:right;">
                 <a href="/logout">退出</a>
             </li>
-            <li class="layui-nav-item" style="float:right;">
+            <li th:if="${userInfo} == null" class="layui-nav-item" style="float:right;">
                 <a href="javascript:;" onclick="openLogin()">登陆</a>
             </li>
 
@@ -28,10 +28,6 @@
                     <dd><a href="javascript:;">安全管理</a></dd>
                 </dl>
             </li>
-
-            <!--<li class="layui-nav-item" style="float:right;">-->
-                <!--<a href="/index">平台管理<span class="layui-badge-dot"></span></a>-->
-            <!--</li>-->
 
             <li class="layui-nav-item">
                 <span href="javascript:;" style="font-size: 30px">CONGITION</span>

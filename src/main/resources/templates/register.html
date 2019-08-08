@@ -11,6 +11,7 @@
     <link href="/css/font-awesome.css" rel="stylesheet">
     <link href="/css/animate.css" rel="stylesheet">
     <link href="/css/login_v1.css" rel="stylesheet">
+    <link href="/css/layui.css" rel="stylesheet">
     <link href="/css/plugins/bootstrapvalidator/bootstrapValidator.min.css" rel="stylesheet">
     <style>
         /*<!--禁用bootshtap相关样式-->*/
@@ -70,24 +71,29 @@
                 <input type="password" id="phone_password" name="password" class="form-control" placeholder="请输入密码">
 
                 <div class="form_item">
-                    <a type="submit" id="phoneSubmit" class="btn btn-login btn-block">注册</a>
+                    <a type="submit" id="phoneSubmit" class="btn btn-primary btn-block">注册</a>
                 </div>
             </from>
         </div>
 
-        <!--<div v-show="cur==1">-->
-            <!--<form id="emailRegister">-->
-                <!--<input type="text" name="name" class="form-control" placeholder="请输入邮箱">-->
+        <div v-show="cur==1">
+            <form id="emailRegister">
+                <input type="text" name="name" class="form-control" placeholder="请输入邮箱">
 
-                <!--<input type="password" name="password" class="form-control" placeholder="密码">-->
+                <input type="password" name="password" class="form-control" placeholder="密码">
 
-                <!--<div class="form_item">-->
-                    <!--<input type="submit" class="btn btn-primary btn-block" value="注册">-->
-                <!--</div>-->
-            <!--</form>-->
-        <!--</div>-->
+                <div class="form_item">
+                    <input type="submit" class="btn btn-primary btn-block" value="注册">
+                </div>
+            </form>
+        </div>
     </div>
 
+
+    <div class="signup-footer">
+        <!--© 2019 xxx.com  京ICP备 12003892号-11 XXXXX有限公司-->
+        <div class="pull-left">&copy; 2019 cognition.com 冀ICP备19019505号-1 carManger车辆管理平台</div>
+    </div>
 </div>
 
 

@@ -116,21 +116,5 @@ public class SnowFlake {
         return timestamp;
     }
 
-//    public static void main(String[] args) {
-//        final SnowFlakeIdGenerator idGenerator = new SnowFlakeIdGenerator(1, 1);
-//        // 线程池并行执行10000次ID生成
-//        ExecutorService executorService = Executors.newCachedThreadPool();
-//        for (int i = 0; i < 10000; i++) {
-//            executorService.execute(new Runnable() {
-//                @Override
-//                public void run() {
-//                    long id = idGenerator.nextId();
-//                    System.out.println(id);
-//                }
-//            });
-//        }
-//        executorService.shutdown();
-//    }
-
 }
 

@@ -14,15 +14,39 @@
 		  id = #{value}
 	</select>
 
+	<select id="getByEntity" resultType="com.root.cognition.system.entity.UserRole">
+		select
+		  `id`,`user_id`,`role_id`
+		from
+		  sys_user_role
+		<where>
+			<if test="id !=null and id!=''">
+				id = #{id}
+			</if>
+			<if test="userId != null and userId != ''">
+				and user_id = #{userId}
+			</if>
+			<if test="roleId != null and roleId != ''">
+				and role_id = #{roleId}
+			</if>
+		</where>
+	</select>
+
 	<select id="findList" resultType="com.root.cognition.system.entity.UserRole">
 		select
 		  `id`,`user_id`,`role_id`
         from
           sys_user_role
 		<where>
-			<if test="id != null and id != ''"> and id = #{id} </if>
-			<if test="userId != null and userId != ''"> and user_id = #{userId} </if>
-			<if test="roleId != null and roleId != ''"> and role_id = #{roleId} </if>
+			<if test="id != null and id != ''">
+			 	and id = #{id}
+			</if>
+			<if test="userId != null and userId != ''">
+			 	and user_id = #{userId}
+			</if>
+			<if test="roleId != null and roleId != ''">
+			 	and role_id = #{roleId}
+			</if>
 		</where>
 		<choose>
 			<when test="sort != null and sort.trim() != ''">

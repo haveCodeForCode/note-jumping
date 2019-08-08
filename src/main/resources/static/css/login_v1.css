@@ -39,13 +39,6 @@ html{
     border: 1px solid #0097ee;
 }
 
-/*.signinpanel .logopanel {*/
-    /*float: none;*/
-    /*width: auto;*/
-    /*padding: 0;*/
-    /*background: none;*/
-/*}*/
-
 .signinpanel .signin-info ul {
     list-style: none;
     padding: 0;
@@ -56,7 +49,7 @@ html{
 
 .signinpanel .form-control {
     display: block;
-    margin-top: 15px;
+    margin-top: 30px;
 }
 
 .signinpanel .uname {
@@ -86,7 +79,7 @@ html{
 .signinpanel h3{
     color: #333333;
     font-size: 24px;
-    font-family: "microsoft yahei";
+    font-family: "microsoft yahei", serif;
     font-weight: 400;
 }
 .signup-footer{border-top: solid 1px rgba(255,255,255,.3);margin:20px 0;padding-top: 15px;}
@@ -199,6 +192,7 @@ html{
 @media screen and (max-width: 768px) {
     .signinpanel {
         width: 400px!important;
+        height: 550px!important;
     }
     .signinpanel form {
         margin-top: 20px;
@@ -243,5 +237,5 @@ html{
     display: block;
     right: 15px;
     top: 2px;
-    line-height: 55px;
+    line-height: 85px;
 }

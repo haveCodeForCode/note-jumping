@@ -45,6 +45,9 @@
             <if test="userName !=null and userName !=''">
                 AND a.user_name =#{userNmae}
             </if>
+            <if test="userId !=null and userId !=''">
+                AND a.user_id = #{userId}
+            </if>
         </where>
         <choose>
             <when test="sort != null and sort.trim() != ''">
@@ -65,35 +68,35 @@
     </select>
 
     <!-- 插入用户 -->
-    <insert id="insert">
+    <insert id="insert" parameterType="com.root.cognition.system.entity.UserInfo">
         INSERT INTO sys_user_info(
         `userinfo_id`,
         `user_id`,
         <if test="userName !=null and userName !=''">
             `user_name`,
         </if>
-        <if test="picId !=null and picId !=''">
-            `pic_id`,
+        <if test="picUrl !=null and picUrl !=''">
+            `pic_url`,
         </if>
         `create_by`,
         `create_time`,
         `update_by`,
         `update_time`,
-        `del_flage`
+        `del_flag`
         ) VALUES (
         #{id},
         #{userId},
         <if test="userName !=null and userName !=''">
             #{userName},
         </if>
-        <if test="picId !=null and picId !=''">
-            #{picId},
+        <if test="picUrl !=null and picUrl !=''">
+            #{picUrl},
         </if>
         #{createBy},
-        #{gmtCreate},
-        #{updater},
-        #{gmtModified},
-        #{delFlage}
+        #{createTime},
+        #{updateBy},
+        #{updateTime},
+        #{delFlag}
         )
     </insert>
 
@@ -104,14 +107,14 @@
         <if test="userName !=null and userName !=''">
             `user_name` = #{userName},
         </if>
-        <if test="userMobile !=null and userMobile !=''">
-            `user_mobile` = #{userMobile},
+        <if test="picUrl !=null and picUrl !=''">
+            `pic_url` = #{picUrl},
         </if>
         `create_by` = #{createBy},
         `create_time` = #{createTime},
         `update_by` = #{updateBy},
         `updateTime` = #{updateTime},
-        `del_flage` = #{delFlage}
+        `del_flag` = #{delFlag}
         WHERE id = #{id}
     </update>
 
@@ -119,11 +122,12 @@
         a.userinfo_id AS  "id",
         a.user_id     AS  "userId",
         a.user_name   AS  "userName",
+        a.pic_url     AS  "picUrl",
         a.create_by    AS "createBy",
         a.create_time  AS "createTime",
         a.update_by   AS "updateBy",
         a.update_time AS  "updateTime",
-        a.del_flag   AS  "delFlage"
+        a.del_flag   AS  "delFlag"
     </sql>
 
 </mapper>

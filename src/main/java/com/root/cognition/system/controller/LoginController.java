@@ -147,6 +147,14 @@ public class LoginController extends BaseController {
 //    }
 
 
+    /**
+     * 登陆接口
+     * @param loginInfo
+     * @param password
+     * @param verify
+     * @param request
+     * @return
+     */
     @PostMapping(value = "/login")
     @ResponseBody
     ResultMap login(String loginInfo, String password, String verify, HttpServletRequest request) {
