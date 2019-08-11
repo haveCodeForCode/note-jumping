@@ -1,6 +1,5 @@
 package com.root.cognition.system.vo;
 
-import com.root.cognition.common.persistence.Tree;
 import com.root.cognition.system.entity.*;
 
 import java.io.Serializable;
@@ -42,7 +41,7 @@ public class UserVo implements Serializable {
     /**
      * 菜单树
      */
-    private  List<Tree<Menu>> menus;
+    private List<Menu> menus;
 
     /**
      * 用户相关登陆信息
@@ -67,11 +66,11 @@ public class UserVo implements Serializable {
         this.user = user;
     }
 
-    public List<Tree<Menu>> getMenus() {
+    public List<Menu> getMenus() {
         return menus;
     }
 
-    public void setMenus(List<Tree<Menu>> menus) {
+    public void setMenus(List<Menu> menus) {
         this.menus = menus;
     }
 

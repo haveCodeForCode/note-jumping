@@ -7,12 +7,10 @@ import com.root.cognition.common.until.BuildTree;
 import com.root.cognition.common.until.Query;
 import com.root.cognition.common.until.StringUtils;
 import com.root.cognition.common.until.codegenerate.SnowFlake;
-import com.root.cognition.system.dao.RoleDao;
-import com.root.cognition.system.dao.UserDao;
-import com.root.cognition.system.dao.UserInfoDao;
-import com.root.cognition.system.dao.UserRoleDao;
+import com.root.cognition.system.dao.*;
 import com.root.cognition.system.entity.*;
 import com.root.cognition.system.service.DeptService;
+import com.root.cognition.system.service.MenuService;
 import com.root.cognition.system.service.UserService;
 import com.root.cognition.system.vo.UserVo;
 import org.apache.commons.lang3.ArrayUtils;
@@ -48,6 +46,8 @@ public class UserServiceImpl implements UserService {
 
     private DeptService deptService;
 
+    private MenuDao menuDao;
+
 
 //    @Autowired
 //    private FileService sysFileService;
@@ -77,6 +77,11 @@ public class UserServiceImpl implements UserService {
     @Autowired
     public void setUserInfoDao(UserInfoDao userInfoDao) {
         this.userInfoDao = userInfoDao;
+    }
+
+    @Autowired
+    public void setMenuDao(MenuDao menuDao) {
+        this.menuDao = menuDao;
     }
 
     /**
@@ -113,8 +118,9 @@ public class UserServiceImpl implements UserService {
         //用户角色
         List<Role> roles = roleDao.findWithUserId(query);
         userVo.setRoles(roles);
-        //部门ID
-//        userVo.setDept(deptService.get(user.getId()));
+        //用户菜单
+        List<Menu> menuList = menuDao.listMenuByUserId(userId);
+        userVo.setMenus(menuList);
         return userVo;
     }
 

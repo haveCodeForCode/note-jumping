@@ -4,27 +4,21 @@
 <mapper namespace="com.root.cognition.system.dao.MenuDao">
 
 	<select id="listMenuByUserId" resultType="com.root.cognition.system.entity.Menu">
-		select distinct
-		m.menu_id AS "id", m.parent_id AS parentId, m.name AS "name", m.url as "url",
-		m.perms as "perms",m.type AS "type",m.icon AS "icon",m.order_num AS "orderNum",
-		m.create_by AS "createBy",
-		m.create_time AS "createTime",
-		m.update_by	AS "updateBy",
-		m.update_time AS "updateTime",
-		m.del_flag 	AS "delFlag"
-		from sys_menu m
-			left join sys_role_menu rm on m.menu_id = rm.menu_id
+		select
+		  <include refid="menuColumns"/>
+		from sys_menu a
+			left join sys_role_menu rm on a.menu_id = rm.menu_id
 			left join sys_user_role ur on rm.role_id =ur.role_id
-		where ur.user_id = #{id} and m.type in(0,1)
+		where ur.user_id = #{id} and a.type in(0,1)
 		order by
-		m.order_num
+		a.order_num
 	</select>
 
 	<select id="listUserPerms" resultType="java.lang.String">
 		select
-			distinct sm.perms
-		from sys_menu sm
-			left join sys_role_menu srm on sm.menu_id = srm.menu_id
+			distinct a.perms
+		from sys_menu a
+			left join sys_role_menu srm on a.menu_id = srm.menu_id
 			left join sys_user_role sur on srm.role_id = sur.role_id
 		where sur.user_id = #{id}
 	</select>

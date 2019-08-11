@@ -87,14 +87,6 @@ public class MenuServiceImpl implements MenuService {
         return menuDao.insert(menu);
     }
 
-    //@Cacheable
-    @Override
-    public Tree<Menu> getSysMenuTree(Long id) {
-        List<Menu> menuList = menuDao.listMenuByUserId(id);
-        List<Tree<Menu>> trees = treeFormation(menuList);
-        // 默认顶级菜单为０，根据数据库实际情况调整
-        return BuildTree.build(trees);
-    }
 
     @Override
     public Tree<Menu> getTree() {

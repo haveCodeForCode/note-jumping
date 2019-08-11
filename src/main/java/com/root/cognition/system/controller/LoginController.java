@@ -73,6 +73,23 @@ public class LoginController extends BaseController {
         return "guide";
     }
 
+    /*** 前往登陆页面*/
+    @RequestMapping(value = "/toLogin")
+    String toLogin() {
+        return "login_v1";
+    }
+
+    /**
+     * 前往注册页面
+     *
+     * @return
+     */
+    @RequestMapping(value = "/toRegister")
+    String toRegister() {
+        return "register";
+    }
+
+
     /**
      * 首页
      *
@@ -89,22 +106,6 @@ public class LoginController extends BaseController {
         return "interface";
     }
 
-
-    /*** 前往登陆页面*/
-    @RequestMapping(value = "/toLogin")
-    String toLogin() {
-        return "login_v1";
-    }
-
-    /**
-     * 前往注册页面
-     *
-     * @return
-     */
-    @RequestMapping(value = "/toRegister")
-    String toRegister() {
-        return "register";
-    }
 
     /**
      * 后台管理页面

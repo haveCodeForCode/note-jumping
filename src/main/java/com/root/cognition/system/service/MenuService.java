@@ -29,14 +29,6 @@ public interface MenuService {
 	Tree<Menu> getTree(String id);
 
 	/**
-	 * 根据userid查询对应user菜单形成树
-	 *
-	 * @param id
-	 * @return
-	 */
-	Tree<Menu> getSysMenuTree(Long id);
-
-	/**
 	 * 根据用户id查询对应的数据
 	 *
 	 * @param id
@@ -45,6 +37,7 @@ public interface MenuService {
 	List<Tree<Menu>> listMenuTree(Long id);
 
 	/**
+	 * 根据用户ID
 	 * @param userId
 	 * @return
 	 */

@@ -1,16 +1,16 @@
 logging:
   level:
-#    com.root.cognition: debug
-     com.root.cognition: info
+    com.root.cognition: debug
+#     com.root.cognition: info
 spring:
   #数据库编写（使用alibaba）
   datasource:
     name: first
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
+    username: root
     url: jdbc:mysql://39.108.237.210:3306/cognition?useUnicode=true&characterEncoding=utf-8
 #    url: jdbc:mysql://localhost:3306/cognition?useUnicode=true&characterEncoding=utf-8
-    username: root
     password: T$jIdEL9bOyQ
 #    password: M$Fa!SN5
     #druid配置->DruidDBConfig
