@@ -1,5 +1,6 @@
 package com.root.cognition.system.controller;
 
+import com.root.cognition.common.config.Constant;
 import com.root.cognition.common.persistence.BaseController;
 import com.root.cognition.common.persistence.Tree;
 import com.root.cognition.common.until.RandomValidateCodeUtil;
@@ -79,28 +80,29 @@ public class LoginController extends BaseController {
         return "login_v1";
     }
 
-    /**
-     * 前往注册页面
-     *
-     * @return
-     */
+    /*** 前往注册页面***/
     @RequestMapping(value = "/toRegister")
     String toRegister() {
         return "register";
     }
 
+//    String
 
-    /**
-     * 首页
-     *
-     * @param model
-     * @return
-     */
+
+    /*** 首页 */
     @GetMapping("/toInterface")
     String toInterface(Model model) {
         if (getUser() != null) {
             UserVo userVo = userService.getbyUserId(getUserId());
-            model.addAttribute("menus", userVo.getMenus());
+            List<Menu> menuList = userVo.getMenus();
+            if (menuList !=null && menuList.size()>0) {
+                for (Menu menu:menuList){
+                    if (menu.getParentId().toString().equals(Constant.STRING_ZERO)){
+                        menuList.remove(menu);
+                    }
+                }
+                model.addAttribute("menus", menuList);
+            }
             model.addAttribute("userInfo", userVo.getUserInfo());
         }
         return "interface";

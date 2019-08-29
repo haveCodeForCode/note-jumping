@@ -35,22 +35,11 @@
         </ul>
     </div>
 
-    <div class="top">
-        <ul>
-            <li><a href="#">车辆管理</a></li>
-            <li><a href="#">车辆年检</a></li>
-            <!--<li><a href="#">一级菜单</a></li>-->
-            <!--<li><a href="#"><b>一级菜单</b></a></li>-->
-            <!--<li><a href="#">一级菜单</a></li>-->
-            <!--<li>-->
-            <!--<a href="#">一级菜单</a>-->
-            <!--<ul>-->
-            <!--<li><a href="#">二级菜单</a></li>-->
-            <!--<li><a href="#">二级菜单</a></li>-->
-            <!--</ul>-->
-            <!--</li>-->
-        </ul>
+    <div class="top" id="menu-box">
+        <ul></ul>
     </div>
+
+    <div class="faceBody"></div>
 
 </div>
 
@@ -59,7 +48,7 @@
 <script type="text/javascript" src="/js/bootstrap.min.js?v=3.3.6"></script>
 <script type="text/javascript" src="/js/layui.all.js"></script>
 
-<script type="text/javascript">
+<script th:inline="javascript" type="text/javascript">
     var index;
     function openLogin() {
          index = layer.open({
@@ -70,30 +59,39 @@
         });
     }
 
-    // $(document).ready(function () {
-    //     var menuStr;
-    //     $.each(infos, function (index, el) {
-    //         menuStr += '<li>' + '<a href="javascript:void(0);" onclick="menuClick(this,'+index +')">' + '<span>' + el.name + '</span></a></li>';
-    //     });
-    //
-    //     $('#menu-box ul').append(menuStr);
-    // });
-
-
-    layui.use('element',function () {
-        var element = layui.element;
-
-
-        // function chooseSecoundMenu(i) {
-        //     var active = JSON.parse(sessionStorage.getItem("infos"))['meunVos'][i];
-        //     if (active && active['childList'].length > 0) {
-        //         $(".layui-body").load(active['childList'][0].path + '.html');
-        //     } else {
-        //         $(".layui-body").load('default.html');
-        //     }
+    var menus;
+    $(document).ready(function () {
+        menus = [[${menus}]];
+        var menuStr ='';
+        if (menus && menus !== '') {
+            $.each(menus, function (index, el) {
+                menuStr += '<li>' + '<a href="javascript:void(0);" onclick="menuClick(' + el.url + ')">' + '<span>' + el.name + '</span></a></li>';
+            });
+        }
+        // else {
+        //     menuStr = '<li>' + '<a href="javascript:void(0);" onclick="menuClick(' + "/login" + ')">' + '<span>' + "用户管理" + '</span></a></li>';
         // }
 
-    })
+        $('#menu-box ul').append(menuStr);
+        menuClick();
+    });
+
+
+    function menuClick(i) {
+        if (menus && menus.length > 0) {
+            $(".faceBody").load(i);
+        } else {
+            $(".faceBody").load('/home.html');
+        }
+    }
+
+
+    // layui.use('element',function () {
+    //     var element = layui.element;
+    //
+    //
+    //
+    // })
 </script>
 </body>
 </html>
