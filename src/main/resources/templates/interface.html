@@ -9,37 +9,39 @@
 </head>
 <body>
 
-<div>
-    <!--导航栏-->
-    <div class="row border-bottom">
-        <ul class="layui-nav">
-            <li th:if="${userInfo} != null" class="layui-nav-item" style="float:right;">
-                <a href="/logout">退出</a>
-            </li>
-            <li th:if="${userInfo} == null" class="layui-nav-item" style="float:right;">
-                <a href="javascript:;" onclick="openLogin()">登陆</a>
-            </li>
+<div >
+    <div class="navigation">
+        <!--导航栏-->
+        <div class="row border-bottom">
+            <ul class="layui-nav">
+                <li class="layui-nav-item" style="float:right;" th:if="${userInfo} != null">
+                    <a href="/logout">退出</a>
+                </li>
+                <li class="layui-nav-item" style="float:right;" th:if="${userInfo} == null">
+                    <a href="javascript:;" onclick="openLogin()">登陆</a>
+                </li>
 
-            <li th:if="${userInfo} != null" class="layui-nav-item" style="float:right;">
-                <a href="javascript:;"><img src="//t.cn/RCzsdCq" class="layui-nav-img">
-                    <span th:text="${userInfo.userName}">未登录</span></a>
-                <dl class="layui-nav-child">
-                    <dd><a href="javascript:;">修改信息</a></dd>
-                    <dd><a href="javascript:;">安全管理</a></dd>
-                </dl>
-            </li>
+                <li class="layui-nav-item" style="float:right;" th:if="${userInfo} != null">
+                    <a href="javascript:;"><img class="layui-nav-img" src="//t.cn/RCzsdCq">
+                        <span th:text="${userInfo.userName}">未登录</span></a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;">修改信息</a></dd>
+                        <dd><a href="javascript:;">安全管理</a></dd>
+                    </dl>
+                </li>
 
-            <li class="layui-nav-item">
-                <span href="javascript:;" style="font-size: 30px">CONGITION</span>
-            </li>
-        </ul>
+                <li class="layui-nav-item">
+                    <span href="javascript:;" style="font-size: 30px">CONGITION</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="top" id="menu-box">
+            <ul></ul>
+        </div>
     </div>
 
-    <div class="top" id="menu-box">
-        <ul></ul>
-    </div>
-
-    <div class="faceBody"></div>
+    <div class="mainContentFrame"></div>
 
 </div>
 
@@ -79,9 +81,9 @@
 
     function menuClick(i) {
         if (menus && menus.length > 0) {
-            $(".faceBody").load(i);
+            $(".mainContentFrame").load(i);
         } else {
-            $(".faceBody").load('/home.html');
+            $(".mainContentFrame").load('/toHome');
         }
     }
 
