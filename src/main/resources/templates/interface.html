@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<div >
+<div>
     <div class="navigation">
         <!--导航栏-->
         <div class="row border-bottom">
@@ -36,12 +36,10 @@
             </ul>
         </div>
 
-        <div class="top" id="menu-box">
-            <ul></ul>
-        </div>
+        <div class="top" id="menu-box"><ul></ul></div>
     </div>
 
-    <div class="mainContentFrame"></div>
+    <div class="main-content-frame"></div>
 
 </div>
 
@@ -69,10 +67,9 @@
             $.each(menus, function (index, el) {
                 menuStr += '<li>' + '<a href="javascript:void(0);" onclick="menuClick(' + el.url + ')">' + '<span>' + el.name + '</span></a></li>';
             });
+        } else {
+            menuStr = '<li>' + '<a href="javascript:void(0);" onclick="menuClick(' + "/login" + ')">' + '<span>' + "用户管理" + '</span></a></li>';
         }
-        // else {
-        //     menuStr = '<li>' + '<a href="javascript:void(0);" onclick="menuClick(' + "/login" + ')">' + '<span>' + "用户管理" + '</span></a></li>';
-        // }
 
         $('#menu-box ul').append(menuStr);
         menuClick();
@@ -81,9 +78,9 @@
 
     function menuClick(i) {
         if (menus && menus.length > 0) {
-            $(".mainContentFrame").load(i);
+            $(".main-content-frame").load(i);
         } else {
-            $(".mainContentFrame").load('/toHome');
+            $(".main-content-frame").load('/toHome');
         }
     }
 
