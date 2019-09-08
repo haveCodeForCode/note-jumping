@@ -3,52 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <title>知域知网，了解一切，简单生活</title>
-    <link rel="stylesheet" href="/css/layui.css">
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/interface.css">
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="website-front/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/font-awesome.css">
+    <link rel="stylesheet" href="website-front/css/animate.css">
+    <link rel="stylesheet" href="website-front/css/style.css">
+    <!--    <link rel="stylesheet" href="/css/layui.css">-->
+<!--        <link rel="stylesheet" href="/css/bootstrap.min.css">-->
+    <!--    <link rel="stylesheet" href="/css/interface.css">-->
+    <!--    <link rel="stylesheet" href="/css/style.css">-->
 </head>
-<body>
+<body class="top-navigation">
 
-<div class="content">
-    <div class="navigation">
-        <!--导航栏-->
-        <div class="row border-bottom">
-            <ul class="layui-nav">
-                <li class="layui-nav-item" style="float:right;" th:if="${userInfo} != null">
-                    <a href="/logout">退出</a>
-                </li>
-                <li class="layui-nav-item" style="float:right;" th:if="${userInfo} == null">
-                    <a href="javascript:;" onclick="openLogin()">登陆</a>
-                </li>
+<div id="wrapper">
+    <div id="page-wrapper" class="gray-bg">
+        <div class="row border-bottom white-bg">
+            <nav class="navbar navbar-expand-lg navbar-static-top" role="navigation">
 
-                <li class="layui-nav-item" style="float:right;" th:if="${userInfo} != null">
-                    <a href="javascript:;"><img class="layui-nav-img" src="//t.cn/RCzsdCq">
-                        <span th:text="${userInfo.userName}">未登录</span></a>
-                    <dl class="layui-nav-child">
-                        <dd><a href="javascript:;">修改信息</a></dd>
-                        <dd><a href="javascript:;">安全管理</a></dd>
-                    </dl>
-                </li>
+                <a href="#" class="navbar-brand">CONGITION</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fa fa-reorder"></i>
+                </button>
 
-                <li class="layui-nav-item">
-                    <span href="javascript:;" style="font-size: 30px">CONGITION</span>
-                </li>
-            </ul>
+                <div class="navbar-collapse collapse" id="navbar">
+                    <ul class="nav navbar-nav mr-auto">
+
+                        <li class="dropdown">
+                            <a aria-expanded="false" role="button" href="#" class="dropdown-toggle"
+                               data-toggle="dropdown"> 菜单</a>
+                            <ul role="menu" class="dropdown-menu">
+                                <li><a href="">菜单</a></li>
+                                <li><a href="">菜单</a></li>
+                                <li><a href="">菜单</a></li>
+                                <li><a href="">菜单</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="dropdown">
+                            <a aria-expanded="false" role="button" href="#" class="dropdown-toggle"
+                               data-toggle="dropdown"> 菜单</a>
+                            <ul role="menu" class="dropdown-menu">
+                                <li><a href="">菜单</a></li>
+                                <li><a href="">菜单</a></li>
+                                <li><a href="">菜单</a></li>
+                                <li><a href="">菜单</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="dropdown">
+                            <a aria-expanded="false" role="button" href="#" class="dropdown-toggle"
+                               data-toggle="dropdown"> 菜单</a>
+                            <ul role="menu" class="dropdown-menu">
+                                <li><a href="">菜单</a></li>
+                                <li><a href="">菜单</a></li>
+                                <li><a href="">菜单</a></li>
+                                <li><a href="">菜单</a></li>
+                            </ul>
+                        </li>
+
+
+                    </ul>
+                    <ul class="nav navbar-top-links navbar-right">
+
+                        <li class="dropdown" th:if="${userInfo} != null">
+                            <a aria-expanded="false" role="button" href="#" class="dropdown-toggle"
+                               data-toggle="dropdown" th:text="${userInfo.userName}">未登录</a>
+                            <ul role="menu" class="dropdown-menu">
+                                <li><a href="">修改信息</a></li>
+                                <li><a href="">安全管理</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="layui-nav-item" style="float:right;" th:if="${userInfo} == null">
+                            <a href="javascript:;" onclick="openLogin()"><i class="fa fa-sign-in"></i>登陆</a>
+                        </li>
+                        <li class="layui-nav-item" style="float:right;" th:if="${userInfo} != null">
+                            <a href="/logout"> <i class="fa fa-sign-out"></i> 退出</a>
+                        </li>
+                    </ul>
+
+                </div>
+            </nav>
         </div>
 
-        <div class="top" id="menu-box">
-            <ul></ul>
+
+        <div class="footer">
+            <div class="float-right">
+                <strong>2.9.2 inspinia</strong>
+            </div>
+            <div>
+                <strong>Copyright</strong> inspinia 2.9.2 &copy; 2014-2018
+            </div>
         </div>
     </div>
-
-    <div class="main-content-frame"></div>
-
 </div>
-
 <!-- 全局js -->
-<script type="text/javascript" src="/js/jquery.min.js?v=2.1.4"></script>
-<script type="text/javascript" src="/js/bootstrap.min.js?v=3.3.6"></script>
+<!--工具方法-->
+<script type="text/javascript" src="/website-front/js/jquery-2.1.1.js"></script>
+<script type="text/javascript" src="/website-front/js/popper.min.js"></script>
+<script type="text/javascript" src="/website-front/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+<script type="text/javascript" src="/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="/js/plugins/pace/pace.min.js"></script>
+<!--自定义方法-->
+<script src="/website-front/js/inspinia.js"></script>
+
 <script type="text/javascript" src="/js/layui.all.js"></script>
 
 <script th:inline="javascript" type="text/javascript">
