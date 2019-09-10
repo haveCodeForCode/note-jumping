@@ -1,7 +1,7 @@
 package com.root.cognition.system.dao;
 
 
-import com.root.cognition.common.persistence.BaseDao;
+import com.root.cognition.system.persistence.BaseDao;
 import com.root.cognition.system.entity.Menu;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;

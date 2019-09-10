@@ -2,7 +2,7 @@ package com.root.cognition.system.service.impl;
 
 
 import com.root.cognition.common.config.Constant;
-import com.root.cognition.common.persistence.Tree;
+import com.root.cognition.system.persistence.Tree;
 import com.root.cognition.common.until.BuildTree;
 import com.root.cognition.common.until.Query;
 import com.root.cognition.system.dao.DeptDao;

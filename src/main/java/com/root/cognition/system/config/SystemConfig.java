@@ -2,11 +2,11 @@ package com.root.cognition.system.config;
 
 
 import com.root.cognition.common.config.Constant;
-import com.root.cognition.common.redis.RedisCacheManager;
-import com.root.cognition.common.redis.RedisManager;
-import com.root.cognition.common.redis.RedisSessionDAO;
-import com.root.cognition.common.shiro.BDSessionListener;
-import com.root.cognition.common.shiro.UserRealm;
+import com.root.cognition.system.config.redis.RedisCacheManager;
+import com.root.cognition.system.config.redis.RedisManager;
+import com.root.cognition.system.config.redis.RedisSessionDAO;
+import com.root.cognition.system.config.shiro.BDSessionListener;
+import com.root.cognition.system.config.shiro.UserRealm;
 import net.sf.ehcache.CacheManager;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.mgt.SecurityManager;

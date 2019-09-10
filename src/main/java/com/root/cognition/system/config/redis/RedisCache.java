@@ -1,4 +1,4 @@
-package com.root.cognition.common.redis;
+package com.root.cognition.system.config.redis;
 
 
 import com.root.cognition.common.until.SerializeUtil;

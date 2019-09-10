@@ -26,7 +26,7 @@
                 </button>
 
                 <div class="navbar-collapse collapse" id="navbar">
-                    <ul class="nav navbar-nav mr-auto">
+                    <ul class="nav navbar-nav mr-auto" id="navbar-ul">
 <!--                        <li class="dropdown">-->
 <!--                            <a aria-expanded="false" role="button" href="#" class="dropdown-toggle"-->
 <!--                               data-toggle="dropdown"> 菜单</a>-->
@@ -34,8 +34,8 @@
 <!--                                <li><a href="">菜单</a></li>-->
 <!--                            </ul>-->
 <!--                        </li>-->
-
                     </ul>
+
                     <ul class="nav navbar-top-links navbar-right">
 
                         <li class="dropdown" th:if="${userInfo} != null">
@@ -54,7 +54,6 @@
                             <a href="/logout"> <i class="fa fa-sign-out"></i> 退出</a>
                         </li>
                     </ul>
-
                 </div>
             </nav>
         </div>
@@ -62,10 +61,10 @@
 
         <div class="footer">
             <div class="float-right">
-                <strong>2.9.2 inspinia</strong>
+                <strong>1.0 cognition</strong>
             </div>
             <div>
-                <strong>Copyright</strong> inspinia 2.9.2 &copy; 2014-2018
+                <strong>Copyright</strong> LonelySingleByte 1.0 &copy; 2019-2019
             </div>
         </div>
     </div>
@@ -108,7 +107,7 @@
             menuStr = '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" onclick="menuClick(' + "/login" + ')">' + "用户管理" + '</a>';
         }
 
-        $('#navbar ul').append(menuStr);
+        $('#navbar-ul').append(menuStr);
         menuClick();
     });
 

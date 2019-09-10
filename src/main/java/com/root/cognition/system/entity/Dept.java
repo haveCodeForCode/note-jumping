@@ -1,7 +1,7 @@
 package com.root.cognition.system.entity;
 
 
-import com.root.cognition.common.persistence.BaseEntity;
+import com.root.cognition.system.persistence.BaseEntity;
 import java.io.Serializable;
 
 /**

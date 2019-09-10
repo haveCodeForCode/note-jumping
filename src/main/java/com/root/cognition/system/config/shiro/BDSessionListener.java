@@ -1,4 +1,4 @@
-package com.root.cognition.common.shiro;
+package com.root.cognition.system.config.shiro;
 
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.SessionListener;

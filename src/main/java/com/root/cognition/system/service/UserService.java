@@ -1,13 +1,12 @@
 package com.root.cognition.system.service;
 
-import com.root.cognition.common.persistence.Tree;
+import com.root.cognition.system.persistence.Tree;
 import com.root.cognition.system.entity.Dept;
 import com.root.cognition.system.entity.User;
 import com.root.cognition.system.vo.UserVo;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public interface UserService {
 

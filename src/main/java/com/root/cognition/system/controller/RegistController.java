@@ -1,8 +1,8 @@
 package com.root.cognition.system.controller;
 
 import com.root.cognition.common.config.Constant;
-import com.root.cognition.common.persistence.BaseController;
-import com.root.cognition.common.redis.RedisService;
+import com.root.cognition.system.persistence.BaseController;
+import com.root.cognition.system.config.redis.RedisService;
 import com.root.cognition.common.until.*;
 import com.root.cognition.common.until.encrypt.Md5Utils;
 import com.root.cognition.modules.service.SmsLogService;

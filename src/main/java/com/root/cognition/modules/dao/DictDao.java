@@ -1,12 +1,10 @@
 package com.root.cognition.modules.dao;
 
 
-import com.root.cognition.common.persistence.BaseDao;
+import com.root.cognition.system.persistence.BaseDao;
 import com.root.cognition.modules.entity.Dict;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 /**
  * 字典表

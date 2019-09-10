@@ -2,9 +2,8 @@ package com.root.cognition.modules.service;
 
 
 
-import com.root.cognition.common.persistence.Tree;
+import com.root.cognition.system.persistence.Tree;
 import com.root.cognition.modules.entity.Dict;
-import com.root.cognition.system.entity.User;
 
 
 import java.util.List;

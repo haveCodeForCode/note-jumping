@@ -1,6 +1,6 @@
 package com.root.cognition.system.service;
 
-import com.root.cognition.common.persistence.Tree;
+import com.root.cognition.system.persistence.Tree;
 import com.root.cognition.system.entity.Menu;
 
 import java.util.List;

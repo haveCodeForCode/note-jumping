@@ -2,7 +2,7 @@ package com.root.cognition.system.service.impl;
 
 
 import com.root.cognition.common.config.Constant;
-import com.root.cognition.common.persistence.Tree;
+import com.root.cognition.system.persistence.Tree;
 import com.root.cognition.common.until.BuildTree;
 import com.root.cognition.common.until.Query;
 import com.root.cognition.common.until.StringUtils;
@@ -10,7 +10,6 @@ import com.root.cognition.common.until.codegenerate.SnowFlake;
 import com.root.cognition.system.dao.*;
 import com.root.cognition.system.entity.*;
 import com.root.cognition.system.service.DeptService;
-import com.root.cognition.system.service.MenuService;
 import com.root.cognition.system.service.UserService;
 import com.root.cognition.system.vo.UserVo;
 import org.apache.commons.lang3.ArrayUtils;

@@ -1,7 +1,7 @@
-package com.root.cognition.common.persistence;
+package com.root.cognition.system.persistence;
 
 
-import com.root.cognition.common.shiro.ShiroUtils;
+import com.root.cognition.system.config.shiro.ShiroUtils;
 import com.root.cognition.system.entity.User;
 import org.springframework.stereotype.Controller;
 

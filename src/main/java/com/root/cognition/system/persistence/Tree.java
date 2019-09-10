@@ -1,4 +1,4 @@
-package com.root.cognition.common.persistence;
+package com.root.cognition.system.persistence;
 
 import com.alibaba.fastjson.JSON;
 

@@ -1,4 +1,4 @@
-package com.root.cognition.common.shiro;
+package com.root.cognition.system.config.shiro;
 
 //slf4j日志
 

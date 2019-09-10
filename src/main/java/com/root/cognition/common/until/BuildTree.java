@@ -1,6 +1,6 @@
 package com.root.cognition.common.until;
 
-import com.root.cognition.common.persistence.Tree;
+import com.root.cognition.system.persistence.Tree;
 
 import java.util.ArrayList;
 import java.util.HashMap;

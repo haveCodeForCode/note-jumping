@@ -1,16 +1,14 @@
 package com.root.cognition.modules.service.impl;
 
 
-import com.root.cognition.common.persistence.Tree;
+import com.root.cognition.system.persistence.Tree;
 import com.root.cognition.common.until.Query;
 import com.root.cognition.modules.dao.DictDao;
 import com.root.cognition.modules.entity.Dict;
 import com.root.cognition.modules.service.DictService;
-import com.root.cognition.system.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

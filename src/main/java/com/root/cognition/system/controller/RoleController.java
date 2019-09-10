@@ -1,6 +1,6 @@
 package com.root.cognition.system.controller;
 
-import com.root.cognition.common.persistence.BaseController;
+import com.root.cognition.system.persistence.BaseController;
 import com.root.cognition.common.until.Query;
 import com.root.cognition.common.until.ResultMap;
 import com.root.cognition.system.entity.Role;

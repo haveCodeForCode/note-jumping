@@ -1,4 +1,4 @@
-package com.root.cognition.common.redis;
+package com.root.cognition.system.config.redis;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import redis.clients.jedis.Jedis;

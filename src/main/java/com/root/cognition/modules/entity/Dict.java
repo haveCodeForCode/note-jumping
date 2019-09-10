@@ -1,6 +1,6 @@
 package com.root.cognition.modules.entity;
 
-import com.root.cognition.common.persistence.BaseEntity;
+import com.root.cognition.system.persistence.BaseEntity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

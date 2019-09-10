@@ -1,4 +1,4 @@
-package com.root.cognition.common.shiro;
+package com.root.cognition.system.config.shiro;
 
 import com.root.cognition.system.entity.User;
 import org.apache.shiro.SecurityUtils;

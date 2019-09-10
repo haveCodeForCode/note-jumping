@@ -1,8 +1,8 @@
 package com.root.cognition.system.controller;
 
 import com.root.cognition.common.config.Constant;
-import com.root.cognition.common.persistence.BaseController;
-import com.root.cognition.common.persistence.Tree;
+import com.root.cognition.system.persistence.BaseController;
+import com.root.cognition.system.persistence.Tree;
 import com.root.cognition.common.until.RandomValidateCodeUtil;
 import com.root.cognition.common.until.ResultMap;
 import com.root.cognition.common.until.StringUtils;
@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -102,13 +103,15 @@ public class LoginController extends BaseController {
         if (getUser() != null) {
             UserVo userVo = userService.getbyUserId(getUserId());
             List<Menu> menuList = userVo.getMenus();
+            //删除菜单父级，只展示详细的菜单
             if (menuList !=null && menuList.size()>0) {
+                List<Menu> menus = new ArrayList<>();
                 for (Menu menu:menuList){
                     if (menu.getParentId().toString().equals(Constant.STRING_ZERO)){
-                        menuList.remove(menu);
+                        menus.remove(menu);
                     }
                 }
-                model.addAttribute("menus", menuList);
+                model.addAttribute("menus", menus);
             }
             model.addAttribute("userInfo", userVo.getUserInfo());
         }

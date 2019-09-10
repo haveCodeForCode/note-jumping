@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.root.cognition.common.persistence;
+package com.root.cognition.system.persistence;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;

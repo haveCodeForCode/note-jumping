@@ -1,8 +1,7 @@
-package com.root.cognition.common.shiro;
+package com.root.cognition.system.config.shiro;
 
 
 import com.root.cognition.common.config.Constant;
-import com.root.cognition.common.until.Query;
 import com.root.cognition.system.config.ApplicationContextRegister;
 import com.root.cognition.system.dao.UserDao;
 import com.root.cognition.system.entity.User;
@@ -13,7 +12,6 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
-import java.util.Map;
 import java.util.Set;
 
 /**
