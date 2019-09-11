@@ -93,7 +93,7 @@ public class LoginController extends BaseController {
      */
     @RequestMapping("/toHome")
     String toHome(){
-        return "home";
+        return "/clienthtml/home";
     }
 
 

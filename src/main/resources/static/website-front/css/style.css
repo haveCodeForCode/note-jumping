@@ -2683,7 +2683,7 @@ div.dt-button-info {
 }
 .widget-head-color-box {
   border-radius: 5px 5px 0 0;
-  margin-top: 10px;
+  /*margin-top: 10px;*/
 }
 .widget .flot-chart {
   height: 100px;
@@ -5033,6 +5033,12 @@ table.table-mail tr td {
   background-color: #1ab394 !important;
   color: #ffffff;
 }
+
+.minimalism-bg {
+  background-color: #1c84c6 !important;
+  color: #ffffff;
+}
+
 .lazur-bg,
 .bg-info {
   background-color: #23c6c8 !important;
