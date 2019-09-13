@@ -41,10 +41,10 @@
                         <li class="dropdown" th:if="${userInfo} != null">
                             <a aria-expanded="false" role="button" href="#" class="dropdown-toggle"
                                data-toggle="dropdown" th:text="${userInfo.userName}">未登录</a>
-                            <ul role="menu" class="dropdown-menu">
-                                <li><a href="">修改信息</a></li>
-                                <li><a href="">安全管理</a></li>
-                            </ul>
+                            <!--<ul role="menu" class="dropdown-menu">-->
+                                <!--<li><a href="">修改信息</a></li>-->
+                                <!--<li><a href="">安全管理</a></li>-->
+                            <!--</ul>-->
                         </li>
 
                         <li class="layui-nav-item" style="float:right;" th:if="${userInfo} == null">
@@ -83,7 +83,11 @@
 <script type="text/javascript" src="/js/layui.all.js"></script>
 
 <script th:inline="javascript" type="text/javascript">
+    <!--全局变量-->
     var index;
+    var userinfo = [[${userInfo}]];
+    var menus = [[${menus}]];
+
     function openLogin() {
          index = layer.open({
             type: 2,
@@ -93,18 +97,18 @@
         });
     }
 
-
-    var menus;
     $(document).ready(function () {
-        menus = [[${menus}]];
+        console.log(menus);
         var menuStr ='';
         if (menus && menus !== '') {
             $.each(menus, function (index, el) {
-                menuStr += '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" onclick="menuClick(' + el.url + ')">' + el.name + '</a>';
+                //class="dropdown-toggle"
+                menuStr += '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="javascript:void(0);"  data-toggle="dropdown" onclick="menuClick(' + el.url + ')">' + el.name + '</a>';
                 // menuStr += '<li>' + '<a href="javascript:void(0);" onclick="menuClick(' + el.url + ')">' + '<span>' + el.name + '</span></a></li>';
             });
         } else {
-            menuStr = '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" onclick="menuClick(' + "/login" + ')">' + "用户管理" + '</a>';
+            //class="dropdown-toggle"
+            menuStr = '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="javascript:void(0);"  data-toggle="dropdown" onclick="menuClick(' + "/login" + ')">' + "用户管理" + '</a>';
         }
 
         $('#navbar-ul').append(menuStr);

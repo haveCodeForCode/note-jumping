@@ -1,11 +1,7 @@
 package com.root.cognition.modules.dao;
 
-
-
-
-
-import com.root.cognition.system.persistence.BaseDao;
 import com.root.cognition.modules.entity.SmsLog;
+import com.root.cognition.system.persistence.BaseDao;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 

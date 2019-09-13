@@ -105,7 +105,7 @@ public class LoginController extends BaseController {
             List<Menu> menuList = userVo.getMenus();
             //删除菜单父级，只展示详细的菜单
             if (menuList !=null && menuList.size()>0) {
-                List<Menu> menus = new ArrayList<>();
+                List<Menu> menus = new ArrayList<>(menuList);
                 for (Menu menu:menuList){
                     if (menu.getParentId().toString().equals(Constant.STRING_ZERO)){
                         menus.remove(menu);

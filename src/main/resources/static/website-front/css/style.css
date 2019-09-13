@@ -2682,7 +2682,8 @@ div.dt-button-info {
   background: #ffffff;
 }
 .widget-head-color-box {
-  border-radius: 5px 5px 0 0;
+  /*border-radius: 5px 5px 0 0;*/
+  border-radius: 5px 5px 5px 5px;
   /*margin-top: 10px;*/
 }
 .widget .flot-chart {
@@ -9601,4 +9602,9 @@ body.md-skin {
   #page-wrapper {
     margin: 0;
   }
+}
+
+.boundary-m {
+
+  border-style: solid;
 }

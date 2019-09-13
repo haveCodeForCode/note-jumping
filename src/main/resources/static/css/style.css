@@ -3450,6 +3450,10 @@ nav.page-tabs .page-tabs-content {
     padding: 0 !important;
 }
 
+.padding-15 {
+    padding: 15px !important;
+}
+
 .no-borders {
     border: none !important;
 }
