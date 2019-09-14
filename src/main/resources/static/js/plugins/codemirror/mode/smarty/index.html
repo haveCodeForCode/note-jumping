@@ -25,8 +25,8 @@
 <article>
 <h2>Smarty mode</h2>
 <form><textarea id="code" name="code">
-{extends file="parent.tpl"}
-{include file="template.tpl"}
+{extends fileRecord="parent.tpl"}
+{include fileRecord="template.tpl"}
 
 {* some example Smarty content *}
 {if isset($name) && $name == 'Blog'}
@@ -57,8 +57,8 @@
 
 	<h3>Smarty 2, custom delimiters</h3>
     <form><textarea id="code2" name="code2">
-{--extends file="parent.tpl"--}
-{--include file="template.tpl"--}
+{--extends fileRecord="parent.tpl"--}
+{--include fileRecord="template.tpl"--}
 
 {--* some example Smarty content *--}
 {--if isset($name) && $name == 'Blog'--}

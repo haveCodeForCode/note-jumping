@@ -1,3 +1,5 @@
+cognition:
+  uploadPath: /var/uploaded_files/
 logging:
   level:
     com.root.cognition: debug

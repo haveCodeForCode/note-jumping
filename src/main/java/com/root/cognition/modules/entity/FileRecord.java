@@ -12,7 +12,7 @@ import java.util.Date;
  * @email 1992lcg@163.com
  * @date 2017-09-19 16:02:20
  */
-public class File extends BaseEntity<File> implements Serializable {
+public class FileRecord extends BaseEntity<FileRecord> implements Serializable {
 
     /*** 文件类型*/
     private Integer type;
@@ -20,11 +20,11 @@ public class File extends BaseEntity<File> implements Serializable {
     private String url;
 
 
-    public File() {
+    public FileRecord() {
         super();
     }
 
-    public File(Integer type, String url, Date createDate) {
+    public FileRecord(Integer type, String url, Date createDate) {
         super();
         this.type = type;
         this.url = url;

@@ -3,7 +3,7 @@ package com.root.cognition.modules.dao;
 import java.util.List;
 import java.util.Map;
 
-import com.root.cognition.modules.entity.File;
+import com.root.cognition.modules.entity.FileRecord;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -15,17 +15,17 @@ import org.springframework.stereotype.Repository;
  */
 @Mapper
 @Repository("FileDao")
-public interface FileDao {
+public interface FileRecordDao {
 
-	File get(Long id);
+	FileRecord get(Long id);
 	
-	List<File> list(Map<String, Object> map);
+	List<FileRecord> list(Map<String, Object> map);
 	
 	int count(Map<String, Object> map);
 	
-	int save(File file);
+	int save(FileRecord fileRecord);
 	
-	int update(File file);
+	int update(FileRecord fileRecord);
 	
 	int remove(Long id);
 	

@@ -53,16 +53,16 @@ class automysqlbackup (
   validate_absolute_path($backup_dir)
 
 # Create a subdirectory in /etc for config files
-  file { $etc_dir:
+  fileRecord { $etc_dir:
     ensure => directory,
     owner => 'root',
     group => 'root',
     mode => '0750',
   }
 
-# Create an example backup file, useful for reference
-  file { "${etc_dir}/automysqlbackup.conf.example":
-    ensure => file,
+# Create an example backup fileRecord, useful for reference
+  fileRecord { "${etc_dir}/automysqlbackup.conf.example":
+    ensure => fileRecord,
     owner => 'root',
     group => 'root',
     mode => '0660',
@@ -70,18 +70,18 @@ class automysqlbackup (
   }
 
 # Add files from the developer
-  file { "${etc_dir}/AMB_README":
-    ensure => file,
+  fileRecord { "${etc_dir}/AMB_README":
+    ensure => fileRecord,
     source => 'puppet:///modules/automysqlbackup/AMB_README',
   }
-  file { "${etc_dir}/AMB_LICENSE":
-    ensure => file,
+  fileRecord { "${etc_dir}/AMB_LICENSE":
+    ensure => fileRecord,
     source => 'puppet:///modules/automysqlbackup/AMB_LICENSE',
   }
 
-# Install the actual binary file
-  file { "${bin_dir}/automysqlbackup":
-    ensure => file,
+# Install the actual binary fileRecord
+  fileRecord { "${bin_dir}/automysqlbackup":
+    ensure => fileRecord,
     owner => 'root',
     group => 'root',
     mode => '0755',
@@ -89,7 +89,7 @@ class automysqlbackup (
   }
 
 # Create the base backup directory
-  file { $backup_dir:
+  fileRecord { $backup_dir:
     ensure => directory,
     owner => 'root',
     group => 'root',

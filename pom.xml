@@ -48,6 +48,12 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <!--使用注释处理器生成自己的元数据-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
 
 
         <!--JDBC-->
@@ -112,6 +118,12 @@
             <groupId>net.sourceforge.nekohtml</groupId>
             <artifactId>nekohtml</artifactId>
         </dependency>
+        <!-- commons-fileupload通用上传工具 -->
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.3.3</version>
+        </dependency>
 
         <!-- ehchache -->
         <dependency>
@@ -129,6 +141,8 @@
             <artifactId>guava</artifactId>
             <version>RELEASE</version>
         </dependency>
+
+
 
         <!--Quartz定时任务依赖-->
         <dependency>

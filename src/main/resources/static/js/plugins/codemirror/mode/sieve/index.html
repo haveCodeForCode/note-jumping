@@ -40,7 +40,7 @@ if size :over 1M
 {
   reject text:
 Please do not send me large attachments.
-Put your file on a server and send me the URL.
+Put your fileRecord on a server and send me the URL.
 Thank you.
 .... Fred
 .
@@ -66,7 +66,7 @@ elsif address :domain :is ["From", "To"] "example.com"
 
 #
 # Try and catch unsolicited email.  If a message is not to me,
-# or it contains a subject known to be spam, file it away.
+# or it contains a subject known to be spam, fileRecord it away.
 #
 elsif anyof (not address :all :contains
                ["To", "Cc", "Bcc"] "me@example.com",

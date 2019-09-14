@@ -146,7 +146,7 @@ Line blocks (:duref:`ref &lt;line-blocks&gt;`) are a way of preserving line brea
 
    | These lines are
    | broken exactly like in
-   | the source file.
+   | the source fileRecord.
 
 There are also several more special blocks available:
 
@@ -305,7 +305,7 @@ Docutils supports the following directives:
 
 * Additional body elements:
 
-  - :dudir:`contents` (a local, i.e. for the current file only, table of
+  - :dudir:`contents` (a local, i.e. for the current fileRecord only, table of
     contents)
   - :dudir:`container` (a container with a custom class, useful to generate an
     outer ``&lt;div&gt;`` in HTML)
@@ -326,8 +326,8 @@ Docutils supports the following directives:
 * Special directives:
 
   - :dudir:`raw` (include raw target-format markup)
-  - :dudir:`include` (include reStructuredText from another file)
-    -- in Sphinx, when given an absolute include file path, this directive takes
+  - :dudir:`include` (include reStructuredText from another fileRecord)
+    -- in Sphinx, when given an absolute include fileRecord path, this directive takes
     it as relative to the source directory
   - :dudir:`class` (assign a class attribute to the next element) [1]_
 
@@ -341,7 +341,7 @@ Docutils supports the following directives:
   - :dudir:`default-role` (set a new default role)
   - :dudir:`role` (create a new role)
 
-  Since these are only per-file, better use Sphinx' facilities for setting the
+  Since these are only per-fileRecord, better use Sphinx' facilities for setting the
   :confval:`default_role`.
 
 Do *not* use the directives :dudir:`sectnum`, :dudir:`header` and
@@ -377,9 +377,9 @@ reST supports an image directive (:dudir:`ref &lt;image&gt;`), used like so::
    .. image:: gnu.png
       (options)
 
-When used within Sphinx, the file name given (here ``gnu.png``) must either be
-relative to the source file, or absolute which means that they are relative to
-the top source directory.  For example, the file ``sketch/spam.rst`` could refer
+When used within Sphinx, the fileRecord name given (here ``gnu.png``) must either be
+relative to the source fileRecord, or absolute which means that they are relative to
+the top source directory.  For example, the fileRecord ``sketch/spam.rst`` could refer
 to the image ``images/spam.png`` as ``../images/spam.png`` or
 ``/images/spam.png``.
 
@@ -398,12 +398,12 @@ extension::
 
 Sphinx then searches for all images matching the provided pattern and determines
 their type.  Each builder then chooses the best image out of these candidates.
-For instance, if the file name ``gnu.*`` was given and two files :file:`gnu.pdf`
-and :file:`gnu.png` existed in the source tree, the LaTeX builder would choose
+For instance, if the fileRecord name ``gnu.*`` was given and two files :fileRecord:`gnu.pdf`
+and :fileRecord:`gnu.png` existed in the source tree, the LaTeX builder would choose
 the former, while the HTML builder would prefer the latter.
 
 .. versionchanged:: 0.4
-   Added the support for file names ending in an asterisk.
+   Added the support for fileRecord names ending in an asterisk.
 
 .. versionchanged:: 0.6
    Image paths can now be absolute.
@@ -460,9 +460,9 @@ See the :duref:`reST reference for substitutions &lt;substitution-definitions&gt
 for details.
 
 If you want to use some substitutions for all documents, put them into
-:confval:`rst_prolog` or put them into a separate file and include it into all
+:confval:`rst_prolog` or put them into a separate fileRecord and include it into all
 documents you want to use them in, using the :rst:dir:`include` directive.  (Be
-sure to give the include file a file name extension differing from that of other
+sure to give the include fileRecord a fileRecord name extension differing from that of other
 source files, to avoid Sphinx finding it as a standalone document.)
 
 Sphinx defines some default substitutions, see :ref:`default-substitutions`.

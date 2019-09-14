@@ -1,7 +1,7 @@
 package com.root.cognition.modules.service;
 
 
-import com.root.cognition.modules.entity.File;
+import com.root.cognition.modules.entity.FileRecord;
 
 import java.util.List;
 import java.util.Map;
@@ -14,15 +14,15 @@ import java.util.Map;
  */
 public interface FileService {
 	
-	File get(Long id);
+	FileRecord get(Long id);
 	
-	List<File> list(Map<String, Object> map);
+	List<FileRecord> list(Map<String, Object> map);
 	
 	int count(Map<String, Object> map);
 	
-	int save(File sysFile);
+	int save(FileRecord sysFileRecord);
 	
-	int update(File sysFile);
+	int update(FileRecord sysFileRecord);
 	
 	int remove(Long id);
 	

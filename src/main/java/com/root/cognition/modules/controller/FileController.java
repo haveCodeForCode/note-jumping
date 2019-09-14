@@ -1,9 +1,14 @@
 package com.root.cognition.modules.controller;
 
-import javax.servlet.http.HttpServletRequest;
-
+import com.root.cognition.common.config.ProjectConfig;
+import com.root.cognition.common.until.FileUtil;
+import com.root.cognition.common.until.PageUtils;
+import com.root.cognition.common.until.Query;
+import com.root.cognition.common.until.ResultMap;
+import com.root.cognition.modules.entity.FileRecord;
 import com.root.cognition.modules.service.FileService;
 import com.root.cognition.system.persistence.BaseController;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,26 +16,35 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * 文件上传
- * 
- * @author chglee
- * @email 1992lcg@163.com
- * @date 2017-09-19 16:02:20
+ *
+ * @author taoya
  */
 @Controller
 @RequestMapping("/modules/sysFile")
 public class FileController extends BaseController {
 
+	private FileService fileService;
+
+	private ProjectConfig projectConfig;
+
 	@Autowired
-	private FileService FileService;
+	public void setFileService(FileService fileService) {
+		this.fileService = fileService;
+	}
 
-
-
+	@Autowired
+	public void setProjectConfig(ProjectConfig projectConfig) {
+		this.projectConfig = projectConfig;
+	}
 
 	@GetMapping()
 	@RequiresPermissions("common:sysFile:sysFile")
@@ -44,10 +58,10 @@ public class FileController extends BaseController {
 	@RequiresPermissions("common:sysFile:sysFile")
 	public PageUtils list(@RequestParam Map<String, Object> params) {
 		// 查询列表数据
-		Query query = new Query(params);
-		List<FileDO> sysFileList = sysFileService.list(query);
-		int total = sysFileService.count(query);
-		PageUtils pageUtils = new PageUtils(sysFileList, total);
+		Map<String, Object> query = new Query(params);
+		List<FileRecord> sysFileRecordList = fileService.list(query);
+		int total = fileService.count(query);
+		PageUtils pageUtils = new PageUtils(sysFileRecordList, total);
 		return pageUtils;
 	}
 
@@ -60,8 +74,8 @@ public class FileController extends BaseController {
 	@GetMapping("/edit")
 	// @RequiresPermissions("common:bComments")
 	String edit(Long id, Model model) {
-		FileDO sysFile = sysFileService.get(id);
-		model.addAttribute("sysFile", sysFile);
+		FileRecord sysFileRecord = fileService.get(id);
+		model.addAttribute("sysFile", sysFileRecord);
 		return "common/sysFile/edit";
 	}
 
@@ -70,33 +84,33 @@ public class FileController extends BaseController {
 	 */
 	@RequestMapping("/info/{id}")
 	@RequiresPermissions("common:info")
-	public R info(@PathVariable("id") Long id) {
-		FileDO sysFile = sysFileService.get(id);
-		return R.ok().put("sysFile", sysFile);
+	public ResultMap info(@PathVariable("id") Long id) {
+		FileRecord sysFileRecord = fileService.get(id);
+		return ResultMap.success().put("sysFile", sysFileRecord);
 	}
 
-	/**
-	 * 保存
-	 */
-	@ResponseBody
-	@PostMapping("/save")
-	@RequiresPermissions("common:save")
-	public R save(FileDO sysFile) {
-		if (sysFileService.save(sysFile) > 0) {
-			return R.ok();
-		}
-		return R.error();
-	}
+//	/**
+//	 * 保存
+//	 */
+//	@ResponseBody
+//	@PostMapping("/save")
+//	@RequiresPermissions("common:save")
+//	public ResultMap save(FileRecord sysFileRecord) {
+//		if (fileService.save(sysFileRecord) > 0) {
+//			return ResultMap.success();
+//		}
+//		return ResultMap.error();
+//	}
 
 	/**
 	 * 修改
 	 */
 	@RequestMapping("/update")
 	@RequiresPermissions("common:update")
-	public R update(@RequestBody FileDO sysFile) {
-		sysFileService.update(sysFile);
+	public ResultMap update(@RequestBody FileRecord sysFileRecord) {
+		fileService.update(sysFileRecord);
 
-		return R.ok();
+		return ResultMap.success();
 	}
 
 	/**
@@ -105,19 +119,19 @@ public class FileController extends BaseController {
 	@PostMapping("/remove")
 	@ResponseBody
 	// @RequiresPermissions("common:remove")
-	public R remove(Long id, HttpServletRequest request) {
+	public ResultMap remove(Long id, HttpServletRequest request) {
 		if ("test".equals(getUsername())) {
-			return R.error(1, "演示系统不允许修改,完整体验请部署程序");
+			return ResultMap.error("演示系统不允许修改,完整体验请部署程序");
 		}
-		String fileName = bootdoConfig.getUploadPath() + sysFileService.get(id).getUrl().replace("/files/", "");
-		if (sysFileService.remove(id) > 0) {
+		String fileName = projectConfig.getUploadPath() + fileService.get(id).getUrl().replace("/files/", "");
+		if (fileService.remove(id) > 0) {
 			boolean b = FileUtil.deleteFile(fileName);
 			if (!b) {
-				return R.error("数据库记录删除成功，文件删除失败");
+				return ResultMap.error("数据库记录删除成功，文件删除失败");
 			}
-			return R.ok();
+			return ResultMap.success();
 		} else {
-			return R.error();
+			return ResultMap.error();
 		}
 	}
 
@@ -127,34 +141,44 @@ public class FileController extends BaseController {
 	@PostMapping("/batchRemove")
 	@ResponseBody
 	@RequiresPermissions("common:remove")
-	public R remove(@RequestParam("ids[]") Long[] ids) {
+	public ResultMap remove(@RequestParam("ids[]") Long[] ids) {
 		if ("test".equals(getUsername())) {
-			return R.error(1, "演示系统不允许修改,完整体验请部署程序");
+			return ResultMap.error("演示系统不允许修改,完整体验请部署程序");
 		}
-		sysFileService.batchRemove(ids);
-		return R.ok();
+		fileService.batchRemove(ids);
+		return ResultMap.success();
 	}
+
 
 	@ResponseBody
 	@PostMapping("/upload")
-	R upload(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
-		if ("test".equals(getUsername())) {
-			return R.error(1, "演示系统不允许修改,完整体验请部署程序");
+	ResultMap upload(@RequestParam("file") MultipartFile multipartFile, HttpServletRequest request) {
+
+		//文件名
+		String fileName = multipartFile.getOriginalFilename();
+		String fileUrl = "";
+		//文件名不为空
+		if (StringUtils.isNotEmpty(fileName)) {
+			fileName = FileUtil.renameToUUID(fileName);
+			fileUrl = projectConfig.getUploadPath() + fileName;
 		}
-		String fileName = file.getOriginalFilename();
-		fileName = FileUtil.renameToUUID(fileName);
-		FileDO sysFile = new FileDO(FileType.fileType(fileName), "/files/" + fileName, new Date());
+		//文件上传地址与名字
+		File file = new File(fileUrl, multipartFile.getOriginalFilename());
+		FileRecord sysFileRecord = new FileRecord(FileUtil.fileType(fileName), fileUrl, new Date());
 		try {
-			FileUtil.uploadFile(file.getBytes(), bootdoConfig.getUploadPath(), fileName);
+			multipartFile.transferTo(file);
+			if (fileService.save(sysFileRecord) > 0) {
+				return ResultMap.success().put("fileName", sysFileRecord.getUrl());
+			}
+			return ResultMap.error();
 		} catch (Exception e) {
-			return R.error();
+			return ResultMap.error();
 		}
 
-		if (sysFileService.save(sysFile) > 0) {
-			return R.ok().put("fileName",sysFile.getUrl());
-		}
-		return R.error();
+
 	}
+
+
 
 
 }

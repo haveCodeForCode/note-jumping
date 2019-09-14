@@ -18,8 +18,8 @@ To run the tests, navigate to <root-folder>/tests/.
 
 In order to run against the shim-code, the tests attempt to kill the current 
 implementation of the missing methods. This happens in <root-folder>/tests/helpers/h-kill.js.
-So in order to run the tests against the built-in methods, invalidate that file somehow
-(comment-out, delete the file, delete the script-tag, etc.).
+So in order to run the tests against the built-in methods, invalidate that fileRecord somehow
+(comment-out, delete the fileRecord, delete the script-tag, etc.).
 
 ## Shims
 
