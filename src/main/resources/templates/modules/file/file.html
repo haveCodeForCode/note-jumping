@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文件管理器</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/layui.css" rel="stylesheet">
+    <link href="/css/style.css?v=4.1.0" rel="stylesheet">
+    <style>
+        .aactive {
+            color: #13b5b7 !important;
+        }
+
+        .hactive:hover {
+            color: #13b5b7 !important;
+        }
+    </style>
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content" id="app">
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <div class="file-manager">
+                        <button type="button" class="layui-btn" id="uploadFiles">
+                            <i class="fa fa-cloud"></i>上传文件
+                        </button>
+                        <div class="hr-line-dashed"></div>
+                        <ul class="folder-list" style="padding: 0">
+                            <li><a href="javascript:void(0)" class="file-control hactive"
+                                   :class="{'aactive':type === ''}"
+                                   v-on:click="changeType('')"><i class="fa fa-folder"></i>所有文件</a></li>
+
+                            <li><a href="javascript:void(0)" class="file-control hactive"
+                                   :class="{'aactive':type === 0}"
+                                   v-on:click="changeType(0)"><i class="fa fa-folder"></i>图片</a></li>
+
+                            <li><a href="javascript:void(0)" :class="{'aactive':type === 1}"
+                                   v-on:click="changeType(1)" class="file-control hactive"><i class="fa fa-folder"></i>文档</a>
+                            </li>
+
+                            <li><a href="javascript:void(0)" v-on:click="changeType(2)" :class="{'aactive':type === 2}"
+                                   class="file-control hactive"><i class="fa fa-folder"></i>视频</a></li>
+
+                            <li><a href="javascript:void(0)" v-on:click="changeType(3)" :class="{'aactive':type === 3}"
+                                   class="file-control hactive"><i class="fa fa-folder"></i>音乐</a></li>
+
+                            <li><a href="javascript:void(0)" v-on:click="changeType(99)"
+                                   :class="{'aactive':type === 99}"
+                                   class="file-control hactive"><i class="fa fa-folder"></i>其他</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-9 animated fadeInRight">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="file-box" v-for="row in rows">
+                        <div class="file">
+                            <a href="#">
+                                <span class="corner"></span>
+                                <div class="image">
+                                    <img alt="image" class="img-responsive" :src="row.url">
+                                </div>
+                                <div class="file-name">
+                                    <br/>
+                                    <small>{{row.createDate}}</small>
+                                </div>
+                                &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;<button
+                                    class="btn btn-warning btn-xs copy" :url="row.url">复制
+                            </button>&nbsp; &nbsp; &nbsp; &nbsp;<button class="btn btn-danger btn-xs"
+                                                                        @click="remove(row.id)">删除
+                            </button>
+                            </a>
+                        </div>
+                    </div>
+                    <div id="incomeNum"></div>
+                </div>
+            </div>
+            <div>
+                <ul id="page"></ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 全局js -->
+<script src="/js/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/bootstrap-paginator.min.js"></script>
+
+<script src="/js/content.js"></script>
+<script src="/js/layui.all.js"></script>
+<script src="/js/plugins/clipboard/clipboard.min.js"></script>
+<script src="/js/plugins/layer/layer.min.js"></script>
+<script src="/js/vue.min.js"></script>
+
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            limit: 12, offset: 0, total: 0,
+            file: '', type: '', rows: ''
+        },
+        methods: {
+            getData: function () {
+                $.getJSON("/modules/sysFile/list", {
+                    limit: this.limit,
+                    offset: this.offset,
+                    type: this.type
+                }, function (r) {
+                    app.total = r.total;
+                    app.rows = r.rows;
+                    app.page();
+                });
+            },
+            page: function () {
+                var options = {
+                    currentPage: app.offset / 12 + 1, //当前页
+                    totalPages: Math.ceil(app.total / 12), //总页数
+                    numberofPages: 4, //显示的页数
+                    bootstrapMajorVersion: 3,
+                    alignment: 'center',
+                    size: 'large',
+                    shouldShowPage: true,
+                    itemTexts: function (type, page, current) { //修改显示文字
+                        switch (type) {
+                            case "first":
+                                return "首页";
+                            case "prev":
+                                return "上一页";
+                            case "next":
+                                return "下一页";
+                            case "last":
+                                return "尾页";
+                            case "page":
+                                return page;
+                        }
+                    },
+                    onPageClicked: function (event, originalEvent, type, page) {
+                        app.offset = (page - 1) * 12;
+                        app.getData();
+                    }
+                };
+                if (app.total > 0) {
+                    $('#page').bootstrapPaginator(options);
+                }
+            },
+            remove: function (id) {
+                layer.confirm('确定要删除选中的记录？', {
+                    btn: ['确定', '取消']
+                }, function () {
+                    $.ajax({
+                        url: "/modules/sysFile/remove",
+                        type: "post",
+                        data: {
+                            'id': id
+                        },
+                        success: function (r) {
+                            if (r.code == 0) {
+                                layer.msg(r.msg);
+                                app.getData();
+                            } else {
+                                layer.msg(r.msg);
+                                app.getData();
+                            }
+                        }
+                    });
+                })
+            },
+            changeType: function (i) {
+                this.type = i;
+                this.offset = 0;
+                this.getData();
+            }
+        },
+        created: function () {
+            this.changeType('')
+        }
+    });
+</script>
+<script type="text/javascript">
+    var clipboard = new Clipboard('button.copy', {
+        text: function (trigger) {
+            layer.msg('文件路径已复制到粘贴板');
+            return $(trigger).attr('url');
+        }
+    });
+
+    layui.use('upload', function () {
+        var upload = layui.upload;
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '#uploadFiles', //绑定元素
+            url: '/modules/sysFile/upload', //上传接口
+            // size: 1000,
+            accept: 'file',
+            done: function (r) {
+                layer.msg(r.msg);
+                app.getData();
+            },
+            error: function (r) {
+                layer.msg(r.msg);
+            }
+        });
+    });
+
+
+    // 上传文件
+    function upload() {
+        var msgInfo = "";
+        if (null == checkFile || "" == checkFile) {
+            $("#msg").text("文件为空,请选择文件!");
+        } else {
+            var formData = new FormData(document.getElementById("FileuploadForm"));
+            $.ajax({
+                type: "POST",
+                enctype: 'multipart/form-data',
+                url: '/upload',
+                data: formData,
+                cache: false,
+                processData: false,
+                contentType: false,
+                error: function (result) {
+                    console.log("error");
+                    console.log(result);
+                    flag = false;
+                    $("#msg").text("访问服务器错误，请重试！");
+                },
+                success: function (result) {
+                    console.log("success");
+                },
+                xhr: function () {
+                    var xhr = $.ajaxSettings.xhr();
+                    if (xhr.upload) {
+                        //处理进度条的事件
+                        xhr.upload.addEventListener("progress", progressHandle, false);
+                        //加载完成的事件
+                        xhr.addEventListener("load", completeHandle, false);
+                        //加载出错的事件
+                        xhr.addEventListener("error", failedHandle, false);
+                        //加载取消的事件
+                        xhr.addEventListener("abort", canceledHandle, false);
+                        //开始显示进度条
+                        showProgress();
+                        return xhr;
+                    }
+                }
+            }, 'json');
+        }
+    }
+
+    var start = 0;
+
+    //显示进度条的函数
+    function showProgress() {
+        start = new Date().getTime();
+        $(".progress-body").css("display", "block");
+    }
+
+    //隐藏进度条的函数
+    function hideProgress() {
+        $("#uploadFile").val('');
+        $('.progress-body .progress-speed').html("0 M/S, 0/0M");
+        $('.progress-body percentage').html("0%");
+        $('.progress-body .progress-info').html("请选择文件并点击上传文件按钮");
+        //$(".progress-body").css("display", "none");
+    }
+
+    //进度条更新
+    function progressHandle(e) {
+        $('.progress-body progress').attr({value: e.loaded, max: e.total});
+        var percent = e.loaded / e.total * 100;
+        var time = ((new Date().getTime() - start) / 1000).toFixed(3);
+        if (time == 0) {
+            time = 1;
+        }
+        $('.progress-body .progress-speed').html(((e.loaded / 1024) / 1024 / time).toFixed(2) + "M/S, " + ((e.loaded / 1024) / 1024).toFixed(2) + "/" + ((e.total / 1024) / 1024).toFixed(2) + " MB. ");
+        $('.progress-body percentage').html(percent.toFixed(2) + "%");
+        if (percent == 100) {
+            $('.progress-body .progress-info').html("上传完成,后台正在处理...");
+        } else {
+            $('.progress-body .progress-info').html("文件上传中...");
+        }
+    };
+
+    //上传完成处理函数
+    function completeHandle(e) {
+        $('.progress-body .progress-info').html("上传文件完成。");
+        setTimeout(hideProgress, 2000);
+    };
+
+    //上传出错处理函数
+    function failedHandle(e) {
+        $('.progress-body .progress-info').html("上传文件出错, 服务不可用或文件过大。");
+    };
+
+    //上传取消处理函数
+    function canceledHandle(e) {
+        $('.progress-body .progress-info').html("上传文件取消。");
+    };
+
+
+    // function changeType(i) {
+    //     app.type = i;
+    //     app.offset = 0;
+    //     app.getData();
+    // }
+</script>
+</body>
+</html>

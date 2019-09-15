@@ -5,21 +5,26 @@
 
     <select id="get" resultType="com.root.cognition.modules.entity.FileRecord">
         select
-        <include refid="flieRecordColumns"/>
+            <include refid="flieRecordColumns"/>
         from
-        sys_file where file_id = #{value}
+            mod_file
+        where
+         file_id = #{value}
     </select>
 
-    <select id="list" resultType="com.root.cognition.modules.entity.FileRecord">
+    <select id="findList" resultType="com.root.cognition.modules.entity.FileRecord">
         select
-        <include refid="flieRecordColumns"/>
-        from sys_file
+            <include refid="flieRecordColumns"/>
+        from mod_file
         <where>
             <if test="id != null and id != ''">
                 and file_id = #{id}
             </if>
+            <if test="fileName != null and fileName != ''">
+                `file_name` = #{fileName},
+            </if>
             <if test="type != null and type != ''">
-                and type = #{type}
+                and `type` = #{type}
             </if>
             <if test="url != null and url != ''">
                 and url = #{url}
@@ -42,10 +47,13 @@
     </select>
 
     <select id="count" resultType="int">
-        select count(*) from sys_file
+        select count(*) from mod_file
         <where>
             <if test="id != null and id != ''">
                 and file_id = #{id}
+            </if>
+            <if test="fileName != null and fileName != ''">
+                `file_name` = #{fileName},
             </if>
             <if test="type != null and type != ''">
                 and `type` = #{type}
@@ -71,10 +79,11 @@
         </where>
     </select>
 
-    <insert id="save" parameterType="com.root.cognition.modules.entity.FileRecord" useGeneratedKeys="true"
-            keyProperty="id">
-		insert into sys_file
+    <insert id="insert" parameterType="com.root.cognition.modules.entity.FileRecord">
+		insert into mod_file
 		(
+		    `file_id`,
+		    `file_name`,
 			`type`, 
 			`url`, 
 			`create_by`,
@@ -85,9 +94,11 @@
 		)
 		values
 		(
+		    #{id},
+		    #{fileName},
 			#{type}, 
 			#{url}, 
-			#{createBy}
+			#{createBy},
 			#{createTime},
 			#{updateBy},
 			#{updateTime},
@@ -96,8 +107,11 @@
 	</insert>
 
     <update id="update" parameterType="com.root.cognition.modules.entity.FileRecord">
-        update sys_file
+        update mod_file
         <set>
+            <if test="fileName != null">
+                `file_name` = #{fileName},
+            </if>
             <if test="type != null">
                 `type` = #{type},
             </if>
@@ -105,21 +119,30 @@
                 `url` = #{url},
             </if>
 			<if test="url != null">
-                `url` = #{createBy},
+                `create_by` = #{createBy},
             </if>
             <if test="createDate != null">
                 `create_date` = #{createDate}
+            </if>
+            <if test="updateBy != null">
+                `update_by` = #{updateBy}
+            </if>
+            <if test="updateTime != null">
+                `update_time` = #{updateTime}
+            </if>
+            <if test="delFlag != null">
+                `del_flag` = #{delFlag}
             </if>
         </set>
         where file_id = #{id}
     </update>
 
     <delete id="remove">
-		delete from sys_file where file_id = #{value}
+		delete from mod_file where file_id = #{value}
 	</delete>
 
     <delete id="batchRemove">
-        delete from sys_file where file_id in
+        delete from mod_file where file_id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
@@ -127,6 +150,7 @@
 
     <sql id="flieRecordColumns">
 		`file_id` as `id`,
+		`file_name` as `fileName`,
 		`type`,
 		`url`,
 		`create_by` as createBy,

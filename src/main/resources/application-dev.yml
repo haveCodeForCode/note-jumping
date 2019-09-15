@@ -1,9 +1,10 @@
 cognition:
-  uploadPath: /var/uploaded_files/
-logging:
+  #为映射关系项目中间已自动创建文件，同时上传文件地址前缀相同
+#  uploadPath: /mnt/plarfrom/
+  uploadPath: F:/IdeaProjects/
   level:
-    com.root.cognition: debug
-#     com.root.cognition: info
+#    com.root.cognition: debug
+     com.root.cognition: info
 spring:
   #数据库编写（使用alibaba）
   datasource:

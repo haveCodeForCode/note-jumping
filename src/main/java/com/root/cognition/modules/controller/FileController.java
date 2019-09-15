@@ -8,8 +8,9 @@ import com.root.cognition.common.until.ResultMap;
 import com.root.cognition.modules.entity.FileRecord;
 import com.root.cognition.modules.service.FileService;
 import com.root.cognition.system.persistence.BaseController;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +31,8 @@ import java.util.Map;
 @Controller
 @RequestMapping("/modules/sysFile")
 public class FileController extends BaseController {
+
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	private FileService fileService;
 
@@ -47,15 +49,15 @@ public class FileController extends BaseController {
 	}
 
 	@GetMapping()
-	@RequiresPermissions("common:sysFile:sysFile")
+//	@RequiresPermissions("common:sysFile:sysFile")
 	String sysFile(Model model) {
 		Map<String, Object> params = new HashMap<>(16);
-		return "common/file/file";
+		return "modules/file/file";
 	}
 
 	@ResponseBody
 	@GetMapping("/list")
-	@RequiresPermissions("common:sysFile:sysFile")
+//	@RequiresPermissions("common:sysFile:sysFile")
 	public PageUtils list(@RequestParam Map<String, Object> params) {
 		// 查询列表数据
 		Map<String, Object> query = new Query(params);
@@ -142,9 +144,6 @@ public class FileController extends BaseController {
 	@ResponseBody
 	@RequiresPermissions("common:remove")
 	public ResultMap remove(@RequestParam("ids[]") Long[] ids) {
-		if ("test".equals(getUsername())) {
-			return ResultMap.error("演示系统不允许修改,完整体验请部署程序");
-		}
 		fileService.batchRemove(ids);
 		return ResultMap.success();
 	}
@@ -153,29 +152,48 @@ public class FileController extends BaseController {
 	@ResponseBody
 	@PostMapping("/upload")
 	ResultMap upload(@RequestParam("file") MultipartFile multipartFile, HttpServletRequest request) {
-
 		//文件名
 		String fileName = multipartFile.getOriginalFilename();
-		String fileUrl = "";
+		String publicUrl = "";
+
 		//文件名不为空
-		if (StringUtils.isNotEmpty(fileName)) {
+		if (fileName != null) {
+
+			publicUrl = projectConfig.getUploadPath();
+			//文件归属文件夹与标识
+			Map<String, String> fileType = FileUtil.fileType(fileName);
+			//文件随机生成uuid
 			fileName = FileUtil.renameToUUID(fileName);
-			fileUrl = projectConfig.getUploadPath() + fileName;
-		}
-		//文件上传地址与名字
-		File file = new File(fileUrl, multipartFile.getOriginalFilename());
-		FileRecord sysFileRecord = new FileRecord(FileUtil.fileType(fileName), fileUrl, new Date());
-		try {
-			multipartFile.transferTo(file);
-			if (fileService.save(sysFileRecord) > 0) {
-				return ResultMap.success().put("fileName", sysFileRecord.getUrl());
+			if (!fileType.get("state").equals("500")) {
+				String path = "/uploaded_files/"+fileType.get("Suffix")+"/";
+				//文件上传地址与名字 multipartFile.getOriginalFilename()
+				FileRecord sysFileRecord = new FileRecord(multipartFile.getOriginalFilename(), Integer.valueOf(fileType.get("state")), path + fileName);
+				sysFileRecord.preInsert();
+				try {
+					File file = new File(publicUrl+path, fileName);
+					if (!file.exists() && !file.isDirectory()) {
+						logger.info("method[uploadPic]文件不存在，正在创建文件。。。。。");
+						file.mkdirs();
+						logger.info("method[uploadPic]文件创建完成 success。。。。。。。");
+					}
+					multipartFile.transferTo(file);
+					if (fileService.save(sysFileRecord) > 0) {
+						return ResultMap.success().put("fileName", sysFileRecord.getUrl());
+					}
+					System.err.println("保存失败！！");
+					logger.info("保存失败！！");
+					return ResultMap.error();
+				} catch (Exception e) {
+					System.err.println(e.toString());
+					logger.info(e.toString());
+					return ResultMap.error();
+				}
 			}
 			return ResultMap.error();
-		} catch (Exception e) {
-			return ResultMap.error();
+		} else {
+			logger.info("选择的文件为空");
+			return ResultMap.error("您选择的文件为空");
 		}
-
-
 	}
 
 

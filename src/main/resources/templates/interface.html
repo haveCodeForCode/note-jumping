@@ -83,7 +83,7 @@
 <script type="text/javascript" src="/js/layui.all.js"></script>
 
 <script th:inline="javascript" type="text/javascript">
-    <!--全局变量-->
+    //全局变量
     var index;
     var userinfo = [[${userInfo}]];
     var menus = [[${menus}]];
@@ -98,7 +98,6 @@
     }
 
     $(document).ready(function () {
-        console.log(menus);
         var menuStr ='';
         if (menus && menus !== '') {
             $.each(menus, function (index, el) {

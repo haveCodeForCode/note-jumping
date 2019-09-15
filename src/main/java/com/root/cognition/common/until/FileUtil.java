@@ -5,6 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -97,48 +99,60 @@ public class FileUtil {
      * @param fileName
      * @return
      */
-    public static int fileType(String fileName) {
+    public static Map<String,String> fileType(String fileName) {
+        Map<String,String> mapGroup = new HashMap<>();
         if (fileName == null) {
-            fileName = "文件名为空！";
-            return 500;
+            mapGroup.put("state","500");
+            mapGroup.put("Suffix","文件名为空！");
+            return mapGroup;
 
         } else {
             // 获取文件后缀名并转化为写，用于后续比较
             String fileType = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length()).toLowerCase();
             // 创建图片类型数组0
-            String[] img = {"bmp", "jpg", "jpeg", "png", "tiff", "gif", "pcx", "tga", "exif", "fpx", "svg", "psd",
-                    "cdr", "pcd", "dxf", "ufo", "eps", "ai", "raw", "wmf"};
+            String[] img = {"bmp", "jpg", "jpeg", "png", "tiff", "gif", "pcx", "tga", "exif", "fpx", "svg", "psd", "cdr", "pcd", "dxf", "ufo", "eps", "ai", "raw", "wmf"};
+            // 创建文档类型数组1
+            String[] document = {"txt", "doc", "docx", "xls", "htm", "html", "jsp", "rtf", "wpd", "pdf", "ppt"};
+            // 创建视频类型数组2
+            String[] video = {"mp4", "avi", "mov", "wmv", "asf", "navi", "3gp", "mkv", "f4v", "rmvb", "webm"};
+            // 创建音乐类型数组3
+            String[] music = {"mp3", "wma", "wav", "mod", "ra", "cd", "md", "asf", "aac", "vqf", "ape", "mid", "ogg", "m4a", "vqf"};
+
             for (String s : img) {
                 if (s.equals(fileType)) {
-                    return 0;
+                    mapGroup.put("state","0");
+                    mapGroup.put("Suffix","img");
+                    return mapGroup;
                 }
             }
 
-            // 创建文档类型数组1
-            String[] document = {"txt", "doc", "docx", "xls", "htm", "html", "jsp", "rtf", "wpd", "pdf", "ppt"};
             for (String s : document) {
                 if (s.equals(fileType)) {
-                    return 1;
+                    mapGroup.put("state","1");
+                    mapGroup.put("Suffix","document");
+                    return mapGroup;
                 }
             }
-            // 创建视频类型数组2
-            String[] video = {"mp4", "avi", "mov", "wmv", "asf", "navi", "3gp", "mkv", "f4v", "rmvb", "webm"};
+
             for (String s : video) {
                 if (s.equals(fileType)) {
-                    return 2;
+                    mapGroup.put("state","2");
+                    mapGroup.put("Suffix","video");
+                    return mapGroup;
                 }
             }
-            // 创建音乐类型数组3
-            String[] music = {"mp3", "wma", "wav", "mod", "ra", "cd", "md", "asf", "aac", "vqf", "ape", "mid", "ogg",
-                    "m4a", "vqf"};
+
             for (String s : music) {
                 if (s.equals(fileType)) {
-                    return 3;
+                    mapGroup.put("state","3");
+                    mapGroup.put("Suffix","music");
+                    return mapGroup;
                 }
             }
 
         }
-        //4
-        return 99;
+        mapGroup.put("state","500");
+        mapGroup.put("Suffix","无对应类型！！");
+        return mapGroup;
     }
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.root.cognition.modules.entity.FileRecord;
+import com.root.cognition.system.persistence.BaseDao;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -15,19 +16,5 @@ import org.springframework.stereotype.Repository;
  */
 @Mapper
 @Repository("FileDao")
-public interface FileRecordDao {
-
-	FileRecord get(Long id);
-	
-	List<FileRecord> list(Map<String, Object> map);
-	
-	int count(Map<String, Object> map);
-	
-	int save(FileRecord fileRecord);
-	
-	int update(FileRecord fileRecord);
-	
-	int remove(Long id);
-	
-	int batchRemove(Long[] ids);
+public interface FileRecordDao extends BaseDao<FileRecord> {
 }

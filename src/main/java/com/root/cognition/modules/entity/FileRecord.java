@@ -3,7 +3,6 @@ package com.root.cognition.modules.entity;
 import com.root.cognition.system.persistence.BaseEntity;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * 文件上传
@@ -14,20 +13,30 @@ import java.util.Date;
  */
 public class FileRecord extends BaseEntity<FileRecord> implements Serializable {
 
+    /***文件名称*/
+    private String fileName;
     /*** 文件类型*/
     private Integer type;
     /***  URL地址*/
     private String url;
 
-
-    public FileRecord() {
+    public FileRecord(){
         super();
     }
 
-    public FileRecord(Integer type, String url, Date createDate) {
+    public FileRecord(String fileName, Integer type, String url) {
         super();
+        this.fileName = fileName;
         this.type = type;
         this.url = url;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public Integer getType() {

@@ -1,6 +1,8 @@
 package com.root.cognition.modules.service.impl;
 
 import com.root.cognition.common.config.ProjectConfig;
+import com.root.cognition.common.until.FileUtil;
+import com.root.cognition.common.until.ResultMap;
 import com.root.cognition.modules.config.FileUploadProgressListener;
 import com.root.cognition.modules.dao.FileRecordDao;
 import com.root.cognition.modules.entity.FileRecord;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartException;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import javax.servlet.http.HttpServletRequest;
@@ -70,7 +73,7 @@ public class FileServiceImpl extends CommonsMultipartResolver implements FileSer
 
     @Override
     public List<FileRecord> list(Map<String, Object> map) {
-        return fileRecordDao.list(map);
+        return fileRecordDao.findList(map);
     }
 
     @Override
@@ -80,7 +83,7 @@ public class FileServiceImpl extends CommonsMultipartResolver implements FileSer
 
     @Override
     public int save(FileRecord sysFileRecord) {
-        return fileRecordDao.save(sysFileRecord);
+        return fileRecordDao.insert(sysFileRecord);
     }
 
     @Override
@@ -111,6 +114,7 @@ public class FileServiceImpl extends CommonsMultipartResolver implements FileSer
         }
         return isExist;
     }
+
 
     @Override
     protected MultipartParsingResult parseRequest(HttpServletRequest request) throws MultipartException {
