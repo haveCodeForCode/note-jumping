@@ -31,19 +31,7 @@ public class ThreadsTools {
         return newNameThreadFactory;
     }
 
-    /**
-     * 开始线程池
-     * @param corePoolSize
-     * @param maximumPoolSize
-     * @param namedThreadFactory
-     * @return
-     */
-    public static ExecutorService startThreadPool(int corePoolSize, int maximumPoolSize, ThreadFactory namedThreadFactory) {
-        ExecutorService singleThreadPool = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, 0L, TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<Runnable>(1024),
-                namedThreadFactory, new ThreadPoolExecutor.AbortPolicy());
-        return singleThreadPool;
-    }
+
 
     /**
      * sleep等待,单位为毫秒,忽略InterruptedException.
