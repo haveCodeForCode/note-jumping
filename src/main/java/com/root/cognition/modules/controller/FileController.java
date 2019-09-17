@@ -50,15 +50,22 @@ public class FileController extends BaseController {
 	}
 
 	@GetMapping()
-//	@RequiresPermissions("common:sysFile:sysFile")
+	@RequiresPermissions("common:sysFile:sysFile")
 	String sysFile(Model model) {
 		Map<String, Object> params = new HashMap<>(16);
 		return "modules/file/file";
 	}
 
+	@GetMapping("/index")
+	String sysFileIndex(Model model) {
+		Map<String, Object> params = new HashMap<>(16);
+		return "clienthtml/userFile";
+	}
+
+
 	@ResponseBody
 	@GetMapping("/list")
-//	@RequiresPermissions("common:sysFile:sysFile")
+	@RequiresPermissions("common:sysFile:sysFile")
 	public PageUtils list(@RequestParam Map<String, Object> params) {
 		// 查询列表数据
 		Map<String, Object> query = new Query(params);
@@ -69,13 +76,13 @@ public class FileController extends BaseController {
 	}
 
 	@GetMapping("/add")
-	// @RequiresPermissions("common:bComments")
+	 @RequiresPermissions("common:bComments")
 	String add() {
 		return "common/sysFile/add";
 	}
 
 	@GetMapping("/edit")
-	// @RequiresPermissions("common:bComments")
+	 @RequiresPermissions("common:bComments")
 	String edit(Long id, Model model) {
 		FileRecord sysFileRecord = fileService.get(id);
 		model.addAttribute("sysFile", sysFileRecord);
@@ -112,7 +119,6 @@ public class FileController extends BaseController {
 	@RequiresPermissions("common:update")
 	public ResultMap update(@RequestBody FileRecord sysFileRecord) {
 		fileService.update(sysFileRecord);
-
 		return ResultMap.success();
 	}
 
@@ -121,7 +127,7 @@ public class FileController extends BaseController {
 	 */
 	@PostMapping("/remove")
 	@ResponseBody
-	// @RequiresPermissions("common:remove")
+	 @RequiresPermissions("common:remove")
 	public ResultMap remove(Long id, HttpServletRequest request) {
 		if ("test".equals(getUsername())) {
 			return ResultMap.error("演示系统不允许修改,完整体验请部署程序");
