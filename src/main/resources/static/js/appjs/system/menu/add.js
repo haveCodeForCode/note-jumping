@@ -1,4 +1,5 @@
 var prefix = "/system/menu";
+
 $(function() {
 	validateRule();
 	//打开图标列表
@@ -6,7 +7,7 @@ $(function() {
         layer.open({
             type: 2,
 			title:'图标列表',
-            content: '/FontIcoList.html',
+			content: '/fontIcoList',
             area: ['480px', '90%'],
             success: function(layero, index){
                 //var body = layer.getChildFrame('.ico-list', index);

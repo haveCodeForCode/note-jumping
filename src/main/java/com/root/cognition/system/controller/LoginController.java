@@ -236,4 +236,8 @@ public class LoginController extends BaseController {
         }
     }
 
+    @GetMapping("/fontIcoList")
+    String getFontIcoList (){
+        return "FontIcoList";
+    }
 }
