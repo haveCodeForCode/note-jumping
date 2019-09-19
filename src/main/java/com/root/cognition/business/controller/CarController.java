@@ -1,23 +1,18 @@
 package com.root.cognition.business.controller;
 
-import java.util.List;
-import java.util.Map;
-
 import com.root.cognition.business.entity.Car;
 import com.root.cognition.business.service.CarService;
 import com.root.cognition.common.until.PageUtils;
 import com.root.cognition.common.until.Query;
 import com.root.cognition.common.until.ResultMap;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.root.cognition.system.persistence.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 
 
@@ -31,7 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  
 @Controller
 @RequestMapping("/business/car")
-public class CarController {
+public class CarController extends BaseController {
 	
 	private CarService carService;
 	
@@ -41,34 +36,39 @@ public class CarController {
 	}
 
 	@RequestMapping("")
-//	@RequiresPermissions("system:car:car")
 	String car(){
 	    return "business/car/car";
 	}
 	
 	@ResponseBody
 	@GetMapping("/list")
-//	@RequiresPermissions("system:car:car")
 	public PageUtils list(@RequestParam Map<String, Object> params){
 		//查询列表数据
         Map<String,Object> query = new Query(params);
+		//用户相关列表
+		query.put("userId", getUserId());
 		List<Car> carList = carService.list(query);
 		int total = carService.count(query);
 		return new PageUtils(carList, total);
 	}
-	
+
 	@GetMapping("/add")
-//	@RequiresPermissions("system:car:add")
 	String add(){
 	    return "business/car/add";
 	}
 
+	/**
+	 * 修改
+	 *
+	 * @param id
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("/edit/{id}")
-//	@RequiresPermissions("system:car:edit")
-	String edit(@PathVariable("id") Long id,Model model){
+	String edit(@PathVariable("id") Long id, Model model){
 		Car car = carService.get(id);
 		model.addAttribute("car", car);
-	    return "business/car/edit";
+		return "business/car/edit";
 	}
 	
 	/**
@@ -76,13 +76,49 @@ public class CarController {
 	 */
 	@ResponseBody
 	@PostMapping("/save")
-//	@RequiresPermissions("system:car:add")
-	public ResultMap save(Car car){
-		if(carService.save(car)>0){
+	public ResultMap save(Car car) {
+		if (carService.save(car,getUserId()) > 0) {
 			return ResultMap.success();
 		}
 		return ResultMap.error();
 	}
+
+	/**
+	 * 查询车辆是否存在
+	 *
+	 * @param carNum
+	 * @return
+	 */
+	@ResponseBody
+	@PostMapping("/checkexist")
+	public ResultMap checkexist(String carNum) {
+		Map<String, Object> param = Query.withDelFlag();
+		param.put("carNum", carNum);
+		if (carService.getByEntity(param) != null) {
+			if (carService.checkCarNum(carNum) != null) {
+				return ResultMap.customMap(1, "已添加", null);
+			} else {
+				return ResultMap.customMap(2, "已存在是否关联", null);
+			}
+		} else {
+			return ResultMap.customMap(3, "可以添加", null);
+		}
+	}
+
+	/**
+	 * 添加中间关系
+	 * @param carNum
+	 * @return
+	 */
+	@ResponseBody
+	@PostMapping("/addexist")
+	public ResultMap addexist(String carNum) {
+		if (carService.saveCarUser(carNum, getUserId()) > 0) {
+			return ResultMap.success();
+		}
+		return ResultMap.error();
+    }
+
 	/**
 	 * 修改
 	 */
@@ -101,12 +137,12 @@ public class CarController {
 	@ResponseBody
 //	@RequiresPermissions("system:car:remove")
 	public ResultMap remove( Long id){
-		if(carService.remove(id)>0){
-		return ResultMap.success();
+		if(carService.remove(id) > 0) {
+			return ResultMap.success();
 		}
 		return ResultMap.error();
 	}
-	
+
 	/**
 	 * 删除
 	 */

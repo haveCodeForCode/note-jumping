@@ -42,7 +42,7 @@ public interface UserService {
 	 */
 	Tree<Dept> getTree();
 
-	//	int resetPwd(UserVO userVO, UserDO userDO) throws Exception;
+//	int resetPwd(UserVO userVO, UserDO userDO) throws Exception;
 //
 //	int adminResetPwd(UserVO userVO) throws Exception;
 

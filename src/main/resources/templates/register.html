@@ -37,11 +37,6 @@
     <h3 class="text-center">用户注册</h3><br/>
     <p class="m-t-md text-center">欢迎注册cognition</p>
 
-    <div class="login_header">
-        <span @click="cur=0" :class="{active:cur==0}">手机注册</span>
-        <span @click="cur=1" :class="{active:cur==1}">邮箱注册</span>
-    </div>
-
     <div>
         <div v-show="cur==0">
             <from id="phoneRegister">
@@ -123,12 +118,6 @@
         th:src="@{/js/tools.js}"></script>
 
 <script type="text/javascript">
-    var app = new Vue({
-        el: "#login-Module",
-        data: {
-            cur: 0 //默认选中第一个tab
-        }
-    });
 
     //手机号验证 、 随机数验证 、 短信验证码验证
     var mobilePass = false, verifyPass = false, codePass = false;
@@ -170,7 +159,6 @@
         });
 
         $("#imgVerify").click();
-
 
         $("#phoneRegister").bootstrapValidator({
             message: '错误!!',

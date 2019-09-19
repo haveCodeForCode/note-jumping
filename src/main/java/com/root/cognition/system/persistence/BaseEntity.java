@@ -150,22 +150,6 @@ public abstract class BaseEntity<T> implements Serializable {
         this.delFlag = delFlag;
     }
 
-
-//    /**
-//     * 是否是新记录（默认：false），调用setIsNewRecord()设置新记录，使用自定义ID。
-//     * 设置为true后强制执行插入语句，ID不会自动生成，需从手动传入。
-//     */
-//    protected boolean isNewRecord = false;
-
-//	@JsonIgnore
-//	@XmlTransient
-//	public Map<String, String> getSqlMap() {
-//		if (sqlMap == null){
-//			sqlMap = Maps.newHashMap();
-//		}
-//		return sqlMap;
-//	}
-
     public void setSqlMap(Map<String, String> sqlMap) {
         this.sqlMap = sqlMap;
     }
@@ -175,13 +159,26 @@ public abstract class BaseEntity<T> implements Serializable {
      */
     public void preInsert() {
         // 不限制ID为UUID，调用setIsNewRecord()使用自定义ID
-        Long sfUserID = SnowFlake.createSFid();
-        setId(sfUserID);
-        this.updateBy = sfUserID;
-        this.createBy = sfUserID;
+        Long sfuserId = SnowFlake.createSFid();
+        setId(sfuserId);
+        this.updateBy = sfuserId;
+        this.createBy = sfuserId;
         this.createTime = new Date();
         this.updateTime = createTime;
         this.delFlag = Constant.DEL_FLAG_NORMAL;
     }
 
+    /**
+     * 是否是新记录（默认：false），调用setIsNewRecord()设置新记录，使用自定义ID。
+     * 设置为true后强制执行插入语句，ID不会自动生成，需从手动传入。
+     */
+//   protected boolean isNewRecord = false;
+//	@JsonIgnore
+//	@XmlTransient
+//	public Map<String, String> getSqlMap() {
+//		if (sqlMap == null){
+//			sqlMap = Maps.newHashMap();
+//		}
+//		return sqlMap;
+//	}
 }

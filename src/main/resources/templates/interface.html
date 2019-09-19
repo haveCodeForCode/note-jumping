@@ -98,24 +98,20 @@
 
     $(document).ready(function () {
         var menuStr ='';
-        if (menus && menus !== '') {
+        if (menus && menus != '') {
+            menuStr += '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="javascript:void(0);"  data-toggle="dropdown" onclick="menuClick(\'/toHome\')">' + "用户管理" + '</a>';
             $.each(menus, function (index, el) {
-                //class="dropdown-toggle"
                 menuStr += '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="javascript:void(0);"  data-toggle="dropdown" onclick="menuClick(\'' + el.url + '\')">' + el.name + '</a>';
-                // menuStr += '<li>' + '<a href="javascript:void(0);" onclick="menuClick(' + el.url + ')">' + '<span>' + el.name + '</span></a></li>';
             });
         } else {
-            //class="dropdown-toggle"
-            menuStr = '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="javascript:void(0);"  data-toggle="dropdown" onclick="menuClick(' + "/login" + ')">' + "用户管理" + '</a>';
+            menuStr = '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="javascript:void(0);"  data-toggle="dropdown" onclick="menuClick(\'/toHome\')">' + "用户管理" + '</a>';
         }
 
         $('#navbar-ul').append(menuStr);
-        menuClick();
+        menuClick('/toHome');
     });
 
-
     function menuClick(i) {
-        console.log("1");
         if (menus && menus.length > 0) {
             $('#main-content-frame').load(i);
         } else {

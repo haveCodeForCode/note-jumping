@@ -8,77 +8,44 @@
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
-                    <form class="form-horizontal m-t" id="signupForm">
+                    <form class="form-horizontal m-t" id="carAdd">
+
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">车主姓名：</label>
-                            <div class="col-sm-8">
+                            <label class="col-sm-2 control-label">车牌号：</label>
+                            <div class="col-sm-4">
+                                <input id="carNum" name="carNum" class="form-control" type="text" placeholder="请输入车牌号">
+                            </div>
+                            <button class="btn btn-w-m btn-danger" onclick="">检查车辆是否存在</button>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">车主姓名：</label>
+                            <div class="col-sm-4">
                                 <input id="realName" name="realName" class="form-control" type="text">
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">身份证号：</label>
-                            <div class="col-sm-8">
-                                <input id="identityNum" name="identityNum" class="form-control" type="text">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">车主联系电话：</label>
-                            <div class="col-sm-8">
+
+                            <label class="col-sm-2 control-label">车主联系电话：</label>
+                            <div class="col-sm-4">
                                 <input id="mobile" name="mobile" class="form-control" type="text">
                             </div>
                         </div>
+
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">车牌号：</label>
-                            <div class="col-sm-8">
-                                <input id="carNum" name="carNum" class="form-control" type="text">
+                            <label class="col-sm-2 control-label">车主身份证号：</label>
+                            <div class="col-sm-4">
+                                <input id="identityNum" name="identityNum" class="form-control" type="text">
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">车辆类型：</label>
-                            <div class="col-sm-8">
+
+                            <label class="col-sm-2 control-label">车辆类型：</label>
+                            <div class="col-sm-4">
                                 <input id="carType" name="carType" class="form-control" type="text">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">归属账号：</label>
-                            <div class="col-sm-8">
-                                <input id="userId" name="userId" class="form-control" type="text">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">创建者：</label>
-                            <div class="col-sm-8">
-                                <input id="createBy" name="createBy" class="form-control" type="text">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">更新者：</label>
-                            <div class="col-sm-8">
-                                <input id="updateBy" name="updateBy" class="form-control" type="text">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">创建时间：</label>
-                            <div class="col-sm-8">
-                                <input id="createTime" name="createTime" class="form-control" type="text">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">更新时间：</label>
-                            <div class="col-sm-8">
-                                <input id="updateTime" name="updateTime" class="form-control" type="text">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">删除标记：</label>
-                            <div class="col-sm-8">
-                                <input id="delFlag" name="delFlag" class="form-control" type="text">
-                            </div>
-                        </div>
+
                         <div class="form-group">
                             <label class="col-sm-3 control-label">备注：</label>
                             <div class="col-sm-8">
-                                <input id="remarks" name="remarks" class="form-control" type="text">
+                                <textarea id="remarks" name="remarks" class="form-control" type="text"></textarea>
                             </div>
                         </div>
                         <div class="form-group">
@@ -93,10 +60,12 @@
     </div>
 </div>
 <div th:include="include::footer"></div>
+<script src="/js/plugins/bootstrapvalidator/bootstrapValidator.min.js"
+        th:src="@{/js/plugins/bootstrapvalidator/bootstrapValidator.min.js}"></script>
 <script type="text/javascript">
-    $().ready(function () {
-        validateRule();
-    });
+    // $(function () {
+    //     validateRule();
+    // });
 
     $.validator.setDefaults({
         submitHandler: function () {
@@ -109,7 +78,7 @@
             cache: true,
             type: "POST",
             url: "/business/car/save",
-            data: $('#signupForm').serialize(),// 你的formid
+            data: $('#carAdd').serialize(),// 你的formid
             async: false,
             error: function (request) {
                 parent.layer.alert("Connection error");
@@ -130,21 +99,112 @@
 
     }
 
-    function validateRule() {
-        var icon = "<i class='fa fa-times-circle'></i> ";
-        $("#signupForm").validate({
-            rules: {
-                name: {
-                    required: true
+
+    $("#carAdd").bootstrapValidator({
+        message: '错误!!',
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            mobile: {
+                message: '手机号码错误!',
+                validators: {
+                    notEmpty: {
+                        message: '手机号不能为空'
+                    }
+                    , regexp: {
+                        regexp: /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/,
+                        message: '手机号格式不正确！！'
+                    }
                 }
             },
-            messages: {
-                name: {
-                    required: icon + "请输入姓名"
+            carNum: {
+                message: '车牌号码错误',
+                validators: {
+                    notEmpty: {
+                        message: '车牌号码不能为空！'
+                    },
+                    callback: {
+                        message: '车牌号输入不正确！',
+                        callback: function (value, validator) {//这里可以自定义value的判断规则
+                            var gValue;
+                            if (value.length > 5) {
+                                $.ajax({
+                                    type: "POST",
+                                    url: "/business/car/checkexist",
+                                    data: {carNum: value},// 你的formid
+                                    async: true,
+                                    error: function (data) {
+                                        gValue = false;
+                                        layer.msg("验证码获取出现问题，请重新打开窗口！");
+                                    },
+                                    success: function (data) {
+                                        if (data.state =='2'){
+                                            layer.confirm('已存在车辆，是否添加关系？', {
+                                                btn: ['是','否'] //按钮
+                                            }, function(){
+                                                $.ajax({
+                                                    type: "POST",
+                                                    url: "/business/car/addexist",
+                                                    data: {carNum: value},// 你的formid
+                                                    async: true,
+                                                    error: function (data) {
+                                                        layer.msg("添加接口异常！");
+                                                    },
+                                                    success: function (data) {
+                                                        parent.layer.msg("操作成功");
+                                                        parent.reLoad();
+                                                        var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                                                        parent.layer.close(index);
+                                                    }
+                                                });
+                                            }, function(){
+
+                                            });
+                                            gValue = "车辆存在，请添加关系";
+                                            return false;
+                                        } else if (data.state == '1'){
+                                            gValue = "已添加";
+                                            return false;
+                                        } else {
+                                            return true;
+                                        }
+                                    }
+                                });
+                                return gValue;
+                            } else {
+                                return false;
+                            }
+                        }
+                    }
                 }
             }
-        })
-    }
+        }
+    });
+
+    // function validateRule() {
+    //     var icon = "<i class='fa fa-times-circle'></i> ";
+    //     $("#signupForm").validate({
+    //         rules: {
+    //             carNum: {
+    //                 required: true
+    //             }
+    //             , realName: {
+    //                 required: true
+    //             }
+    //         },
+    //         messages: {
+    //             carNum: {
+    //                 required: icon + "请输入姓名"
+    //             }
+    //             , realName: {
+    //                 required: true
+    //             }
+    //         }
+    //     })
+    // }
 </script>
 </body>
 </html>

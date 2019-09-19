@@ -4,57 +4,83 @@
 <mapper namespace="com.root.cognition.business.dao.CarDao">
 
     <select id="get" resultType="com.root.cognition.business.entity.Car">
-		select
+        SELECT
 		 <include refid="carColumns"/>
-	 	from
-	 		business_car
-		 where car_id = #{value}
-	</select>
+        FROM business_car
+        where
+        car_id = #{value}
+    </select>
+
+    <select id="getByEntity" resultType="com.root.cognition.business.entity.Car">
+        SELECT
+        <include refid="carColumns"/>
+        FROM business_car
+        <where>
+            del_flag = #{delFlag}
+            <if test="carId !=null and carNum!=''">
+                AND car_id = #{carId}
+            </if>
+            <if test="carNum !=null and carNum!=''">
+                AND car_num = #{carNum}
+            </if>
+        </where>
+    </select>
 
     <select id="findList" resultType="com.root.cognition.business.entity.Car">
-        select
-        	<include refid="carColumns"/>
+        SELECT
+        bc.car_id as `id`,
+        bc.real_name,
+        bc.identity_num,
+        bc.mobile,
+        bc.car_num,
+        bc.car_type,
+        bc.create_by,
+        bc.update_by,
+        bc.create_time,
+        bc.update_time,
+        bc.del_flag,
+        bc.remarks
         from
-        	business_car
+        business_car bc
+        left join business_car_user bcu ON bcu.car_id = bc.car_id
         <where>
+            bc.del_flag = #{delFlag}
+            and bcu.del_flag = #{delFlag}
+            <if test="userId != null and userId != ''">
+                and bcu.user_id = #{userId}
+            </if>
             <if test="id != null and id != ''">
-                and car_id = #{id}
+                and bc.car_id = #{id}
             </if>
             <if test="realName != null and realName != ''">
-                and real_name = #{realName}
+                and bc.real_name = #{realName}
             </if>
             <if test="identityNum != null and identityNum != ''">
-                and identity_num = #{identityNum}
+                and bc.identity_num = #{identityNum}
             </if>
             <if test="mobile != null and mobile != ''">
-                and mobile = #{mobile}
+                and bc.mobile = #{mobile}
             </if>
             <if test="carNum != null and carNum != ''">
-                and car_num = #{carNum}
+                and bc.car_num = #{carNum}
             </if>
             <if test="carType != null and carType != ''">
-                and car_type = #{carType}
-            </if>
-            <if test="userId != null and userId != ''">
-                and user_id = #{userId}
+                and bc.car_type = #{carType}
             </if>
             <if test="createBy != null and createBy != ''">
-                and create_by = #{createBy}
+                and bc.create_by = #{createBy}
             </if>
             <if test="updateBy != null and updateBy != ''">
-                and update_by = #{updateBy}
+                and bc.update_by = #{updateBy}
             </if>
             <if test="createTime != null and createTime != ''">
-                and create_time = #{createTime}
+                and bc.create_time = #{createTime}
             </if>
             <if test="updateTime != null and updateTime != ''">
-                and update_time = #{updateTime}
-            </if>
-            <if test="delFlag != null and delFlag != ''">
-                and del_flag = #{delFlag}
+                and bc.update_time = #{updateTime}
             </if>
             <if test="remarks != null and remarks != ''">
-                and remarks = #{remarks}
+                and bc.remarks = #{remarks}
             </if>
         </where>
         <choose>
@@ -62,7 +88,7 @@
                 order by ${sort} ${order}
             </when>
             <otherwise>
-                order by id desc
+                order by create_time desc
             </otherwise>
         </choose>
         <if test="offset != null and limit != null">
@@ -71,7 +97,7 @@
     </select>
 
     <select id="count" resultType="int">
-        select count(*) from business_car
+        SELECT count(*) from business_car
         <where>
             <if test="id != null and id != ''">
                 and car_id = #{id}
@@ -90,9 +116,6 @@
             </if>
             <if test="carType != null and carType != ''">
                 and car_type = #{carType}
-            </if>
-            <if test="userId != null and userId != ''">
-                and user_id = #{userId}
             </if>
             <if test="createBy != null and createBy != ''">
                 and create_by = #{createBy}
@@ -123,13 +146,11 @@
 			`identity_num`, 
 			`mobile`, 
 			`car_num`, 
-			`car_type`, 
-			`user_id`, 
+			`car_type`,
 			`create_by`, 
 			`update_by`, 
 			`create_time`, 
-			`update_time`, 
-			`del_flag`, 
+			`update_time`,
 			`remarks`
 		)
 		values
@@ -139,13 +160,11 @@
 			#{identityNum}, 
 			#{mobile}, 
 			#{carNum}, 
-			#{carType}, 
-			#{userId}, 
+			#{carType},
 			#{createBy}, 
 			#{updateBy}, 
 			#{createTime}, 
-			#{updateTime}, 
-			#{delFlag}, 
+			#{updateTime},
 			#{remarks}
 		)
 	</insert>
@@ -167,9 +186,6 @@
             </if>
             <if test="carType != null">
                 `car_type` = #{carType},
-            </if>
-            <if test="userId != null">
-                `user_id` = #{userId},
             </if>
             <if test="createBy != null">
                 `create_by` = #{createBy},
@@ -194,7 +210,7 @@
     </update>
 
     <delete id="remove">
-		delete from business_car where car_id = #{value}
+		update business_car del_flag ='1' where car_id = #{value}
 	</delete>
 
     <delete id="batchRemove">
@@ -211,7 +227,6 @@
 		`mobile`,
 		`car_num`,
 		`car_type`,
-		`user_id`,
 		`create_by`,
 		`update_by`,
 		`create_time`,

@@ -51,6 +51,9 @@
 </div>
 <script type="text/javascript">
     var prefix = "/business/car";
+    var s_edit_h="";
+    var s_remove_h ="";
+
     $(function () {
         load();
     });
@@ -108,11 +111,10 @@
                             field: 'mobile',
                             title: '车主联系电话'
                         },
-                        {
-                            field: 'identityNum',
-                            title: '身份证号'
-                        },
-
+                        // {
+                        //     field: 'identityNum',
+                        //     title: '身份证号'
+                        // },
                         {
                             field: 'carType',
                             title: '车辆类型'
@@ -195,9 +197,6 @@
                 }
             });
         })
-    }
-
-    function resetPwd(id) {
     }
 
     function batchRemove() {

@@ -87,10 +87,7 @@ public class LoginController extends BaseController {
         return "register";
     }
 
-    /**
-     * 前往首页
-     * @return
-     */
+    /*** 前往首页**/
     @RequestMapping("/toHome")
     String toHome(){
         return "clienthtml/home";
