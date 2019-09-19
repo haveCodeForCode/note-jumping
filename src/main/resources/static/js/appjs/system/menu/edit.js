@@ -1,4 +1,5 @@
 var prefix = "/system/menu";
+
 $(function() {
 	validateRule();
 
@@ -17,11 +18,13 @@ $(function() {
     });
 
 });
+
 $.validator.setDefaults({
 	submitHandler : function() {
 		update();
 	}
 });
+
 function update() {
 	$.ajax({
 		cache : true,
@@ -44,29 +47,8 @@ function update() {
 
 		}
 	});
+}
 
-}
-function validate() {
-	var icon = "<i class='fa fa-times-circle'></i> ";
-	$("#signupForm").validate({
-		rules : {
-			name : {
-				required : true
-			},
-			type : {
-				required : true
-			}
-		},
-		messages : {
-			name : {
-				required : icon + "请输入菜单名"
-			},
-			type : {
-				required : icon + "请选择菜单类型"
-			}
-		}
-	})
-}
 function validateRule() {
 	var icon = "<i class='fa fa-times-circle'></i> ";
 	$("#signupForm").validate({

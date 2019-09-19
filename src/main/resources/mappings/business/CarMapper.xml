@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.root.cognition.business.dao.CarDao">
+
+    <select id="get" resultType="com.root.cognition.business.entity.Car">
+		select
+		 <include refid="carColumns"/>
+	 	from
+	 		business_car
+		 where car_id = #{value}
+	</select>
+
+    <select id="findList" resultType="com.root.cognition.business.entity.Car">
+        select
+        	<include refid="carColumns"/>
+        from
+        	business_car
+        <where>
+            <if test="id != null and id != ''">
+                and car_id = #{id}
+            </if>
+            <if test="realName != null and realName != ''">
+                and real_name = #{realName}
+            </if>
+            <if test="identityNum != null and identityNum != ''">
+                and identity_num = #{identityNum}
+            </if>
+            <if test="mobile != null and mobile != ''">
+                and mobile = #{mobile}
+            </if>
+            <if test="carNum != null and carNum != ''">
+                and car_num = #{carNum}
+            </if>
+            <if test="carType != null and carType != ''">
+                and car_type = #{carType}
+            </if>
+            <if test="userId != null and userId != ''">
+                and user_id = #{userId}
+            </if>
+            <if test="createBy != null and createBy != ''">
+                and create_by = #{createBy}
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                and update_by = #{updateBy}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                and update_time = #{updateTime}
+            </if>
+            <if test="delFlag != null and delFlag != ''">
+                and del_flag = #{delFlag}
+            </if>
+            <if test="remarks != null and remarks != ''">
+                and remarks = #{remarks}
+            </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from business_car
+        <where>
+            <if test="id != null and id != ''">
+                and car_id = #{id}
+            </if>
+            <if test="realName != null and realName != ''">
+                and real_name = #{realName}
+            </if>
+            <if test="identityNum != null and identityNum != ''">
+                and identity_num = #{identityNum}
+            </if>
+            <if test="mobile != null and mobile != ''">
+                and mobile = #{mobile}
+            </if>
+            <if test="carNum != null and carNum != ''">
+                and car_num = #{carNum}
+            </if>
+            <if test="carType != null and carType != ''">
+                and car_type = #{carType}
+            </if>
+            <if test="userId != null and userId != ''">
+                and user_id = #{userId}
+            </if>
+            <if test="createBy != null and createBy != ''">
+                and create_by = #{createBy}
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                and update_by = #{updateBy}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                and update_time = #{updateTime}
+            </if>
+            <if test="delFlag != null and delFlag != ''">
+                and del_flag = #{delFlag}
+            </if>
+            <if test="remarks != null and remarks != ''">
+                and remarks = #{remarks}
+            </if>
+        </where>
+    </select>
+
+    <insert id="insert" parameterType="com.root.cognition.business.entity.Car">
+		insert into business_car
+		(
+			`car_id`,
+			`real_name`, 
+			`identity_num`, 
+			`mobile`, 
+			`car_num`, 
+			`car_type`, 
+			`user_id`, 
+			`create_by`, 
+			`update_by`, 
+			`create_time`, 
+			`update_time`, 
+			`del_flag`, 
+			`remarks`
+		)
+		values
+		(
+			#{id}, 
+			#{realName}, 
+			#{identityNum}, 
+			#{mobile}, 
+			#{carNum}, 
+			#{carType}, 
+			#{userId}, 
+			#{createBy}, 
+			#{updateBy}, 
+			#{createTime}, 
+			#{updateTime}, 
+			#{delFlag}, 
+			#{remarks}
+		)
+	</insert>
+
+    <update id="update" parameterType="com.root.cognition.business.entity.Car">
+        update business_car
+        <set>
+            <if test="realName != null">
+                `real_name` = #{realName},
+            </if>
+            <if test="identityNum != null">
+                `identity_num` = #{identityNum},
+            </if>
+            <if test="mobile != null">
+                `mobile` = #{mobile},
+            </if>
+            <if test="carNum != null">
+                `car_num` = #{carNum},
+            </if>
+            <if test="carType != null">
+                `car_type` = #{carType},
+            </if>
+            <if test="userId != null">
+                `user_id` = #{userId},
+            </if>
+            <if test="createBy != null">
+                `create_by` = #{createBy},
+            </if>
+            <if test="updateBy != null">
+                `update_by` = #{updateBy},
+            </if>
+            <if test="createTime != null">
+                `create_time` = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                `update_time` = #{updateTime},
+            </if>
+            <if test="delFlag != null">
+                `del_flag` = #{delFlag},
+            </if>
+            <if test="remarks != null">
+                `remarks` = #{remarks}
+            </if>
+        </set>
+        where car_id = #{id}
+    </update>
+
+    <delete id="remove">
+		delete from business_car where car_id = #{value}
+	</delete>
+
+    <delete id="batchRemove">
+        delete from business_car where car_id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <sql id="carColumns">
+		`car_id` as `id`,
+		`real_name`,
+		`identity_num`,
+		`mobile`,
+		`car_num`,
+		`car_type`,
+		`user_id`,
+		`create_by`,
+		`update_by`,
+		`create_time`,
+		`update_time`,
+		`del_flag`,
+		`remarks`
+	</sql>
+</mapper>

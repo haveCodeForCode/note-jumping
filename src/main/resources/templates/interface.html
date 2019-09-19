@@ -7,10 +7,6 @@
     <link rel="stylesheet" href="/css/font-awesome.css">
     <link rel="stylesheet" href="website-front/css/animate.css">
     <link rel="stylesheet" href="website-front/css/style.css">
-    <!--    <link rel="stylesheet" href="/css/layui.css">-->
-<!--        <link rel="stylesheet" href="/css/bootstrap.min.css">-->
-    <!--    <link rel="stylesheet" href="/css/interface.css">-->
-    <!--    <link rel="stylesheet" href="/css/style.css">-->
 </head>
 <body class="top-navigation">
 
@@ -57,7 +53,7 @@
                 </div>
             </nav>
         </div>
-        <div class="wrapper wrapper-content main-content-frame"></div>
+        <div class="wrapper wrapper-content" id="main-content-frame"></div>
 
         <div class="footer">
             <div class="float-right">
@@ -76,6 +72,9 @@
 <script type="text/javascript" src="/website-front/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/js/plugins/metisMenu/jquery.metisMenu.js"></script>
 <script type="text/javascript" src="/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
 <script src="/js/plugins/pace/pace.min.js"></script>
 <!--自定义方法-->
 <script src="/website-front/js/inspinia.js"></script>
@@ -102,7 +101,7 @@
         if (menus && menus !== '') {
             $.each(menus, function (index, el) {
                 //class="dropdown-toggle"
-                menuStr += '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="javascript:void(0);"  data-toggle="dropdown" onclick="menuClick(' + el.url + ')">' + el.name + '</a>';
+                menuStr += '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="javascript:void(0);"  data-toggle="dropdown" onclick="menuClick(\'' + el.url + '\')">' + el.name + '</a>';
                 // menuStr += '<li>' + '<a href="javascript:void(0);" onclick="menuClick(' + el.url + ')">' + '<span>' + el.name + '</span></a></li>';
             });
         } else {
@@ -116,10 +115,11 @@
 
 
     function menuClick(i) {
+        console.log("1");
         if (menus && menus.length > 0) {
-            $(".main-content-frame").load(i);
+            $('#main-content-frame').load(i);
         } else {
-            $(".main-content-frame").load('/toHome');
+            $("#main-content-frame").load('/toHome');
         }
     }
 

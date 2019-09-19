@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <form class="form-horizontal m-t" id="signupForm">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">车辆id：</label>
+                            <div class="col-sm-8">
+                                <input id="carId" name="carId" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">外观时间：</label>
+                            <div class="col-sm-8">
+                                <input id="carTime" name="carTime" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">行驶证：</label>
+                            <div class="col-sm-8">
+                                <input id="vehicleLicense" name="vehicleLicense" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">行驶证检时间：</label>
+                            <div class="col-sm-8">
+                                <input id="vehicleTime" name="vehicleTime" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">保险（强险）：</label>
+                            <div class="col-sm-8">
+                                <input id="carInsurance" name="carInsurance" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">保险（强险）检时间：</label>
+                            <div class="col-sm-8">
+                                <input id="insuranceTime" name="insuranceTime" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">创建者：</label>
+                            <div class="col-sm-8">
+                                <input id="createBy" name="createBy" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">创建时间：</label>
+                            <div class="col-sm-8">
+                                <input id="createTime" name="createTime" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">更新者：</label>
+                            <div class="col-sm-8">
+                                <input id="updateBy" name="updateBy" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">更新时间：</label>
+                            <div class="col-sm-8">
+                                <input id="updateTime" name="updateTime" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">删除标记：</label>
+                            <div class="col-sm-8">
+                                <input id="delFlag" name="delFlag" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-8 col-sm-offset-3">
+                                <button type="submit" class="btn btn-primary">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:include="include::footer"></div>
+<script type="text/javascript">
+    $().ready(function () {
+        validateRule();
+    });
+
+    $.validator.setDefaults({
+        submitHandler: function () {
+            save();
+        }
+    });
+
+    function save() {
+        $.ajax({
+            cache: true,
+            type: "POST",
+            url: "/system/carInspect/save",
+            data: $('#signupForm').serialize(),// 你的formid
+            async: false,
+            error: function (request) {
+                parent.layer.alert("Connection error");
+            },
+            success: function (data) {
+                if (data.code == 0) {
+                    parent.layer.msg("操作成功");
+                    parent.reLoad();
+                    var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                    parent.layer.close(index);
+
+                } else {
+                    parent.layer.alert(data.msg)
+                }
+
+            }
+        });
+
+    }
+
+    function validateRule() {
+        var icon = "<i class='fa fa-times-circle'></i> ";
+        $("#signupForm").validate({
+            rules: {
+                name: {
+                    required: true
+                }
+            },
+            messages: {
+                name: {
+                    required: icon + "请输入姓名"
+                }
+            }
+        })
+    }
+</script>
+</body>
+</html>
