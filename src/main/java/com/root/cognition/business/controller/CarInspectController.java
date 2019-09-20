@@ -60,7 +60,7 @@ public class CarInspectController {
 	@GetMapping("/add")
 //	@RequiresPermissions("system:carInspect:add")
 	String add(){
-	    return "system/carInspect/add";
+	    return "business/carInspect/add";
 	}
 
 	@GetMapping("/edit/{id}")
@@ -88,7 +88,7 @@ public class CarInspectController {
 	 */
 	@ResponseBody
 	@RequestMapping("/update")
-	@RequiresPermissions("system:carInspect:edit")
+//	@RequiresPermissions("system:carInspect:edit")
 	public ResultMap update( CarInspect carInspect){
 		carInspectService.update(carInspect);
 		return ResultMap.success();
