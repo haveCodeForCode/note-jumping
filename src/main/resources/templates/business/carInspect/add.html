@@ -54,7 +54,7 @@
 <div th:include="include::footer"></div>
 <script type="text/javascript">
 
-    layui.use(['layer,laydate'], function(){
+    layui.use(['layer','laydate'], function(){
         var layer = layui.layer;
         var laydate = layui.laydate;
 
@@ -63,8 +63,13 @@
             type: 'date'
         });
 
-        var carCreateDate = laydate.render({
-            elem: '#carTime',
+        var vehicleCreateDate = laydate.render({
+            elem: '#vehicleTime',
+            type: 'date'
+        });
+
+        var insuranceCreateDate = laydate.render({
+            elem: '#insuranceTime',
             type: 'date'
         });
 
