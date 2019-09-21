@@ -14,45 +14,56 @@
 
     <select id="findList" resultType="com.root.cognition.business.entity.CarInspect">
         select
-        <include refid="carInspectColumns"/>
+        bci.car_inspect_id as id,
+        bci.car_id,
+        bci.car_time,
+        bci.vehicle_license,
+        bci.vehicle_time,
+        bci.car_insurance,
+        bci.insurance_time,
+        bci.create_by,
+        bci.create_time,
+        bci.update_by,
+        bci.update_time,
+        bci.del_flag,
+        bc.car_num as carNum
         from
-        business_car_inspect
+        business_car_inspect bci
+        LEFT join business_car bc on bc.car_id = bci.car_id
         <where>
+            bci.del_flag = #{delFlag}
             <if test="id != null and id != ''">
-                and car_inspect_id = #{id}
+                and bci.car_inspect_id = #{id}
             </if>
             <if test="carId != null and carId != ''">
-                and car_id = #{carId}
+                and bci.car_id = #{carId}
             </if>
             <if test="carTime != null and carTime != ''">
-                and car_time = #{carTime}
+                and bci.car_time = #{carTime}
             </if>
             <if test="vehicleLicense != null and vehicleLicense != ''">
-                and vehicle_license = #{vehicleLicense}
+                and bci.vehicle_license = #{vehicleLicense}
             </if>
             <if test="vehicleTime != null and vehicleTime != ''">
-                and vehicle_time = #{vehicleTime}
+                and bci.vehicle_time = #{vehicleTime}
             </if>
             <if test="carInsurance != null and carInsurance != ''">
-                and car_insurance = #{carInsurance}
+                and bci.car_insurance = #{carInsurance}
             </if>
             <if test="insuranceTime != null and insuranceTime != ''">
-                and insurance_time = #{insuranceTime}
+                and bci.insurance_time = #{insuranceTime}
             </if>
             <if test="createBy != null and createBy != ''">
-                and create_by = #{createBy}
+                and bci.create_by = #{createBy}
             </if>
             <if test="createTime != null and createTime != ''">
-                and create_time = #{createTime}
+                and bci.create_time = #{createTime}
             </if>
             <if test="updateBy != null and updateBy != ''">
-                and update_by = #{updateBy}
+                and bci.update_by = #{updateBy}
             </if>
             <if test="updateTime != null and updateTime != ''">
-                and update_time = #{updateTime}
-            </if>
-            <if test="delFlag != null and delFlag != ''">
-                and del_flag = #{delFlag}
+                and bci.update_time = #{updateTime}
             </if>
         </where>
         <choose>
@@ -184,11 +195,11 @@
     </update>
 
     <delete id="remove">
-		delete from business_car_inspect where id = #{value}
+		update business_car_inspect set del_flag ='1' where car_inspect_id = #{value}
 	</delete>
 
     <delete id="batchRemove">
-        delete from business_car_inspect where id in
+        delete business_car_inspect set del_flag ='1'  where car_inspect_id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

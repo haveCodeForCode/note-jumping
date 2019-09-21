@@ -41,6 +41,7 @@ public class CarInspectServiceImpl implements CarInspectService {
 
     @Override
     public int save(CarInspect carInspect) {
+        carInspect.preInsert();
         return carInspectDao.insert(carInspect);
     }
 

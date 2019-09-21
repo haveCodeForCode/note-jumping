@@ -1,6 +1,7 @@
 package com.root.cognition.business.entity;
 
 import com.root.cognition.system.persistence.BaseEntity;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -25,6 +26,7 @@ public class CarInspect extends BaseEntity<CarInspect> implements Serializable {
 	/**
 	 * 外观时间
 	 */
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date carTime;
 	/**
 	 * 行驶证
@@ -33,6 +35,7 @@ public class CarInspect extends BaseEntity<CarInspect> implements Serializable {
 	/**
 	 * 行驶证检时间
 	 */
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date vehicleTime;
 	/**
 	 * 保险（强险）
@@ -41,8 +44,13 @@ public class CarInspect extends BaseEntity<CarInspect> implements Serializable {
 	/**
 	 * 保险（强险）检时间
 	 */
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date insuranceTime;
-
+//*******************************************************
+	/**
+	 * 车牌号
+	 */
+	private String carNum;
 
 	/**
 	 * 设置：车辆id
@@ -117,4 +125,30 @@ public class CarInspect extends BaseEntity<CarInspect> implements Serializable {
 		return insuranceTime;
 	}
 
+	public String getCarNum() {
+		return carNum;
+	}
+
+	public void setCarNum(String carNum) {
+		this.carNum = carNum;
+	}
+
+	@Override
+	public String toString() {
+		return "CarInspect{" +
+				"carId=" + carId +
+				", carTime=" + carTime +
+				", vehicleLicense='" + vehicleLicense + '\'' +
+				", vehicleTime=" + vehicleTime +
+				", carInsurance='" + carInsurance + '\'' +
+				", insuranceTime=" + insuranceTime +
+				", carNum='" + carNum + '\'' +
+				", id=" + id +
+				", createBy=" + createBy +
+				", updateBy=" + updateBy +
+				", createTime=" + createTime +
+				", updateTime=" + updateTime +
+				", delFlag='" + delFlag + '\'' +
+				'}';
+	}
 }

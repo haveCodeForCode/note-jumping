@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <meta charset="utf-8">
 <head th:include="include :: header"></head>
 <body class="gray-bg">
@@ -15,30 +15,55 @@
                             <div class="col-sm-4">
                                 <input id="carNum" name="carNum" class="form-control" type="text" placeholder="请输入车牌号">
                             </div>
-                            <button class="btn btn-w-m btn-danger" onclick="">检查车辆是否存在</button>
+                            <div class="col-sm-4">
+                                <h4>自动监测检查车辆是否存在</h4>
+                            </div>
                         </div>
 
                         <div class="form-group">
                             <label class="col-sm-2 control-label">车主姓名：</label>
                             <div class="col-sm-4">
-                                <input id="realName" name="realName" class="form-control" type="text">
+                                <input id="realName" name="realName" class="form-control" type="text" placeholder="请输入车主姓名">
                             </div>
 
                             <label class="col-sm-2 control-label">车主联系电话：</label>
                             <div class="col-sm-4">
-                                <input id="mobile" name="mobile" class="form-control" type="text">
+                                <input id="mobile" name="mobile" class="form-control" type="text" placeholder="请输入车主联系电话">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="col-sm-2 control-label">车主身份证号：</label>
                             <div class="col-sm-4">
-                                <input id="identityNum" name="identityNum" class="form-control" type="text">
+                                <input id="identityNum" name="identityNum" class="form-control" type="text" placeholder="请输入车主身份证号">
                             </div>
 
                             <label class="col-sm-2 control-label">车辆类型：</label>
                             <div class="col-sm-4">
-                                <input id="carType" name="carType" class="form-control" type="text">
+                                <select id="truckType" class="form-control">
+                                    <option value="">请选择车辆类型</option>
+                                    <option value="H01">普通货车</option>
+                                    <option value="H02">厢式货车</option>
+                                    <option value="H04">罐式货车</option>
+                                    <option value="Q00">牵引车</option>
+                                    <option value="G01">普通挂车</option>
+                                    <option value="G03">罐式挂车</option>
+                                    <option value="G05">集装箱挂车</option>
+                                    <option value="H09">仓栅式货车</option>
+                                    <option value="H03">封闭货车</option>
+                                    <option value="H05">平板货车</option>
+                                    <option value="H06">集装箱车</option>
+                                    <option value="H07">自卸货车</option>
+                                    <option value="H08">特殊结构货车</option>
+                                    <option value="Z00">专项作业车</option>
+                                    <option value="G02">厢式挂车</option>
+                                    <option value="G07">仓栅式挂车</option>
+                                    <option value="G04">平板挂车</option>
+                                    <option value="G06">自卸挂车</option>
+                                    <option value="G09">专项作业挂车</option>
+                                    <option value="X91">车辆运输车</option>
+                                    <option value="X92">车辆运输车(单排)</option>
+                                </select>
                             </div>
                         </div>
 
@@ -48,11 +73,13 @@
                                 <textarea id="remarks" name="remarks" class="form-control" type="text"></textarea>
                             </div>
                         </div>
+
                         <div class="form-group">
                             <div class="col-sm-8 col-sm-offset-3">
                                 <button type="submit" class="btn btn-primary">提交</button>
                             </div>
                         </div>
+
                     </form>
                 </div>
             </div>
@@ -125,8 +152,10 @@
                 validators: {
                     notEmpty: {
                         message: '车牌号码不能为空！'
-                    },
-                    callback: {
+                    },regexp:{
+                        regexp:/^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[A-Z0-9]{4}[A-Z0-9挂学警港澳]{1}[A-Z0-9]{0,1}$/,
+                        message:'车牌号码不正确！！'
+                    }, callback: {
                         message: '车牌号输入不正确！',
                         callback: function (value, validator) {//这里可以自定义value的判断规则
                             var gValue;
@@ -180,7 +209,19 @@
                         }
                     }
                 }
-            }
+            },
+            identityNum:{
+                message: '身份证号码错误!',
+                validators: {
+                    notEmpty: {
+                        message: '身份证号码号不能为空'
+                    }
+                    , regexp: {
+                        regexp: /^[1-9][0-7]\d{4}((19\d{2}(0[13-9]|1[012])(0[1-9]|[12]\d|30))|(19\d{2}(0[13578]|1[02])31)|(19\d{2}02(0[1-9]|1\d|2[0-8]))|(19([13579][26]|[2468][048]|0[48])0229))\d{3}(\d|X|x)?$/,
+                        message: '身份证号码格式不正确！！'
+                    }
+                }
+            },
         }
     });
 
