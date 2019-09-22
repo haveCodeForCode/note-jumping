@@ -87,14 +87,11 @@ function load() {
                         field: 'updateBy',
                         title: '更新者'
                     },
-
                     {
                         visible: false,
                         field: 'createDate',
                         title: '创建时间'
                     },
-
-
                     {
                         visible: false,
                         field: 'updateDate',
@@ -110,7 +107,6 @@ function load() {
                         field: 'springBean',
                         title: 'Spring bean'
                     },
-
                     {
                         field: 'jobStatus',
                         title: '停起操作',
@@ -150,9 +146,11 @@ function load() {
             });
 }
 
+
 function reLoad() {
     $('#exampleTable').bootstrapTable('refresh');
 }
+
 
 function add() {
     layer.open({

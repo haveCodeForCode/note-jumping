@@ -7,6 +7,7 @@ $.validator.setDefaults({
 		update();
 	}
 });
+
 function update() {
 	$.ajax({
 		cache : true,
@@ -18,7 +19,8 @@ function update() {
 			layer.alert("Connection error");
 		},
 		success : function(data) {
-			if (data.code == 0) {
+
+			if (data.state == 0) {
 				parent.layer.msg("保存成功");
 				parent.reLoad();
 				var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
@@ -30,6 +32,7 @@ function update() {
 		}
 	});
 }
+
 function validateRule() {
 	var icon = "<i class='fa fa-times-circle'></i> ";
 	$("#signupForm").validate({

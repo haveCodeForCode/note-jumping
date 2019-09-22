@@ -13,6 +13,6 @@ public class JobToSms implements Job {
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-
+            System.err.println("执行了一次");
     }
 }

@@ -2,6 +2,8 @@ package com.root.cognition.business.service;
 
 import com.root.cognition.business.entity.CarInspect;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -24,4 +26,6 @@ public interface CarInspectService {
     int remove(Long id);
 
     int batchRemove(Long[] ids);
+
+    boolean sumDate(Date insuranceTime, String s, String carInsurance, String realName, String carNum, String toString, String mobile,Date SmsTime) throws ParseException;
 }

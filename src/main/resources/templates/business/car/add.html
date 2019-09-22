@@ -76,7 +76,7 @@
 
                         <div class="form-group">
                             <div class="col-sm-8 col-sm-offset-3">
-                                <button type="submit" class="btn btn-primary">提交</button>
+                                <button type="submit" class="btn btn-primary" id="carAdds">提交</button>
                             </div>
                         </div>
 
@@ -94,10 +94,15 @@
     //     validateRule();
     // });
 
-    $.validator.setDefaults({
-        submitHandler: function () {
-            save();
-        }
+    // $.validator.setDefaults({
+    //     submitHandler: function () {
+    //         save();
+    //     }
+    // });
+
+    $("#carAdds").on('click', function () {
+        $('#carAdd').submit();
+        save();
     });
 
     function save() {
@@ -154,20 +159,20 @@
                         message: '车牌号码不能为空！'
                     },regexp:{
                         regexp:/^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[A-Z0-9]{4}[A-Z0-9挂学警港澳]{1}[A-Z0-9]{0,1}$/,
-                        message:'车牌号码不正确！！'
+                        message: '车牌号码格式不正确！！'
                     }, callback: {
                         message: '车牌号输入不正确！',
                         callback: function (value, validator) {//这里可以自定义value的判断规则
-                            var gValue;
-                            if (value.length > 5) {
+                            var stateValue;
+                            debugger;
                                 $.ajax({
                                     type: "POST",
                                     url: "/business/car/checkexist",
                                     data: {carNum: value},// 你的formid
                                     async: true,
                                     error: function (data) {
-                                        gValue = false;
                                         layer.msg("验证码获取出现问题，请重新打开窗口！");
+                                        stateValue = false;
                                     },
                                     success: function (data) {
                                         if (data.state =='2'){
@@ -192,20 +197,15 @@
                                             }, function(){
 
                                             });
-                                            gValue = "车辆存在，请添加关系";
-                                            return false;
+                                            stateValue = false;
                                         } else if (data.state == '1'){
-                                            gValue = "已添加";
-                                            return false;
+                                            stateValue = false;
                                         } else {
-                                            return true;
+                                            stateValue = true;
                                         }
                                     }
                                 });
-                                return gValue;
-                            } else {
-                                return false;
-                            }
+                            return stateValue;
                         }
                     }
                 }
@@ -221,7 +221,7 @@
                         message: '身份证号码格式不正确！！'
                     }
                 }
-            },
+            }
         }
     });
 

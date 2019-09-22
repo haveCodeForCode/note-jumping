@@ -46,11 +46,31 @@ public class CarInspect extends BaseEntity<CarInspect> implements Serializable {
 	 */
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date insuranceTime;
-//*******************************************************
+
 	/**
-	 * 车牌号
+	 * 车检更新时间
+	 **/
+	private Date carSmsTimes;
+
+	/**
+	 * 驾驶证更新时间
+	 **/
+	private Date vehicleSmsTimes;
+
+	/**
+	 * 保险检更新时间
 	 */
+	private Date insuranceSmsTimes;
+
+//*************************车辆相关数据******************************
+	/*** 车牌号*/
 	private String carNum;
+
+	/*** 车主联系电话*/
+	private String mobile;
+
+	/*** 车主姓名*/
+	private String realName;
 
 	/**
 	 * 设置：车辆id
@@ -133,6 +153,47 @@ public class CarInspect extends BaseEntity<CarInspect> implements Serializable {
 		this.carNum = carNum;
 	}
 
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+
+	public void setCarSmsTimes(Date carSmsTimes) {
+		this.carSmsTimes = carSmsTimes;
+	}
+
+	public void setVehicleSmsTimes(Date vehicleSmsTimes) {
+		this.vehicleSmsTimes = vehicleSmsTimes;
+	}
+
+	public void setInsuranceSmsTimes(Date insuranceSmsTimes) {
+		this.insuranceSmsTimes = insuranceSmsTimes;
+	}
+
+	public String getRealName() {
+		return realName;
+	}
+
+	public void setRealName(String realName) {
+		this.realName = realName;
+	}
+
+	public Date getCarSmsTimes() {
+		return carSmsTimes;
+	}
+
+	public Date getVehicleSmsTimes() {
+		return vehicleSmsTimes;
+	}
+
+	public Date getInsuranceSmsTimes() {
+		return insuranceSmsTimes;
+	}
+
 	@Override
 	public String toString() {
 		return "CarInspect{" +
@@ -142,7 +203,12 @@ public class CarInspect extends BaseEntity<CarInspect> implements Serializable {
 				", vehicleTime=" + vehicleTime +
 				", carInsurance='" + carInsurance + '\'' +
 				", insuranceTime=" + insuranceTime +
+				", carSmsTimes=" + carSmsTimes +
+				", vehicleSmsTimes=" + vehicleSmsTimes +
+				", insuranceSmsTimes=" + insuranceSmsTimes +
 				", carNum='" + carNum + '\'' +
+				", mobile='" + mobile + '\'' +
+				", realName='" + realName + '\'' +
 				", id=" + id +
 				", createBy=" + createBy +
 				", updateBy=" + updateBy +

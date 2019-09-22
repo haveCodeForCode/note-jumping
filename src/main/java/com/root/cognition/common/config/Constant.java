@@ -60,8 +60,15 @@ public class Constant {
      */
     public static final int INT_ZERO = 0;
     public static final int INT_ONE = 1;
+    public static final int INT_TWO = 2;
+    public static final int INT_THREE = 3;
+    public static final int INT_FOUR = 4;
     public static final String STRING_ZERO = "0";
     public static final String STRING_ONE = "1";
+    public static final String STRING_TWO = "2";
+    public static final String STRING_THREE = "3";
+    public static final String STRING_FOUR = "4";
+    public static final String STRING_SEVEN = "7";
 
 
 
@@ -97,10 +104,13 @@ public class Constant {
     public static final int RETURN_STATUS_INFOBUG = 2;
     public static final int RETURN_STATUS_OVERCONTROLBUG = 3;
 
-    /**
-     * 发送短信类型
-     */
+    //发送短信类型
+    /**主动自由发布短信**/
     public static final String FREE_SMS = "free_send_sms";
+    /**注册信息**/
     public static final String REGISTER_SMS = "register_send_sms";
+    /**验证信息**/
     public static final String VERIFICATION_SMS = "Verification_send_sms";
+    /**定时业务短信 **/
+    public static final String service_SMS = "Verification_send_sms";
 }
