@@ -88,12 +88,12 @@ public class CarInspectServiceImpl implements CarInspectService {
         //判断是否到期
         String oneDate = DateUntils.getYearMonthToYYDDHHmmSS(Constant.INT_TWO, sdf.format(date), 1);
         Date od = sdf.parse(oneDate);
-        if (od.after(nowTime) && smsTime.before(nowTime)) {
+        if (od.after(nowTime) && (smsTime ==null || smsTime.before(nowTime))) {
             sendSms = true;
         } else {
             String threeDate = DateUntils.getYearMonthToYYDDHHmmSS(Constant.INT_TWO, sdf.format(date), 3);
             Date td = sdf.parse(threeDate);
-            if (td.after(nowTime)&& smsTime.before(nowTime)) {
+            if (td.after(nowTime)&& (smsTime ==null ||smsTime.before(nowTime))) {
                 sendSms = true;
             } else {
                 String sevenDate = DateUntils.getYearMonthToYYDDHHmmSS(Constant.INT_TWO, sdf.format(date), 7);

@@ -14,7 +14,8 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">外观时间：</label>
                             <div class="col-sm-8">
-                                <input id="carTime" name="carTime" class="form-control" type="text">
+                                <input id="carTime" name="carTime" class="form-control" th:value="${#dates.format(carInspect.carTime,'MM-dd')}"
+                                       type="text">
                             </div>
                         </div>
                         <div class="form-group">
@@ -27,7 +28,8 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">行驶证检时间：</label>
                             <div class="col-sm-8">
-                                <input id="vehicleTime" name="vehicleTime" class="form-control" type="text">
+                                <input id="vehicleTime" name="vehicleTime" class="form-control" th:value="${#dates.format(carInspect.vehicleTime,'MM-dd')}"
+                                       type="text">
                             </div>
                         </div>
                         <div class="form-group">
@@ -40,7 +42,8 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">保险（强险）检时间：</label>
                             <div class="col-sm-8">
-                                <input id="insuranceTime" name="insuranceTime" class="form-control" type="text">
+                                <input id="insuranceTime" name="insuranceTime" class="form-control" th:value="${#dates.format(carInspect.insuranceTime,'MM-dd')}"
+                                       type="text">
                             </div>
                         </div>
 
@@ -74,23 +77,17 @@
 
         var carCreateDate = laydate.render({
             elem: '#carTime',
-            type: 'datetime',
-            trigger: 'click',
-            value: new ([[${carInspect.carTime}]])
+            trigger: 'click'
         });
 
         var vehicleCreateDate = laydate.render({
             elem: '#vehicleTime',
-            type: 'datetime',
-            trigger: 'click',
-            value: new ([[${carInspect.vehicleTime}]])
+            trigger: 'click'
         });
 
         var insuranceCreateDate = laydate.render({
             elem: '#insuranceTime',
-            type: 'datetime',
-            trigger: 'click',
-            value: new ([[${carInspect.insuranceTime}]])
+            trigger: 'click'
         });
 
     });

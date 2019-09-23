@@ -238,13 +238,13 @@
     </delete>
 
     <sql id="carInspectColumns">
-		`car_inspect_id` as id,
+		car_inspect_id as id,
 		`car_id`,
 		`car_time`,
 		`vehicle_license`,
 		`vehicle_time`,
-		`vehicle_sms_times`
-		`car_insurance` as carInsurance,
+		`vehicle_sms_times`,
+		`car_Insurance`,
 		`insurance_time`,
 		`insurance_sms_times`,
 		`create_by`,

@@ -26,7 +26,7 @@ public class CarInspect extends BaseEntity<CarInspect> implements Serializable {
 	/**
 	 * 外观时间
 	 */
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@DateTimeFormat(pattern = "MM-dd")
 	private Date carTime;
 	/**
 	 * 行驶证
@@ -35,7 +35,7 @@ public class CarInspect extends BaseEntity<CarInspect> implements Serializable {
 	/**
 	 * 行驶证检时间
 	 */
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@DateTimeFormat(pattern = "MM-dd")
 	private Date vehicleTime;
 	/**
 	 * 保险（强险）
@@ -44,25 +44,25 @@ public class CarInspect extends BaseEntity<CarInspect> implements Serializable {
 	/**
 	 * 保险（强险）检时间
 	 */
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@DateTimeFormat(pattern = "MM-dd")
 	private Date insuranceTime;
 
 	/**
 	 * 车检更新时间
 	 **/
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@DateTimeFormat(pattern = "MM-dd")
 	private Date carSmsTimes;
 
 	/**
 	 * 驾驶证更新时间
 	 **/
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@DateTimeFormat(pattern = "MM-dd")
 	private Date vehicleSmsTimes;
 
 	/**
 	 * 保险检更新时间
 	 */
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@DateTimeFormat(pattern = "MM-dd")
 	private Date insuranceSmsTimes;
 
 //*************************车辆相关数据******************************
