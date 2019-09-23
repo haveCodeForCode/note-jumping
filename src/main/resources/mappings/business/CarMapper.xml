@@ -210,11 +210,11 @@
     </update>
 
     <delete id="remove">
-		update business_car del_flag ='1' where car_id = #{value}
+		update business_car set del_flag = '1' where car_id = #{value}
 	</delete>
 
     <delete id="batchRemove">
-        delete from business_car where car_id in
+        update business_car set del_flag = '1' where car_id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

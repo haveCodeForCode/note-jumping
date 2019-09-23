@@ -244,8 +244,9 @@
 		`vehicle_license`,
 		`vehicle_time`,
 		`vehicle_sms_times`
-		`car_insurance`,
+		`car_insurance` as carInsurance,
 		`insurance_time`,
+		`insurance_sms_times`,
 		`create_by`,
 		`create_time`,
 		`update_by`,

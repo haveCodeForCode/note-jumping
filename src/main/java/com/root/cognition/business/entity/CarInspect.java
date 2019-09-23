@@ -50,16 +50,19 @@ public class CarInspect extends BaseEntity<CarInspect> implements Serializable {
 	/**
 	 * 车检更新时间
 	 **/
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date carSmsTimes;
 
 	/**
 	 * 驾驶证更新时间
 	 **/
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date vehicleSmsTimes;
 
 	/**
 	 * 保险检更新时间
 	 */
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date insuranceSmsTimes;
 
 //*************************车辆相关数据******************************

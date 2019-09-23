@@ -117,7 +117,10 @@
                         // },
                         {
                             field: 'carType',
-                            title: '车辆类型'
+                            title: '车辆类型',
+                            formatter: function (value, row, index) {
+                                return TRUCKTYPE[row.carType];
+                            }
                         },
                         {
                             field: 'createBy',
@@ -188,7 +191,7 @@
                     'id': id
                 },
                 success: function (r) {
-                    if (r.code == 0) {
+                    if (r.state == 0) {
                         layer.msg(r.msg);
                         reLoad();
                     } else {

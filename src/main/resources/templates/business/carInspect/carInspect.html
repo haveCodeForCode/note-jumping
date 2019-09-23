@@ -160,7 +160,7 @@
                     'id': id
                 },
                 success: function (r) {
-                    if (r.code == 0) {
+                    if (r.state == 0) {
                         layer.msg(r.msg);
                         reLoad();
                     } else {
@@ -196,7 +196,7 @@
                 },
                 url: prefix + '/batchRemove',
                 success: function (r) {
-                    if (r.code == 0) {
+                    if (r.state == 0) {
                         layer.msg(r.msg);
                         reLoad();
                     } else {

@@ -40,7 +40,7 @@
 
                             <label class="col-sm-2 control-label">车辆类型：</label>
                             <div class="col-sm-4">
-                                <select id="truckType" class="form-control">
+                                <select id="carType" class="form-control" name="carType">
                                     <option value="">请选择车辆类型</option>
                                     <option value="H01">普通货车</option>
                                     <option value="H02">厢式货车</option>
@@ -113,19 +113,17 @@
             data: $('#carAdd').serialize(),// 你的formid
             async: false,
             error: function (request) {
-                parent.layer.alert("Connection error");
+                parent.layer.alert("系统链接不稳定，请通联系管理员！");
             },
             success: function (data) {
-                if (data.code == 0) {
+                if (data.state == 0) {
                     parent.layer.msg("操作成功");
                     parent.reLoad();
                     var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
                     parent.layer.close(index);
-
                 } else {
                     parent.layer.alert(data.msg)
                 }
-
             }
         });
 
@@ -161,20 +159,21 @@
                         regexp:/^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[A-Z0-9]{4}[A-Z0-9挂学警港澳]{1}[A-Z0-9]{0,1}$/,
                         message: '车牌号码格式不正确！！'
                     }, callback: {
-                        message: '车牌号输入不正确！',
+                        message: '存在相同车牌号！',
                         callback: function (value, validator) {//这里可以自定义value的判断规则
-                            var stateValue;
-                            debugger;
+                            var stateValue = false;
+                            // debugger;
                                 $.ajax({
                                     type: "POST",
                                     url: "/business/car/checkexist",
                                     data: {carNum: value},// 你的formid
-                                    async: true,
+                                    async: false,
                                     error: function (data) {
                                         layer.msg("验证码获取出现问题，请重新打开窗口！");
                                         stateValue = false;
                                     },
                                     success: function (data) {
+
                                         if (data.state =='2'){
                                             layer.confirm('已存在车辆，是否添加关系？', {
                                                 btn: ['是','否'] //按钮
