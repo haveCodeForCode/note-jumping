@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>知域知网，了解一切，简单生活</title>
+    <title>字帖比特，了解一切，简单生活</title>
     <link rel="stylesheet" href="website-front/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/font-awesome.css">
     <link rel="stylesheet" href="website-front/css/animate.css">
@@ -15,7 +15,7 @@
         <div class="row border-bottom white-bg">
             <nav class="navbar navbar-expand-lg navbar-static-top" role="navigation">
 
-                <a href="#" class="navbar-brand">车辆管理系统</a>
+                <a href="#" class="navbar-brand">字帖比特</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <i class="fa fa-reorder"></i>
@@ -56,11 +56,12 @@
         <div class="wrapper wrapper-content" id="main-content-frame"></div>
 
         <div class="footer">
+
             <div class="float-right">
-                <strong>1.0 cognition</strong>
+                <strong>Copyright © 2013-2019 <a href="#">XXXXX有限公司</a></strong>
             </div>
             <div>
-                <strong>Copyright</strong> LonelySingleByte 1.0 &copy; 2019-2019
+                <strong>Copyright</strong> © 2019 xxx.com 京ICP备 12003892号-11
             </div>
         </div>
     </div>
@@ -88,38 +89,8 @@
     var menus = [[${menus}]];
 
 
-    var TRUCKTYPE = {
-        'H01': '普通货车',
-        'H02': '厢式货车',
-        'H04': '罐式货车',
-        'Q00': '牵引车',
-        'G01': '普通挂车',
-        'G03': '罐式挂车',
-        'G05': '集装箱挂车',
-        'H09': '仓栅式货车',
-        'H03': '封闭货车',
-        'H05': '平板货车',
-        'H06': '集装箱车',
-        'H07': '自卸货车',
-        'H08': '特殊结构货车',
-        'Z00': '专项作业车',
-        'G02': '厢式挂车',
-        'G07': '仓栅式挂车',
-        'G04': '平板挂车',
-        'G06': '自卸挂车',
-        'G09': '专项作业挂车',
-        'X91': '车辆运输车',
-        'X92': '车辆运输车(单排)'
-    };
-
-
     function openLogin() {
-         index = layer.open({
-            type: 2,
-            title: '登陆与注册',
-            area: ['400px', '600px'],
-            content: '/toLogin' //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
-        });
+        $("#main-content-frame").load('/toLogin');
     }
 
     $(document).ready(function () {
