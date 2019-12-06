@@ -8,13 +8,25 @@
     <link rel="stylesheet" href="website-front/css/animate.css">
     <link rel="stylesheet" href="website-front/css/style.css">
     <style>
-        #main-content-frame {
+        .pageBackgroundMask {
             background: #fff url(/img/stylepicture.jpg) no-repeat;
+            width: 100%;
+            height: 90%;
             background-size: 100% 100%;
+
         }
         #page-wrapper {
              padding: 0;
         }
+        #main-content-frame{
+            position: relative;
+            z-index: 10;
+        }
+
+/*        position: relative;
+    width: 100%;
+    box-shadow: 0 1px 5px rgba(0,0,0,.25);
+    background-color: rgb(20,20,20,0.47);*/
 </style>
 </head>
 <body class="top-navigation">
@@ -24,7 +36,7 @@
         <div class="row border-bottom white-bg">
             <nav class="navbar navbar-expand-lg navbar-static-top" role="navigation">
 
-                <a href="#" class="navbar-brand">字帖比特</a>
+                <a href="/" class="navbar-brand">字帖比特</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <i class="fa fa-reorder"></i>
@@ -62,7 +74,9 @@
                 </div>
             </nav>
         </div>
-        <div class="wrapper wrapper-content" id="main-content-frame"></div>
+        <div class="pageBackgroundMask">
+            <div class="wrapper wrapper-content" id="main-content-frame"></div>
+        </div>
 
         <div class="footer">
 
@@ -105,12 +119,12 @@
     $(document).ready(function () {
         var menuStr ='';
         if (menus && menus != '') {
-            menuStr += '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="javascript:void(0);"  data-toggle="dropdown" onclick="menuClick(\'/toHome\')">' + "用户管理" + '</a>';
+            menuStr += '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="javascript:void(0);"  data-toggle="dropdown" onclick="menuClick(\'/toHome\')">' + "关于" + '</a>';
             $.each(menus, function (index, el) {
                 menuStr += '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="javascript:void(0);"  data-toggle="dropdown" onclick="menuClick(\'' + el.url + '\')">' + el.name + '</a>';
             });
         } else {
-            menuStr = '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="javascript:void(0);"  data-toggle="dropdown" onclick="menuClick(\'/toHome\')">' + "用户管理" + '</a>';
+            menuStr = '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="javascript:void(0);"  data-toggle="dropdown" onclick="menuClick(\'/toHome\')">' + "关于" + '</a>';
         }
 
         $('#navbar-ul').append(menuStr);
