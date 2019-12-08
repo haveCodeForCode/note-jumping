@@ -11,24 +11,37 @@
         body {
             overflow: hidden;
         }
+
+        .maskPage {
+            background: #000 no-repeat;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            z-index: 1;
+        }
+
         .pageBackgroundMask {
-            background: url(/img/stylepicture.jpg) no-repeat;
+            background: url(/img/dd.jpg) no-repeat;
             width: 100%;
             height: 100%;
             background-size: cover;
-        }
-        #page-wrapper {
-             padding: 0;
-        }
-        #main-content-frame{
+            opacity: 0.6;
+            filter: alpha(opacity=60);
             position: relative;
             z-index: 10;
         }
 
-/*        position: relative;
-    width: 100%;
-    box-shadow: 0 1px 5px rgba(0,0,0,.25);
-    background-color: rgb(20,20,20,0.47);*/
+        #page-wrapper {
+             padding: 0;
+        }
+
+        #main-content-frame{
+            position: absolute;
+            z-index: 100;
+        }
+        .footer{
+            z-index: 50;
+        }
 </style>
 </head>
 <body class="top-navigation">
@@ -70,14 +83,17 @@
                 </div>
             </nav>
         </div>
+
         <!-- 中间内容-->
-        <div class="pageBackgroundMask">
-            <div class="wrapper wrapper-content" id="main-content-frame"></div>
-        </div>
+        <div class="wrapper wrapper-content" id="main-content-frame"></div>
+        <div class="maskPage"></div>
+        <div class="pageBackgroundMask"></div>
+
+
         <!--底部-->
-        <div class="footer">
+        <div class="footer" style="color: white">
             <div class="float-right">
-                <strong>Copyright © 2013-2019 <a href="#">XXXXX有限公司</a></strong>
+                <strong>Copyright © 2013-2019 <span>XXXXX有限公司</span></strong>
             </div>
             <div>
                 <strong>Copyright</strong> © 2019 xxx.com 京ICP备 12003892号-11
@@ -115,12 +131,12 @@
     $(document).ready(function () {
         var menuStr ='';
         if (menus && menus != '') {
-            menuStr += '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="javascript:void(0);"  data-toggle="dropdown" onclick="menuClick(\'/\')">' + "关于" + '</a>';
+            menuStr += '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="javascript:void(0);"  data-toggle="dropdown" onclick="menuClick(\'/\')">' + "首页" + '</a>';
             $.each(menus, function (index, el) {
                 menuStr += '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="javascript:void(0);"  data-toggle="dropdown" onclick="menuClick(\'' + el.url + '\')">' + el.name + '</a>';
             });
         } else {
-            menuStr = '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="javascript:void(0);"  data-toggle="dropdown" onclick="menuClick(\'/\')">' + "关于" + '</a>';
+            menuStr = '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="javascript:void(0);"  data-toggle="dropdown" onclick="menuClick(\'/\')">' + "首页" + '</a>';
         }
 
         $('#navbar-ul').append(menuStr);
@@ -136,12 +152,6 @@
     }
 
 
-    // layui.use('element',function () {
-    //     var element = layui.element;
-    //
-    //
-    //
-    // })
 </script>
 </body>
 </html>

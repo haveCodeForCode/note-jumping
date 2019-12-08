@@ -4589,7 +4589,7 @@ ol.unstyled {
 }
 /* FOOTER */
 .footer {
-  background: none repeat scroll 0 0 black;
+  background: none repeat scroll 0 0 gray;
   /*border-top: 1px solid #e7eaec;*/
   bottom: 0;
   left: 0;
