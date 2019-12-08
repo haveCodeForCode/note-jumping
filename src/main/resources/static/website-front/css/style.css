@@ -4540,7 +4540,7 @@ video {
 /* WRAPPERS */
 #wrapper {
   width: 100%;
-  overflow-x: hidden;
+  /*overflow-x: hidden;*/
   display: -ms-flex;
   display: -webkit-flex;
   display: flex;
@@ -4589,13 +4589,14 @@ ol.unstyled {
 }
 /* FOOTER */
 .footer {
-  background: none repeat scroll 0 0 white;
-  border-top: 1px solid #e7eaec;
+  background: none repeat scroll 0 0 black;
+  /*border-top: 1px solid #e7eaec;*/
   bottom: 0;
   left: 0;
-  padding: 10px 20px;
+  padding: 10px 20px 0 0;
   position: absolute;
   right: 0;
+  opacity: 0.7;
 }
 .footer.fixed_full {
   position: fixed;

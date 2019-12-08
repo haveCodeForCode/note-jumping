@@ -13,13 +13,13 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @author LineInkBook
  */
 @EnableTransactionManagement
-@MapperScan("com.root.cognition.*.dao")
+@MapperScan("com.notejumping.*.dao")
 @SpringBootApplication
 @EnableCaching
 @EnableScheduling
-public class CognitionApplication {
+public class NoteJumpingApplication {
     public static void main(String[] args) {
-        SpringApplication.run(CognitionApplication.class, args);
+        SpringApplication.run(NoteJumpingApplication.class, args);
         System.out.println(
                         "                                                                   ┏┓　  ┏┓  \n" +
                         "                                                                  ┏┛┻━━━━┛┻━━━━━┓\n" +
