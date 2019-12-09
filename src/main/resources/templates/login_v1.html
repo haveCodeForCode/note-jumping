@@ -1,13 +1,12 @@
 <style>
 
-    .dowebok {
+    .loginFrame {
         position: absolute;
-        left: 50%;
-        top: 55%;
         width: 430px;
         height: 550px;
-        margin: -300px 0 0 -215px;
         border: 1px solid #fff;
+        margin-left: 700px;
+        margin-top: 100px;
         border-radius: 20px;
         overflow: hidden;
     }
@@ -16,20 +15,20 @@
         width: 104px;
         height: 104px;
         margin: 50px auto 80px;
-        background: url(images/login.png) 0 0 no-repeat;
+        background: url(/img/notLogged.png) 0 0 no-repeat;
     }
 
     .form-item {
         position: relative;
-        width: 360px;
+        width: 350px;
         margin: 0 auto;
         padding-bottom: 30px;
     }
 
     .form-item input {
-        width: 288px;
+        width: 350px;
         height: 48px;
-        padding-left: 70px;
+        padding-left: 40px;
         border: 1px solid #fff;
         border-radius: 25px;
         font-size: 18px;
@@ -48,23 +47,6 @@
         outline: none;
         cursor: pointer;
         background-color: #fff;
-    }
-
-    #username {
-        background: url(images/emil.png) 20px 14px no-repeat;
-    }
-
-    #password {
-        background: url(images/password.png) 23px 11px no-repeat;
-    }
-
-    .tip {
-        display: none;
-        position: absolute;
-        left: 20px;
-        top: 52px;
-        font-size: 14px;
-        color: #f50;
     }
 
     .reg-bar {
@@ -91,25 +73,25 @@
         float: right;
     }
 
-    .dowebok ::-webkit-input-placeholder {
+    .loginFrame ::-webkit-input-placeholder {
         font-size: 18px;
         line-height: 1.4;
         color: #fff;
     }
 
-    .dowebok :-moz-placeholder {
+    .loginFrame :-moz-placeholder {
         font-size: 18px;
         line-height: 1.4;
         color: #fff;
     }
 
-    .dowebok ::-moz-placeholder {
+    .loginFrame ::-moz-placeholder {
         font-size: 18px;
         line-height: 1.4;
         color: #fff;
     }
 
-    .dowebok :-ms-input-placeholder {
+    .loginFrame :-ms-input-placeholder {
         font-size: 18px;
         line-height: 1.4;
         color: #fff;
@@ -120,7 +102,7 @@
             box-sizing: border-box;
         }
 
-        .dowebok {
+        .loginFrame {
             position: static;
             width: auto;
             height: auto;
@@ -133,9 +115,6 @@
             margin: 50px auto;
         }
 
-        .form-item {
-            width: auto;
-        }
 
         .form-item input, .form-item button, .reg-bar {
             width: 100%;
@@ -144,20 +123,18 @@
 </style>
 
 
-<div class="dowebok">
+<div class="loginFrame">
     <div class="logo"></div>
     <div class="form-item">
-        <input id="username" type="text" autocomplete="off" placeholder="邮箱">
-        <p class="tip">请输入合法的邮箱地址</p>
+        <input id="username" type="text" autocomplete="off" placeholder="你的手机号/邮箱">
     </div>
     <div class="form-item">
         <input id="password" type="password" autocomplete="off" placeholder="登录密码">
-        <p class="tip">邮箱或密码不正确</p>
     </div>
     <div class="form-item"><button id="submit">登 录</button></div>
     <div class="reg-bar">
-        <a class="reg" href="http://www.dowebok.com" target="_blank">立即注册</a>
-        <a class="forget" href="http://www.dowebok.com" target="_blank">忘记密码</a>
+        <a class="reg" href="/toRegister" target="_blank">立即注册</a>
+<!--        <a class="forget" href="http://www.dowebok.com" target="_blank">忘记密码</a>-->
     </div>
 </div>
 

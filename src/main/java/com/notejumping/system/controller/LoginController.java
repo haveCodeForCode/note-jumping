@@ -69,11 +69,6 @@ public class LoginController extends BaseController {
         return "redirect:/toInterface";
     }
 
-    /*** 网站引荐 */
-    @GetMapping("/toGuide")
-    String guide() {
-        return "guide";
-    }
 
     /*** 前往登陆页面*/
     @RequestMapping(value = "/toLogin")
