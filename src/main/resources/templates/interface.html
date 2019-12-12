@@ -130,8 +130,8 @@
 
     $(document).ready(function () {
         var menuStr ='';
-        if (menus && menus != '') {
-            menuStr += '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="javascript:void(0);"  data-toggle="dropdown" onclick="menuClick(\'/toInterface\')">' + "首页" + '</a>';
+        if (menus && menus !== '') {
+            menuStr += '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="javascript:void(0);"  data-toggle="dropdown" onclick="menuClick(\'/toRegister\')">' + "首页" + '</a>';
             $.each(menus, function (index, el) {
                 menuStr += '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="javascript:void(0);"  data-toggle="dropdown" onclick="menuClick(\'' + el.url + '\')">' + el.name + '</a>';
             });
@@ -147,7 +147,7 @@
         if (menus && menus.length > 0) {
             $('#main-content-frame').load(i);
         } else {
-            $("#main-content-frame").load('/toHome');
+            $('#main-content-frame').load('/toHome');
         }
     }
 

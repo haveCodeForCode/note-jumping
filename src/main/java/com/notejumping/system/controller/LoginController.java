@@ -1,5 +1,6 @@
 package com.notejumping.system.controller;
 
+
 import com.notejumping.common.config.Constant;
 import com.notejumping.common.until.RandomValidateCodeUtil;
 import com.notejumping.common.until.ResultMap;
@@ -7,11 +8,11 @@ import com.notejumping.common.until.StringUtils;
 import com.notejumping.common.until.encrypt.Md5Utils;
 import com.notejumping.system.entity.Menu;
 import com.notejumping.system.entity.User;
-import com.notejumping.system.vo.UserVo;
 import com.notejumping.system.persistence.BaseController;
 import com.notejumping.system.persistence.Tree;
 import com.notejumping.system.service.MenuService;
 import com.notejumping.system.service.UserService;
+import com.notejumping.system.vo.UserVo;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -69,6 +70,11 @@ public class LoginController extends BaseController {
         return "redirect:/toInterface";
     }
 
+    /*** 网站引荐 */
+    @GetMapping("/toGuide")
+    String guide() {
+        return "guide";
+    }
 
     /*** 前往登陆页面*/
     @RequestMapping(value = "/toLogin")
@@ -163,19 +169,19 @@ public class LoginController extends BaseController {
     @PostMapping(value = "/login")
     @ResponseBody
     ResultMap login(String loginInfo, String password, String verify, HttpServletRequest request) {
-        try {
-            //从session中获取随机数
-            String random = (String) request.getSession().getAttribute(RandomValidateCodeUtil.RANDOMCODEKEY);
-            if (StringUtils.isBlank(verify)) {
-                return ResultMap.error("请输入验证码");
-            }
-            if (!random.equals(verify)) {
-                return ResultMap.error("请输入正确的验证码");
-            }
-        } catch (Exception e) {
-            logger.error("验证码校验失败", e);
-            return ResultMap.error("验证码校验失败");
-        }
+//        try {
+//            //从session中获取随机数
+//            String random = (String) request.getSession().getAttribute(RandomValidateCodeUtil.RANDOMCODEKEY);
+//            if (StringUtils.isBlank(verify)) {
+//                return ResultMap.error("请输入验证码");
+//            }
+//            if (!random.equals(verify)) {
+//                return ResultMap.error("请输入正确的验证码");
+//            }
+//        } catch (Exception e) {
+//            logger.error("验证码校验失败", e);
+//            return ResultMap.error("验证码校验失败");
+//        }
 
         User user = userService.getWihtLogininfo(loginInfo);
         if (user != null) {
@@ -196,16 +202,6 @@ public class LoginController extends BaseController {
             System.err.println(e.getMessage());
             return ResultMap.error(e.getMessage());
         }
-    }
-
-    /**
-     * 前往注册页面
-     *
-     * @return
-     */
-    @GetMapping("/toRegister")
-    String register() {
-        return "register";
     }
 
     /**
