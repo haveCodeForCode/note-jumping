@@ -1,39 +1,40 @@
 <html lang="en">
 <body>
-<style>
+<header>
+    <style>
+        .center {
+            text-align: center;
+        }
 
-    .center {
-        text-align: center;
-    }
+        .c_img {
+            height: 129px;
+            width: 270px;
+        }
 
-    .c_img {
-        height: 129px;
-        width: 270px;
-    }
+        .c_input {
+            width: 460px;
+            height: 48px;
+            padding-left: 70px;
+            border: 1px solid #fff;
+            border-radius: 25px;
+            font-size: 18px;
+            color: #fff;
+            background-color: transparent;
+            outline: none;
+        }
 
-    .c_input {
-        width: 460px;
-        height: 48px;
-        padding-left: 70px;
-        border: 1px solid #fff;
-        border-radius: 25px;
-        font-size: 18px;
-        color: #fff;
-        background-color: transparent;
-        outline: none;
-    }
+        .c_btn {
+            background-color: #3388FF;
+            color: white;
+            border: 0;
+            height: 39px;
+            width: 100px;
+        }
 
-    .c_btn {
-        background-color: #3388FF;
-        color: white;
-        border: 0;
-        height: 39px;
-        width: 100px;
-    }
-
-</style>
-
+    </style>
+</header>
 <div>
+    <div th:include="interface:common_head"></div>
     <!--中间-->
     <div class="center">
         <!--logo-->

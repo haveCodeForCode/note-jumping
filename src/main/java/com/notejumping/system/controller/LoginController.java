@@ -66,15 +66,18 @@ public class LoginController extends BaseController {
      * @return
      */
     @GetMapping("/")
+//    String welcome(Model model) {
+//        return "redirect:/toInterface";
+//    }
     String welcome(Model model) {
-        return "redirect:/toInterface";
+        return "redirect:/toHome";
     }
 
-    /*** 网站引荐 */
-    @GetMapping("/toGuide")
-    String guide() {
-        return "guide";
-    }
+//    /*** 网站引荐 */
+//    @GetMapping("/toGuide")
+//    String guide() {
+//        return "guide";
+//    }
 
     /*** 前往登陆页面*/
     @RequestMapping(value = "/toLogin")
