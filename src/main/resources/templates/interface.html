@@ -3,94 +3,82 @@
 <!--<head>-->
 <!--    <meta charset="UTF-8">-->
 <!--    <title>字帖比特，了解一切，简单生活</title>-->
+<div th:fragment="common_head">
     <link rel="stylesheet" href="website-front/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/font-awesome.css">
     <link rel="stylesheet" href="website-front/css/animate.css">
     <link rel="stylesheet" href="website-front/css/style.css">
     <style>
-        body {
-            overflow: hidden;
-        }
+        /*html, body {*/
+        /*    height: 100%*/
+        /*}*/
 
-        .maskPage {
-            background: #000 no-repeat;
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            z-index: 1;
-        }
+        /*body {*/
+        /*    overflow: hidden;*/
+        /*}*/
 
         .pageBackgroundMask {
-            background: url(/img/dd.jpg) no-repeat;
+            background: url(/img/bg.jpg) no-repeat;
             width: 100%;
             height: 100%;
             background-size: cover;
-            opacity: 0.6;
-            filter: alpha(opacity=60);
-            position: relative;
-            z-index: 10;
+            position: absolute;
         }
 
         #page-wrapper {
-             padding: 0;
+            padding: 0;
         }
 
-        #main-content-frame{
-            position: absolute;
-            z-index: 100;
-        }
-        .footer{
-            z-index: 50;
-        }
+        p
+
 </style>
-<!--</head>-->
-<!--<body class="top-navigation">-->
 
-<div id="wrapper" th:fragment="common_head">
-<!--    <div id="page-wrapper" class="gray-bg">-->
-        <!-- 顶部菜单栏-->
-        <div class="row border-bottom white-bg">
-            <nav class="navbar navbar-expand-lg navbar-static-top" role="navigation">
+    <div id="wrapper">
+        <div id="page-wrapper" class="gray-bg">
+            <!-- 顶部菜单栏-->
+            <div class="row border-bottom white-bg">
+                <nav class="navbar navbar-expand-lg navbar-static-top" role="navigation">
 
-                <a href="" class="navbar-brand">字帖比特</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <i class="fa fa-reorder"></i>
-                </button>
+                    <a href="" class="navbar-brand">字帖比特</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fa fa-reorder"></i>
+                    </button>
 
-                <div class="navbar-collapse collapse" id="navbar">
-                    <!-- 菜单内容-->
-                    <ul class="nav navbar-nav mr-auto" id="navbar-ul"></ul>
+                    <div class="navbar-collapse collapse" id="navbar">
+                        <!-- 菜单内容-->
+                        <ul class="nav navbar-nav mr-auto" id="navbar-ul"></ul>
 
-                    <ul class="nav navbar-top-links navbar-right">
+                        <ul class="nav navbar-top-links navbar-right">
 
-                        <li class="dropdown" th:if="${userInfo} != null">
-                            <a aria-expanded="false" role="button" href="#" class="dropdown-toggle"
-                               data-toggle="dropdown" th:text="${userInfo.userName}">未登录</a>
-                            <!--<ul role="menu" class="dropdown-menu">-->
+                            <li class="dropdown" th:if="${userInfo} != null">
+                                <a aria-expanded="false" role="button" href="#" class="dropdown-toggle"
+                                   data-toggle="dropdown" th:text="${userInfo.userName}">未登录</a>
+                                <!--<ul role="menu" class="dropdown-menu">-->
                                 <!--<li><a href="">修改信息</a></li>-->
                                 <!--<li><a href="">安全管理</a></li>-->
-                            <!--</ul>-->
-                        </li>
+                                <!--</ul>-->
+                            </li>
 
-                        <li class="layui-nav-item" style="float:right;" th:if="${userInfo} == null">
-                            <a href="javascript:;" onclick="openLogin()"><i class="fa fa-sign-in"></i>登陆</a>
-                        </li>
-                        <li class="layui-nav-item" style="float:right;" th:if="${userInfo} != null">
-                            <a href="/logout"> <i class="fa fa-sign-out"></i> 退出</a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </div>
+                            <li class="layui-nav-item" style="float:right;" th:if="${userInfo} == null">
+                                <a href="javascript:;" onclick="openLogin()"><i class="fa fa-sign-in"></i>登陆</a>
+                            </li>
+                            <li class="layui-nav-item" style="float:right;" th:if="${userInfo} != null">
+                                <a href="/logout"> <i class="fa fa-sign-out"></i> 退出</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
 
-        <!-- 中间内容-->
+            <!-- 中间内容-->
 <!--        <div class="wrapper wrapper-content" id="main-content-frame"></div>-->
-        <div class="maskPage"></div>
-        <div class="pageBackgroundMask"></div>
+            <div class="pageBackgroundMask">
+                <div class="maskPage"></div>
+            </div>
 
 
-        <!--底部-->
+            <!--底部-->
 <!--        <div class="footer" style="color: white">-->
 <!--            <div class="float-right">-->
 <!--                <strong>Copyright © 2013-2019 <span>XXXXX有限公司</span></strong>-->
@@ -100,58 +88,54 @@
 <!--            </div>-->
 <!--        </div>-->
 <!--    </div>-->
+        </div>
 </div>
 <!-- 全局js -->
 <!--工具方法-->
-<script type="text/javascript" src="/website-front/js/jquery-2.1.1.js"></script>
-<script type="text/javascript" src="/website-front/js/popper.min.js"></script>
-<script type="text/javascript" src="/website-front/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/js/plugins/metisMenu/jquery.metisMenu.js"></script>
-<script type="text/javascript" src="/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-<script src="/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
-<script src="/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
-<script src="/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
-<script src="/js/plugins/pace/pace.min.js"></script>
+    <script type="text/javascript" src="/website-front/js/jquery-2.1.1.js"></script>
+    <script type="text/javascript" src="/website-front/js/popper.min.js"></script>
+    <script type="text/javascript" src="/website-front/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script type="text/javascript" src="/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+    <script src="/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="/js/plugins/pace/pace.min.js"></script>
 <!--自定义方法-->
-<script src="/website-front/js/inspinia.js"></script>
+    <script src="/website-front/js/inspinia.js"></script>
+    <script type="text/javascript" src="/js/layui.all.js"></script>
 
-<script type="text/javascript" src="/js/layui.all.js"></script>
-
-<script th:inline="javascript" type="text/javascript">
-    //全局变量
-    var index;
-    var userinfo = [[${userInfo}]];
-    var menus = [[${menus}]];
+    <script th:inline="javascript" type="text/javascript">
+        //全局变量
+        var index;
+        var userinfo = [[${userInfo}]];
+        var menus = [[${menus}]];
 
 
-    function openLogin() {
-        $("#main-content-frame").load('/toLogin');
-    }
-
-    $(document).ready(function () {
-        var menuStr ='';
-        if (menus && menus !== '') {
-            menuStr += '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="javascript:void(0);"  data-toggle="dropdown" onclick="menuClick(\'/toRegister\')">' + "首页" + '</a>';
-            $.each(menus, function (index, el) {
-                menuStr += '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="javascript:void(0);"  data-toggle="dropdown" onclick="menuClick(\'' + el.url + '\')">' + el.name + '</a>';
-            });
-        } else {
-            menuStr = '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="javascript:void(0);"  data-toggle="dropdown" onclick="menuClick(\'/toInterface\')">' + "首页" + '</a>';
+        function openLogin() {
+            window.location.href = '/toLogin';
         }
 
-        $('#navbar-ul').append(menuStr);
-        menuClick('/toHome');
-    });
+        $(document).ready(function () {
+            var menuStr = '';
+            if (menus && menus !== '') {
+                menuStr += '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="javascript:void(0);"  data-toggle="dropdown" onclick="menuClick(\'/toRegister\')">' + "首页" + '</a>';
+                $.each(menus, function (index, el) {
+                    menuStr += '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="javascript:void(0);"  data-toggle="dropdown" onclick="menuClick(\'' + el.url + '\')">' + el.name + '</a>';
+                });
+            } else {
+                menuStr = '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="javascript:void(0);"  data-toggle="dropdown" onclick="menuClick(\'/toInterface\')">' + "首页" + '</a>';
+            }
 
-    function menuClick(i) {
-        if (menus && menus.length > 0) {
-            $('#main-content-frame').load(i);
-        } else {
-            $('#main-content-frame').load('/toHome');
+            $('#navbar-ul').append(menuStr);
+            menuClick('/toHome');
+        });
+
+        function menuClick(i) {
+            if (menus && menus.length > 0) {
+                window.location.href = i;
+            }
         }
-    }
+    </script>
 
-
-</script>
-<!--</body>-->
-<!--</html>-->
+</div>

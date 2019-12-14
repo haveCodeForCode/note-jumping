@@ -1,11 +1,7 @@
-<html lang="en">
-<body>
+<html lang="zh_CN">
+<meta charset="utf-8">
 <header>
     <style>
-        .center {
-            text-align: center;
-        }
-
         .c_img {
             height: 129px;
             width: 270px;
@@ -33,10 +29,11 @@
 
     </style>
 </header>
-<div>
-    <div th:include="interface:common_head"></div>
+<body class="top-navigation">
+
+<div class="pageHeader" th:include = "interface :: common_head"></div>
     <!--中间-->
-    <div class="center">
+    <div class="pageCenter">
         <!--logo-->
         <div class="c_logo">
             <img src="https://www.baidu.com/img/bd_logo1.png" class="c_img">
@@ -47,8 +44,6 @@
         </label>
         <input type="button" value="Jump Note" class="c_btn">
     </div>
-</div>
-</body>
 
     <script th:inline="javascript" type="text/javascript">
         $(function () {
@@ -92,5 +87,5 @@
         }
     </script>
 
-
+</body>
 </html>

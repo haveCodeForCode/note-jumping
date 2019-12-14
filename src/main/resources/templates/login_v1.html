@@ -1,5 +1,5 @@
+<html>
 <style>
-
     .loginFrame {
         position: absolute;
         width: 430px;
@@ -121,27 +121,28 @@
         }
     }
 </style>
+<body class="top-navigation">
 
-
-<div class="loginFrame">
-    <form id="signupForm">
-        <div class="logo"></div>
-        <div class="form-item">
-            <input id="loginInfo" name="loginInfo" type="text" autocomplete="off" placeholder="你的手机号/邮箱">
-        </div>
-        <div class="form-item">
-            <input id="password" name="password" type="password" autocomplete="off" placeholder="登录密码">
-        </div>
-        <div class="form-item">
-            <button id="login">登 录</button>
-        </div>
-        <div class="reg-bar">
-            <a class="reg" href="javascript:;" onclick="toRegister()">立即注册</a>
-            <!--        <a class="forget" href="" target="_blank">忘记密码</a>-->
-        </div>
-    </form>
-</div>
-
+    <div class="mateHeader" th:include="interface :: common_head"></div>
+    <div class="loginFrame">
+        <form id="signupForm">
+            <div class="logo"></div>
+            <div class="form-item">
+                <input id="loginInfo" name="loginInfo" type="text" autocomplete="off" placeholder="你的手机号/邮箱">
+            </div>
+            <div class="form-item">
+                <input id="password" name="password" type="password" autocomplete="off" placeholder="登录密码">
+            </div>
+            <div class="form-item">
+                <button id="login">登 录</button>
+            </div>
+            <div class="reg-bar">
+                <a class="reg" href="javascript:;" onclick="toRegister()">立即注册</a>
+                <!--        <a class="forget" href="" target="_blank">忘记密码</a>-->
+            </div>
+        </form>
+    </div>
+</body>
 <!-- 全局js -->
 <script type="text/javascript" src="/js/jquery.min.js?v=2.1.4"></script>
 <script type="text/javascript" src="/js/bootstrap.min.js?v=3.3.6"></script>
@@ -228,3 +229,4 @@
         obj.src = "/getVerify?" + Math.random();
     }
 </script>
+</html>

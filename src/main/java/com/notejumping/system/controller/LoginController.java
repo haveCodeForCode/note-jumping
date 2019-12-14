@@ -4,7 +4,6 @@ package com.notejumping.system.controller;
 import com.notejumping.common.config.Constant;
 import com.notejumping.common.until.RandomValidateCodeUtil;
 import com.notejumping.common.until.ResultMap;
-import com.notejumping.common.until.StringUtils;
 import com.notejumping.common.until.encrypt.Md5Utils;
 import com.notejumping.system.entity.Menu;
 import com.notejumping.system.entity.User;
@@ -66,9 +65,6 @@ public class LoginController extends BaseController {
      * @return
      */
     @GetMapping("/")
-//    String welcome(Model model) {
-//        return "redirect:/toInterface";
-//    }
     String welcome(Model model) {
         return "redirect:/toHome";
     }
@@ -94,9 +90,8 @@ public class LoginController extends BaseController {
     /*** 前往首页**/
     @RequestMapping("/toHome")
     String toHome(){
-        return "clienthtml/home";
+        return "system/home";
     }
-
 
     /*** 首页 */
     @GetMapping("/toInterface")
