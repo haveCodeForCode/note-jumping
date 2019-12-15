@@ -1,13 +1,10 @@
 <html lang="zh_CN">
 <meta charset="utf-8">
 <header>
+    <meta charset="UTF-8">
+    <title>字帖比特，了解一切，简单生活</title>
     <style>
-        .c_img {
-            height: 129px;
-            width: 270px;
-        }
-
-        .c_input {
+        .s_input {
             width: 460px;
             height: 48px;
             padding-left: 70px;
@@ -19,14 +16,36 @@
             outline: none;
         }
 
-        .c_btn {
+        .s_btn {
             background-color: #3388FF;
             color: white;
             border: 0;
-            height: 39px;
+            border-radius: 25px;
+            height: 48px;
             width: 100px;
         }
 
+        /*.noteQuery{*/
+        /*    top: 20%;*/
+        /*    left: 40%;*/
+        /*    width: 600px;*/
+        /*    height: 300px;*/
+        /*    background: hsla(0,0%,100%,.3);*/
+        /*}*/
+
+        .pageCenter {
+            top: 15%;
+            left: 30%;
+            position: absolute;
+        }
+
+        p {
+            padding-left: 80px;
+            font-size: 80px;
+            /*使用了 字体阴影，然后把字体颜色调成背景颜色，就是空心字了*/
+            text-shadow: 0 0 2px black;
+            color: white;
+        }
     </style>
 </header>
 <body class="top-navigation">
@@ -34,15 +53,14 @@
 <div class="pageHeader" th:include = "interface :: common_head"></div>
     <!--中间-->
     <div class="pageCenter">
+        <!--        <div class="noteQuery">-->
         <!--logo-->
-        <div class="c_logo">
-            <img src="https://www.baidu.com/img/bd_logo1.png" class="c_img">
-        </div>
+        <p>字帖比特</p>
         <!--搜索框input-->
-        <label>
-            <input type="text" class="c_input">
-        </label>
-        <input type="button" value="Jump Note" class="c_btn">
+        <input type="text" class="s_input">
+        <!--查询按钮-->
+        <input type="button" value="Jump Note" class="s_btn">
+        <!--        </div>-->
     </div>
 
     <script th:inline="javascript" type="text/javascript">
