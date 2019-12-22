@@ -1,4 +1,4 @@
-<div th:fragment="common_head">
+<div th:fragment="common_head" xmlns:th="http://www.w3.org/1999/xhtml">
     <link rel="stylesheet" href="website-front/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/font-awesome.css">
     <link rel="stylesheet" href="website-front/css/animate.css">
@@ -29,7 +29,7 @@
             padding: 0;
         }
 
-</style>
+    </style>
         <div id="page-wrapper" class="gray-bg">
             <!-- 顶部菜单栏-->
             <div class="row border-bottom white-bg">
@@ -105,30 +105,30 @@
         var userinfo = [[${userInfo}]];
         var menus = [[${menus}]];
 
+        console.log(userinfo);
+        console.log(menus);
 
         function openLogin() {
             window.location.href = '/toLogin';
         }
 
         $(document).ready(function () {
+            // debugger;
             var menuStr = '';
             if (menus && menus !== '') {
-                menuStr += '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="javascript:void(0);"  data-toggle="dropdown" onclick="menuClick(\'/toRegister\')">' + "首页" + '</a>';
+                menuStr += '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="/toHome"  data-toggle="dropdown" onclick="menuClick(\'/toHome\')">' + "首页" + '</a>';
                 $.each(menus, function (index, el) {
-                    menuStr += '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="javascript:void(0);"  data-toggle="dropdown" onclick="menuClick(\'' + el.url + '\')">' + el.name + '</a>';
+                    menuStr += '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="' + el.url + '"  data-toggle="dropdown" onclick="menuClick(\'' + el.url + '\')">' + el.name + '</a>';
                 });
             } else {
-                menuStr = '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="javascript:void(0);"  data-toggle="dropdown" onclick="menuClick(\'/toInterface\')">' + "首页" + '</a>';
+                menuStr = '<li class="dropdown">' + '<a aria-expanded="false" role="button" href="/toHome"  data-toggle="dropdown" onclick="menuClick(\'/toHome\')">' + "首页" + '</a>';
             }
 
             $('#navbar-ul').append(menuStr);
-            menuClick('/toHome');
         });
 
         function menuClick(i) {
-            if (menus && menus.length > 0) {
-                window.location.href = i;
-            }
+            window.location.href = '' + i + '';
         }
     </script>
 

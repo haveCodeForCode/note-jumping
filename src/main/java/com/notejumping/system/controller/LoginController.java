@@ -2,8 +2,9 @@ package com.notejumping.system.controller;
 
 
 import com.notejumping.common.config.Constant;
-import com.notejumping.common.until.RandomValidateCodeUtil;
 import com.notejumping.common.until.ResultMap;
+import com.notejumping.common.until.StringUtils;
+import com.notejumping.common.until.Tools;
 import com.notejumping.common.until.encrypt.Md5Utils;
 import com.notejumping.system.entity.Menu;
 import com.notejumping.system.entity.User;
@@ -27,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +46,12 @@ public class LoginController extends BaseController {
 
     private MenuService menuService;
 
+    /**
+     * session key
+     */
+    private static final String RANDOMCODEKEY = "RANDOMVALIDATECODEKEY";
+
+    private static final String DOMCODEKEY = "DOMCODEKEY";
 
     @Autowired
     public void setUserService(UserService userService) {
@@ -77,7 +84,12 @@ public class LoginController extends BaseController {
 
     /*** 前往登陆页面*/
     @RequestMapping(value = "/toLogin")
-    String toLogin() {
+    String toLogin(HttpServletRequest request, Model model) {
+        HttpSession session = request.getSession();
+        String randomNumber = Tools.getRandomNumber(5).toString();
+        session.removeAttribute(RANDOMCODEKEY);
+        session.setAttribute(RANDOMCODEKEY, randomNumber);
+        model.addAttribute("verifyNumber",randomNumber);
         return "login_v1";
     }
 
@@ -89,13 +101,7 @@ public class LoginController extends BaseController {
 
     /*** 前往首页**/
     @RequestMapping("/toHome")
-    String toHome(){
-        return "system/home";
-    }
-
-    /*** 首页 */
-    @GetMapping("/toInterface")
-    String toInterface(Model model) {
+    String toHome(Model model) {
         if (getUser() != null) {
             UserVo userVo = userService.getbyUserId(getUserId());
             List<Menu> menuList = userVo.getMenus();
@@ -111,7 +117,7 @@ public class LoginController extends BaseController {
             }
             model.addAttribute("userInfo", userVo.getUserInfo());
         }
-        return "interface";
+        return "system/home";
     }
 
 
@@ -167,19 +173,19 @@ public class LoginController extends BaseController {
     @PostMapping(value = "/login")
     @ResponseBody
     ResultMap login(String loginInfo, String password, String verify, HttpServletRequest request) {
-//        try {
-//            //从session中获取随机数
-//            String random = (String) request.getSession().getAttribute(RandomValidateCodeUtil.RANDOMCODEKEY);
-//            if (StringUtils.isBlank(verify)) {
-//                return ResultMap.error("请输入验证码");
-//            }
-//            if (!random.equals(verify)) {
-//                return ResultMap.error("请输入正确的验证码");
-//            }
-//        } catch (Exception e) {
-//            logger.error("验证码校验失败", e);
-//            return ResultMap.error("验证码校验失败");
-//        }
+        try {
+//            从session中获取随机数
+            String random = (String) request.getSession().getAttribute(RANDOMCODEKEY);
+            if (StringUtils.isBlank(verify)) {
+                return ResultMap.error("请输入验证码");
+            }
+            if (!random.equals(verify)) {
+                return ResultMap.error("请正确的验证登录");
+            }
+        } catch (Exception e) {
+            logger.error("验证码校验失败", e);
+            return ResultMap.error("验证码校验失败");
+        }
 
         User user = userService.getWihtLogininfo(loginInfo);
         if (user != null) {
@@ -205,22 +211,22 @@ public class LoginController extends BaseController {
     /**
      * 生成验证码
      */
-    @GetMapping(value = "/getVerify")
-    public void getVerify(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            //设置相应类型,告诉浏览器输出的内容为图片
-            response.setContentType("image/jpeg");
-            //设置响应头信息，告诉浏览器不要缓存此内容
-            response.setHeader("Pragma", "No-cache");
-            response.setHeader("Cache-Control", "no-cache");
-            response.setDateHeader("Expire", 0);
-            RandomValidateCodeUtil randomValidateCode = new RandomValidateCodeUtil();
-            //输出验证码图片方法
-            randomValidateCode.getRandcode(request, response);
-        } catch (Exception e) {
-            logger.error("获取验证码失败>>>> ", e);
-        }
-    }
+//    @GetMapping(value = "/getVerify")
+//    public void getVerify(HttpServletRequest request, HttpServletResponse response) {
+//        try {
+//            //设置相应类型,告诉浏览器输出的内容为图片
+//            response.setContentType("image/jpeg");
+//            //设置响应头信息，告诉浏览器不要缓存此内容
+//            response.setHeader("Pragma", "No-cache");
+//            response.setHeader("Cache-Control", "no-cache");
+//            response.setDateHeader("Expire", 0);
+//            RandomValidateCodeUtil randomValidateCode = new RandomValidateCodeUtil();
+//            //输出验证码图片方法
+//            randomValidateCode.getRandcode(request, response);
+//        } catch (Exception e) {
+//            logger.error("获取验证码失败>>>> ", e);
+//        }
+//    }
 
     @GetMapping("/fontIcoList")
     String getFontIcoList (){

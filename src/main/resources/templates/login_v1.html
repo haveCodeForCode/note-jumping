@@ -1,151 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>congnition</title>
-    <meta name="keywords" content="CarManger管理系统">
-    <meta name="description" content="CarManger管理系统">
+    <title>字帖比特，了解一切，简单生活</title>
+    <meta name="keywords" content="字帖比特，了解一切，简单生活">
+    <meta name="description" content="字帖比特，了解一切，简单生活">
+    <!--登录样式-->
+    <link rel="stylesheet" href="/css/login_v1.css">
+    <!--验证样式-->
+    <link rel="stylesheet" href="/css/manmachine.css">
     <!--    <link rel="stylesheet" href="/css/bootstrap.min.css">-->
     <!--    <link rel="stylesheet" href="/css/font-awesome.css">-->
     <!--    <link rel="stylesheet" href="/css/animate.css">-->
-    <!--    <link rel="stylesheet" href="/css/login_v1.css">-->
     <!--    <link rel="stylesheet" href="/css/layui.css">-->
-    <style>
-        .loginFrame {
-            top: 12%;
-            left: 37%;
-            position: absolute;
-            width: 430px;
-            height: 550px;
-            border: 1px solid #fff;
-            border-radius: 20px;
-            overflow: hidden;
-        }
-
-        .logo {
-            width: 104px;
-            height: 104px;
-            margin: 50px auto 80px;
-            background: url(/img/notLogged.png) 0 0 no-repeat;
-        }
-
-        .form-item {
-            position: relative;
-            width: 350px;
-            margin: 0 auto;
-            padding-bottom: 30px;
-        }
-
-        .form-item input {
-            width: 350px;
-            height: 48px;
-            padding-left: 40px;
-            border: 1px solid #fff;
-            border-radius: 25px;
-            font-size: 18px;
-            color: #fff;
-            background-color: transparent;
-            outline: none;
-        }
-
-        .form-item button {
-            width: 360px;
-            height: 50px;
-            border: 0;
-            border-radius: 25px;
-            font-size: 18px;
-            color: #1f6f4a;
-            outline: none;
-            cursor: pointer;
-            background-color: #fff;
-        }
-
-        .reg-bar {
-            width: 360px;
-            margin: 20px auto 0;
-            font-size: 14px;
-            overflow: hidden;
-        }
-
-        .reg-bar a {
-            color: #fff;
-            text-decoration: none;
-        }
-
-        .reg-bar a:hover {
-            text-decoration: underline;
-        }
-
-        .reg-bar .reg {
-            float: left;
-        }
-
-        .reg-bar .forget {
-            float: right;
-        }
-
-        .loginFrame ::-webkit-input-placeholder {
-            font-size: 18px;
-            line-height: 1.4;
-            color: #fff;
-        }
-
-        .loginFrame :-moz-placeholder {
-            font-size: 18px;
-            line-height: 1.4;
-            color: #fff;
-        }
-
-        .loginFrame ::-moz-placeholder {
-            font-size: 18px;
-            line-height: 1.4;
-            color: #fff;
-        }
-
-        .loginFrame :-ms-input-placeholder {
-            font-size: 18px;
-            line-height: 1.4;
-            color: #fff;
-        }
-
-        @media screen and (max-width: 500px) {
-            * {
-                box-sizing: border-box;
-            }
-
-            .loginFrame {
-                position: static;
-                width: auto;
-                height: auto;
-                margin: 0 30px;
-                border: 0;
-                border-radius: 0;
-            }
-
-            .logo {
-                margin: 50px auto;
-            }
-
-
-            .form-item input, .form-item button, .reg-bar {
-                width: 100%;
-            }
-        }
-    </style>
-
 </head>
 
 <body class="top-navigation">
 
 <div th:include="interface :: common_head"></div>
 <!--登陆界面-->
-<div class="signinpanel">
-
+<div class="loginFrame pageOverLap">
     <form id="signupForm">
-        <!--        <h3 class="text-center">用户登录</h3><br/>-->
-        <!--        <p class="m-t-md text-center">欢迎登录cognition</p>-->
         <div class="logo"></div>
         <div class="form-item">
             <input id="loginInfo" type="text" name="loginInfo" class="form-control uname" placeholder="请输入手机号\邮箱"/>
@@ -153,29 +29,40 @@
         <div class="form-item">
             <input id="password" type="password" name="password" class="form-control pword m-b" placeholder="请输入密码"/>
         </div>
+        <input name="verify" id="verify" th:value="${verifyNumber}" style="display: none">
+        <div class="form-item">
+            <a class="btn btn-login btn-block" onclick="login()">登录</a>
+        </div>
+    </form>
 
-        <div class="row">
-            <div class="col-xs-12 pull_left">
-                <div class="form-group">
-                    <input class="form-control" type="tel" name="verify" id="verify"
-                           placeholder="请输入验证码" maxlength="4">
+    <div class="reg-bar">
+        <a class="reg" href="/toRegister">立即注册</a>
+        <!--        <a class="forget" href="" target="_blank">忘记密码</a>-->
+    </div>
+
+    <div class="manMbox">
+        <img src="/img/manmachine/cw.png" class="cuo">
+        <span class="top-s">身份验证</span>
+        <span class="top-x">拖动滑块，使图片角度为正</span>
+        <div id="rotateWrap1">
+            <div class="rotateverify-contaniner">
+                <div class="rotate-can-wrap">
+                    <canvas class="rotateCan rotate-can" width="200" height="200"></canvas>
+                    <div class="statusBg status-bg"></div>
                 </div>
-                <a href="javascript:void(0);" rel="external nofollow" class="layoutVerification" title="点击更换验证码">
-                    <!--height="36" width="100%" style="margin-top: 12px;"-->
-                    <img id="imgVerify" src="" alt="更换验证码" onclick="getVerify(this);">
-                </a>
+                <div class="control-wrap slideDragWrap">
+                    <div class="control-tips">
+                        <p class="c-tips-txt cTipsTxt">滑动将图片转正</p>
+                    </div>
+                    <div class="control-bor-wrap controlBorWrap"></div>
+                    <div class="control-btn slideDragBtn">
+                        <i class="control-btn-ico"></i>
+                    </div>
+                </div>
             </div>
         </div>
-        <a id="login" class="btn btn-login btn-block">登录</a>
-    </form>
-    <div style="padding:10px;text-align:right;">
-        <a href="/toRegister" style="color: #0d8ddb">立即注册>></a>
     </div>
 
-    <div class="signup-footer">
-        <!--© 2019 xxx.com  京ICP备 12003892号-11 XXXXX有限公司-->
-        <div class="pull-left">&copy; 2019 cognition.com 冀ICP备19019505号-1 carManger车辆管理平台</div>
-    </div>
 </div>
 
 <!-- 全局js -->
@@ -189,48 +76,54 @@
 <script type="text/javascript" src="/js/plugins/validate/jquery.validate.min.js"></script>
 <script type="text/javascript" src="/js/plugins/validate/messages_zh.min.js"></script>
 <script type="text/javascript" src="/js/layui.all.js"></script>
+<!--人机验证插件-->
+<script type="text/javascript" src="/js/manmachine.js"></script>
 
-<script type="text/javascript">
+<script th:inline="javascript" type="text/javascript">
     $(document).ready(function () {
-        $("#login").on('click', function () {
-            $("#signupForm").submit();
-        });
         validateRule();
-        $("body").keydown(keyDownLogon);
+        // $("body").keydown(keyDownLogon);
         // getVerify($("#imgVerify"));
-        $("#imgVerify").click()
+        // $("#imgVerify").click()
+
+        var myRotateVerify = new RotateVerify('#rotateWrap1', {
+            initText: '滑动将图片转正',//默认
+            slideImage: ['/img/manmachine/1.png', '/img/manmachine/2.png', '/img/manmachine/4.png', '/img/manmachine/5.png'],//arr  [imgsrc1,imgsrc2] 或者str 'imgsrc1'
+            slideAreaNum: 10,// 误差范围角度 +- 10(默认)
+            getSuccessState: function (res) {//验证通过 返回  true;
+                $(".manMbox").css("display", "none");
+                $.ajax({
+                    type: "POST",
+                    url: "/login",
+                    data: $('#signupForm').serialize(),
+                    success: function (response) {
+                        if (response.state == 0) {
+                            window.location.href = '/toHome';
+                        } else {
+                            layer.msg(response.msg);
+                        }
+                    }
+                });
+            }
+        });
+
+    });
+
+
+    $(".cuo").click(function () {
+        $(".manMbox").css("display", "none");
     });
 
 
     $.validator.setDefaults({
         submitHandler: function () {
-            login();
+            $(".manMbox").css("display", "block");
         }
     });
 
-
     //登陆接口调用
     function login() {
-        $.ajax({
-            type: "POST",
-            url: "/login",
-            data: $('#signupForm').serialize(),
-            success: function (response) {
-                if (response.state == 0) {
-                    parent.layer.close(parent.index);
-                    parent.location.reload();
-                } else {
-                    layer.msg(response.msg);
-                }
-            }
-        });
-    }
-
-    //监听按键按下
-    function keyDownLogon() {
-        if (event.keyCode == "13") {
-            $("#login").trigger('click');
-        }
+        $("#signupForm").submit();
     }
 
 

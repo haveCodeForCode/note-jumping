@@ -1439,7 +1439,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
   margin-top: 0;
 }
 .top-navigation .navbar-brand {
-  background: #1ab394;
+  background: #3388ff;
   color: #fff;
   padding: 15px 25px;
   font-size: 18px;
@@ -9608,4 +9608,10 @@ body.md-skin {
 .boundary-m {
 
   border-style: solid;
+}
+
+.pageOverLap{
+  top: 12%;
+  left: 37%;
+  position: absolute;
 }
